@@ -2,7 +2,7 @@
 // AUTHOR James Lin
 // Version 3.0.4 
 // FIXED by Simon Delage <simon.geekitude@gmail.com> on 2014-08-30
- 
+
 if (!defined('DOKU_INC')) die();
 if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
  
