@@ -1,6 +1,7 @@
 <?php
-//AUTHOR James Lin
-//Version 3.0.4 
+// AUTHOR James Lin
+// Version 3.0.4 
+// FIXED by Simon Delage <simon.geekitude@gmail.com> on 2014-08-30
  
 if (!defined('DOKU_INC')) die();
 if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
@@ -146,11 +147,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin
                 return  array
                 (
                         'name' => 'User Home Page',
-                        'email' => 'guanfenglin@gmail.com',
-                        'date' => '04/12/2008',
-                        'author' => 'James GuanFeng Lin, Mikhail I. Izmestev, Daniel Stonier',
+                        'email' => 'simon.geekitude@gmail.com',
+                        'date' => '2009-05-28',
+                        'author' => 'Simon Delage (previously James GuanFeng Lin, Mikhail I. Izmestev & Daniel Stonier)',
                         'desc' => 'auto redirects users to <create> their homepage',
-                        'url' => ''
+                        'url' => 'https://www.dokuwiki.org/plugin:userhomepage'
                 );
         }
  
@@ -160,4 +161,3 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin
                 $controller->register_hook('HTML_PAGE_FROMTEMPLATE', 'BEFORE', $this, 'page_template',array());
         }
 }
-?>

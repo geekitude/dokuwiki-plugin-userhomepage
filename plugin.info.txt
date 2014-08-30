@@ -1,0 +1,7 @@
+base     userhomepage
+author   Simon Delage
+email    guanfenglin@gmail.com
+date     2009-05-28
+name     User Home Page
+desc     Auto redirects users to <create> their homepage.
+url      https://www.dokuwiki.org/plugin:userhomepage
