@@ -6,7 +6,7 @@
  */
 
 $lang['use_name_string'] = 'Use user\'s full name instead of login for his namespace.';
-$lang['use_start_page'] = 'Use the wiki\'s start page string instead of the user\'s namespace name set above for the start page of his namespace.';
+$lang['use_start_page'] = 'Use the wiki\'s start page string instead of the user\'s namespace string set above for the start page of his namespace.';
 $lang['set_permissions'] = 'Automatically configure acl for user\'s namespace.';
 $lang['set_permissions_others'] = 'If set permission is enabled, what permission for other people (both @ALL and @user groups)?';
 $lang['set_permissions_others_o_0'] = 'None';
