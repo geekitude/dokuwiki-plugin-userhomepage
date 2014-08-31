@@ -120,10 +120,19 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin
                     if ( $this->getConf('set_permissions') == 1 )
                     {
                         $acl = new admin_plugin_acl();
-                        $ns = cleanID($this->home_wiki_ns.':'.$this->homePage());
-                        $acl->_acl_add($ns, '@ALL', (int)$this->getConf('set_permissions_others'));
-                        $acl->_acl_add($ns, strtolower($_SERVER['REMOTE_USER']), AUTH_DELETE);
-                    }
+                        // Old user-page ACL:
+                        // $ns = cleanID($this->home_wiki_ns.':'.$this->homePage());
+                        // New user-namespace ACL:
+                        $ns = cleanID($this->home_wiki_ns).':*';
+                        $acl->_acl_add($this->getConf('users_namespace').':*', '@ALL', (int)$this->getConf('set_permissions_others'));
+                        $acl->_acl_add($this->getConf('users_namespace').':*', '@user', (int)$this->getConf('set_permissions_others'));
+                        $acl->_acl_add($ns, strtolower($_SERVER['REMOTE_USER']), AUTH_DELETE);                    }
+                        // If the 2 lines concerning set_permissions_others above allready existed in conf/acl.auth.php file they've been duplicated so let's read the file
+                        $lines = file(DOKU_INC.'conf/acl.auth.php');
+                        // Only keep unique lines (OK, we loose an empty comment line...)
+                        $lines = array_unique($lines);
+                        // Write things back to conf/acl.auth.php
+                        file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));;
                     if (!$this->getConf('edit_before_create'))
                     {
                         //writes the user info to page
