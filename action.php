@@ -52,8 +52,17 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 // redirect to edit home page
                 send_redirect(wl($id, array("do" => ($this->getConf('edit_before_create'))?"edit":"show"), false, "&"));
             }
-            // if the user was at a specific page, then don't redirect to personal page.
-            if (($_REQUEST['id']==$conf['start'])||(!isset($_REQUEST['id']))) {
+            // If Translation plugin is active, determine if we're at wikistart
+            if (!plugin_isdisabled('translation')) {
+                foreach (explode(' ',$conf['plugin']['translation']['translations']) as $lang){
+                    if (getID() === $lang.':'.$conf['start']) {
+                        $wikistart = true;
+                        break;
+                    }
+                }
+            }
+            // If the user was at a specific page (beside wiki start), then don't redirect to personal page.
+            if (($_REQUEST['id']==$conf['start'])||(!isset($_REQUEST['id']))||($wikistart)) {
                 send_redirect(wl($id));
             }
         }
@@ -103,16 +112,6 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         $content = str_replace('@USER@',$user,$content);
         return $content;
     }
-//    function page_template(&$event, $param) {
-//        $this->init();
-//        if($this->home_wiki_page && $this->home_wiki_page == $event->data[0]) {
-//            if(!$event->result) {
-//                // FIXME: another template applied?
-//                $event->result = $this->_template();
-//                $event->preventDefault();
-//            }
-//        }
-//    }
 	//draws a home link, used by calls from main.php in template folder
     function homeButton() {
         $this->init();
