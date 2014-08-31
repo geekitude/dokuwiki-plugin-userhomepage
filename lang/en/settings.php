@@ -1,8 +1,9 @@
 <?php
 /**
- * English language file for config of Userhomepage plugin
- * @author: Daniel Stonier <d.stonier@gmail.com>
- * FIXED by Simon Delage <simon.geekitude@gmail.com> on 2014-08-30
+ * English settings file for Userhomepage plugin
+ * Previous authors: James GuanFeng Lin, Mikhail I. Izmestev, Daniel Stonier
+ * @author: Simon Delage <simon.geekitude@gmail.com>
+ * @license: CC Attribution-Share Alike 3.0 Unported <http://creativecommons.org/licenses/by-sa/3.0/>
  */
 
 $lang['use_name_string'] = 'Use user\'s full name instead of login for his namespace and homepage (will break <code>%USER%</code> wildcard in ACL for that namespace).';

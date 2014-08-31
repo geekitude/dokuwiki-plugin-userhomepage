@@ -1,7 +1,10 @@
 <?php
-// AUTHOR James Lin
-// Version 3.0.4 
-// FIXED by Simon Delage <simon.geekitude@gmail.com> on 2014-08-30
+/**
+ * Userhomepage plugin main file
+ * Previous authors: James GuanFeng Lin, Mikhail I. Izmestev, Daniel Stonier
+ * @author: Simon Delage <simon.geekitude@gmail.com>
+ * @license: CC Attribution-Share Alike 3.0 Unported <http://creativecommons.org/licenses/by-sa/3.0/>
+ */
 
 if (!defined('DOKU_INC')) die();
 if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');

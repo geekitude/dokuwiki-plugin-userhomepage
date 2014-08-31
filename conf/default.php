@@ -1,7 +1,9 @@
 <?php
-/*
- * Userhomepage plugin, configuration defaults
- * FIXED by Simon Delage <simon.geekitude@gmail.com> on 2014-08-30
+/**
+ * Configuration defaults file for Userhomepage plugin
+ * Previous authors: James GuanFeng Lin, Mikhail I. Izmestev, Daniel Stonier
+ * @author: Simon Delage <simon.geekitude@gmail.com>
+ * @license: CC Attribution-Share Alike 3.0 Unported <http://creativecommons.org/licenses/by-sa/3.0/>
  */
 
 $conf['use_name_string'] = 0;
