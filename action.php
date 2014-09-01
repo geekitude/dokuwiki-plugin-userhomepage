@@ -24,7 +24,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         if (($_SERVER['REMOTE_USER']!=null)&&($_REQUEST['do']=='login')) {
             $this->init();
             $id = $this->private_page;
-            // if page doesn't exists, create it
+            // if page doesn't exists, create it (from template)
             if ($this->getConf('create_private_ns') && !page_exists($id) && !checklock($id) && !checkwordblock()) {
                 // set acl's if requested
                 if ( $this->getConf('set_permissions') == 1 ) {
@@ -43,12 +43,12 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $lines = array_unique($lines);
                 // Write things back to conf/acl.auth.php
                 file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
-                if (!$this->getConf('edit_before_create')) {
+//                if (!$this->getConf('edit_before_create')) {
                     //writes the user info to private page
                     lock($id);
                     saveWikiText($id,$this->_template_private(),$lang['created']);
                     unlock($id);
-                }
+//                }
                 // redirect to edit home page
                 send_redirect(wl($id, array("do" => ($this->getConf('edit_before_create'))?"edit":"show"), false, "&"));
             }
@@ -87,7 +87,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 				$this->public_page_template = DOKU_INC . $this->getConf('templatepathpublic');
                 // user:simon.txt
 				$this->public_page= cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
-				// if page doesn't exists, create it
+				// If public page doesn't exists, create it (from template)
 				if ($this->getConf('create_public_page') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
 					//writes the user info to public page
 					lock($this->public_page);
