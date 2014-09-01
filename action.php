@@ -25,7 +25,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $this->init();
             $id = $this->private_page;
             // if page doesn't exists, create it
-            if (!page_exists($id) && !checklock($id) && !checkwordblock()) {
+            if ($this->getConf('create_private_ns') && !page_exists($id) && !checklock($id) && !checkwordblock()) {
                 // set acl's if requested
                 if ( $this->getConf('set_permissions') == 1 ) {
                     $acl = new admin_plugin_acl();
@@ -88,7 +88,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 // user:simon.txt
 				$this->public_page= cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
 				// if page doesn't exists, create it
-				if (!page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
+				if ($this->getConf('create_public_page') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
 					//writes the user info to public page
 					lock($this->public_page);
 					saveWikiText($this->public_page,$this->_template_public(),$lang['created']);
