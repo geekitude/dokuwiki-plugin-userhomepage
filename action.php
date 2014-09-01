@@ -49,8 +49,10 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     saveWikiText($id,$this->_template_private(),$lang['created']);
                     unlock($id);
 //                }
-                // redirect to edit home page
-                send_redirect(wl($id, array("do" => ($this->getConf('edit_before_create'))?"edit":"show"), false, "&"));
+                // Redirect to edit or show private namespace start page (if edit public page is not on)
+                if (!($this->getConf('edit_public_before_create'))) {
+					send_redirect(wl($id, array("do" => ($this->getConf('edit_before_create'))?"edit":"show"), false, "&"));
+				}
             }
             // If Translation plugin is active, determine if we're at wikistart
             if (!plugin_isdisabled('translation')) {
@@ -93,6 +95,10 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 					lock($this->public_page);
 					saveWikiText($this->public_page,$this->_template_public(),$lang['created']);
 					unlock($this->public_page);
+					// redirect to edit public page
+					if ($this->getConf('edit_public_before_create')) {
+						send_redirect(wl($this->public_page, 'do=edit', false, '&'));
+					}
 				}
 			}
         }

@@ -18,3 +18,4 @@ $conf['edit_before_create'] = 0;
 $conf['create_public_page'] = 0;
 $conf['public_pages_ns'] = 'user';
 $conf['templatepathpublic'] = 'lib/plugins/userhomepage/_template_public.txt';
+$conf['edit_public_before_create'] = 1;
