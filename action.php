@@ -16,7 +16,7 @@ require_once (DOKU_PLUGIN . '/acl/admin.php');
 class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function register(&$controller) {
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'redirect',array());
-        $controller->register_hook('HTML_PAGE_FROMTEMPLATE', 'BEFORE', $this, 'page_template',array());
+//        $controller->register_hook('HTML_PAGE_FROMTEMPLATE', 'BEFORE', $this, 'page_template',array());
     }
     function redirect(&$event, $param) {
         global $conf;
@@ -44,9 +44,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 // Write things back to conf/acl.auth.php
                 file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
                 if (!$this->getConf('edit_before_create')) {
-                    //writes the user info to page
+                    //writes the user info to private page
                     lock($id);
-                    saveWikiText($id,$this->_template(),$lang['created']);
+                    saveWikiText($id,$this->_template_private(),$lang['created']);
                     unlock($id);
                 }
                 // redirect to edit home page
@@ -72,7 +72,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         require_once (DOKU_INC.'inc/search.php');
         if($_SERVER['REMOTE_USER']!=null) {
             $this->doku_page_path = $conf['datadir'];
-            $this->home_page_template = DOKU_INC . $this->getConf('templatepath');
+            $this->private_page_template = DOKU_INC . $this->getConf('templatepath');
             if ($this->getConf('group_by_name')) {
                 // private:s:simon
                 $this->home_wiki_ns = cleanID($this->getConf('users_namespace').':'.strtolower(substr($this->homeNamespace(), 0, 1)).':'. $this->homeNamespace());
@@ -103,9 +103,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             return $this->homeNamespace();
         }
     }
-    function _template() {
+    function _template_private() {
         global $INFO;
-        $content = io_readFile($this->home_page_template, false);
+        $content = io_readFile($this->private_page_template, false);
         $name = $INFO['userinfo']['name'];
         $user = strtolower($_SERVER['REMOTE_USER']);
         $content = str_replace('@NAME@',$name,$content);
