@@ -23,16 +23,16 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         global $INFO;
         if (($_SERVER['REMOTE_USER']!=null)&&($_REQUEST['do']=='login')) {
             $this->init();
-            $id = $this->home_wiki_page;
+            $id = $this->private_page;
             // if page doesn't exists, create it
             if (!page_exists($id) && !checklock($id) && !checkwordblock()) {
                 // set acl's if requested
                 if ( $this->getConf('set_permissions') == 1 ) {
                     $acl = new admin_plugin_acl();
                     // Old user-page ACL (version 3.0.4):
-                    // $ns = cleanID($this->home_wiki_ns.':'.$this->homePage());
+                    // $ns = cleanID($this->private_ns.':'.$this->privatePage());
                     // New user-namespace ACL:
-                    $ns = cleanID($this->home_wiki_ns).':*';
+                    $ns = cleanID($this->private_ns).':*';
                     $acl->_acl_add($this->getConf('users_namespace').':*', '@ALL', (int)$this->getConf('set_permissions_others'));
                     $acl->_acl_add($this->getConf('users_namespace').':*', '@user', (int)$this->getConf('set_permissions_others'));
                     $acl->_acl_add($ns, strtolower($_SERVER['REMOTE_USER']), AUTH_DELETE);
@@ -75,16 +75,29 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $this->private_page_template = DOKU_INC . $this->getConf('templatepath');
             if ($this->getConf('group_by_name')) {
                 // private:s:simon
-                $this->home_wiki_ns = cleanID($this->getConf('users_namespace').':'.strtolower(substr($this->homeNamespace(), 0, 1)).':'. $this->homeNamespace());
+                $this->private_ns = cleanID($this->getConf('users_namespace').':'.strtolower(substr($this->privateNamespace(), 0, 1)).':'. $this->privateNamespace());
             } else {
                 // private:simon
-                $this->home_wiki_ns = cleanID($this->getConf('users_namespace').':'. $this->homeNamespace());
+                $this->private_ns = cleanID($this->getConf('users_namespace').':'. $this->privateNamespace());
             }
             // private:simon:start.txt
-            $this->home_wiki_page= cleanID($this->home_wiki_ns . ':' . $this->homePage());
+            $this->private_page= cleanID($this->private_ns . ':' . $this->privatePage());
+            // Public page?
+            if ($this->getConf('create_public_page')) {
+				$this->public_page_template = DOKU_INC . $this->getConf('templatepathpublic');
+                // user:simon.txt
+				$this->public_page= cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
+				// if page doesn't exists, create it
+				if (!page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
+					//writes the user info to public page
+					lock($this->public_page);
+					saveWikiText($this->public_page,$this->_template_public(),$lang['created']);
+					unlock($this->public_page);
+				}
+			}
         }
     }
-    function homeNamespace() {
+    function privateNamespace() {
         if ( $this->getConf('use_name_string')) {
             global $INFO;
             $raw_string = $INFO['userinfo']['name'];
@@ -95,17 +108,26 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             return strtolower($_SERVER['REMOTE_USER']);
         }
     }
-    function homePage() {
-        if ( $this->getConf('use_start_page')) {
-            global $conf;
-            return $conf['start'];
-        } else {
-            return $this->homeNamespace();
-        }
-    }
+	function privatePage() {
+	    if ( $this->getConf('use_start_page')) {
+	        global $conf;
+                return $conf['start'];
+	    } else {
+	        return $this->homeNamespace();
+	    };
+	}
     function _template_private() {
         global $INFO;
         $content = io_readFile($this->private_page_template, false);
+        $name = $INFO['userinfo']['name'];
+        $user = strtolower($_SERVER['REMOTE_USER']);
+        $content = str_replace('@NAME@',$name,$content);
+        $content = str_replace('@USER@',$user,$content);
+        return $content;
+    }
+    function _template_public() {
+        global $INFO;
+        $content = io_readFile($this->public_page_template, false);
         $name = $INFO['userinfo']['name'];
         $user = strtolower($_SERVER['REMOTE_USER']);
         $content = str_replace('@NAME@',$name,$content);
@@ -116,14 +138,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function homeButton() {
         $this->init();
         if ($_SERVER['REMOTE_USER']!=null) {
-            echo '<form class="button btn_show" method="post" action="doku.php?id='.$this->home_wiki_page.'"><input class="button" type="submit" value="Home"/></form>';
+            echo '<form class="button btn_show" method="post" action="doku.php?id='.$this->private_page.'"><input class="button" type="submit" value="Home"/></form>';
         }
     }
 	//draws a home link, used by calls from main.php in template folder
     function homeLink() {
         $this->init();
         if ($_SERVER['REMOTE_USER']!=null) {
-            echo '<a href="doku.php?id='.$this->home_wiki_page.'">Home</a>';
+            echo '<a href="doku.php?id='.$this->private_page.'">Home</a>';
         }
     }
 }

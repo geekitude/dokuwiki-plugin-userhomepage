@@ -6,6 +6,7 @@
  * @license: CC Attribution-Share Alike 3.0 Unported <http://creativecommons.org/licenses/by-sa/3.0/>
  */
 
+$lang['create_private_ns'] = 'Create user\'s private namespace';
 $lang['use_name_string'] = 'Use user\'s full name instead of login for his namespace and homepage (will break <code>%USER%</code> wildcard in ACL for that namespace).';
 $lang['use_start_page'] = 'Use the wiki\'s start page string instead of the user\'s namespace string set above for the start page of his namespace.';
 $lang['users_namespace'] = 'Namespace under which user namespaces are created (can be anything but <code>user</code> without messing up with Dokuwiki default behaviour).';
@@ -20,3 +21,6 @@ $lang['set_permissions_others_o_16'] = 'Delete';
 $lang['group_by_name'] = 'Group users\' namespaces by the first character of user name ?';
 $lang['templatepath'] = 'Doku relative path to the template file for user\'s namespace start page.';
 $lang['edit_before_create'] = 'Allow users to edit their namespace start page before create (note that template will not be used if you enable this option).';
+$lang['create_public_page'] = 'Create a public page for user';
+$lang['public_pages_ns'] = 'Namespace under wich public pages ar created. If a value other than \'user\' is used, ?????????????????';
+$lang['templatepathpublic'] = 'lib/plugins/userhomepage/_template_public.txt';
