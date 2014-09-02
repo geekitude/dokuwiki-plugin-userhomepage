@@ -12,11 +12,10 @@ if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN', DOKU_INC . 'lib/plugins/');
 
 require_once (DOKU_PLUGIN . 'action.php');
 require_once (DOKU_PLUGIN . '/acl/admin.php');
- 
+
 class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function register(&$controller) {
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'redirect',array());
-//        $controller->register_hook('HTML_PAGE_FROMTEMPLATE', 'BEFORE', $this, 'page_template',array());
     }
     function redirect(&$event, $param) {
         global $conf;
@@ -68,14 +67,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // If public page doesn't exists, create it (from template)
             if ($this->getConf('create_public_page') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
                 // Read public page template
-				$this->public_page_template = DOKU_INC . $this->getConf('templatepathpublic');
-				// Create public page
-				lock($this->public_page);
-				saveWikiText($this->public_page,$this->_template_public(),$lang['created']);
-				unlock($this->public_page);
+                $this->public_page_template = DOKU_INC . $this->getConf('templatepathpublic');
+                // Create public page
+                lock($this->public_page);
+                saveWikiText($this->public_page,$this->_template_public(),$lang['created']);
+                unlock($this->public_page);
                 // Note that we created public page
                 $created['public'] = true;
-			}
+            }
             // If Translation plugin is active, determine if we're at wikistart
             if (!plugin_isdisabled('translation')) {
                 foreach (explode(' ',$conf['plugin']['translation']['translations']) as $lang){
@@ -108,14 +107,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             return strtolower($_SERVER['REMOTE_USER']);
         }
     }
-	function privatePage() {
-	    if ( $this->getConf('use_start_page')) {
-	        global $conf;
-                return $conf['start'];
-	    } else {
-	        return $this->homeNamespace();
-	    };
-	}
+    function privatePage() {
+        if ( $this->getConf('use_start_page')) {
+            global $conf;
+            return $conf['start'];
+        } else {
+            return $this->homeNamespace();
+        };
+    }
     function _template_private() {
         global $INFO;
         $content = io_readFile($this->private_page_template, false);
@@ -141,7 +140,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             echo '<form class="button btn_show" method="post" action="doku.php?id='.$this->private_page.'"><input class="button" type="submit" value="Home"/></form>';
         }
     }
-	//draws a home link, used by calls from main.php in template folder
+    //draws a home link, used by calls from main.php in template folder
     function homeLink() {
         $this->init();
         if ($_SERVER['REMOTE_USER']!=null) {
