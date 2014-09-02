@@ -21,17 +21,29 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function redirect(&$event, $param) {
         global $conf;
         global $INFO;
+        $created = array();
+        // If user just logged in
         if (($_SERVER['REMOTE_USER']!=null)&&($_REQUEST['do']=='login')) {
-            $this->init();
-            $id = $this->private_page;
-            // if page doesn't exists, create it (from template)
-            if ($this->getConf('create_private_ns') && !page_exists($id) && !checklock($id) && !checkwordblock()) {
+            // Determine targets
+            if ($this->getConf('group_by_name')) {
+                // private:s:simon
+                $this->private_ns = cleanID($this->getConf('users_namespace').':'.strtolower(substr($this->privateNamespace(), 0, 1)).':'. $this->privateNamespace());
+            } else {
+                // private:simon
+                $this->private_ns = cleanID($this->getConf('users_namespace').':'. $this->privateNamespace());
+            }
+            // private:simon:start.txt
+            $this->private_page= cleanID($this->private_ns . ':' . $this->privatePage());
+            // user:simon.txt
+            $this->public_page= cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
+            // if private page doesn't exists, create it (from template)
+            if ($this->getConf('create_private_ns') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
                 // set acl's if requested
                 if ( $this->getConf('set_permissions') == 1 ) {
                     $acl = new admin_plugin_acl();
                     // Old user-page ACL (version 3.0.4):
                     // $ns = cleanID($this->private_ns.':'.$this->privatePage());
-                    // New user-namespace ACL:
+                    // New user-namespace ACL (based on Luitzen van Gorkum and Harmen P. (Murf) de Ruiter suggestions):
                     $ns = cleanID($this->private_ns).':*';
                     $acl->_acl_add($this->getConf('users_namespace').':*', '@ALL', (int)$this->getConf('set_permissions_others'));
                     $acl->_acl_add($this->getConf('users_namespace').':*', '@user', (int)$this->getConf('set_permissions_others'));
@@ -43,15 +55,27 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $lines = array_unique($lines);
                 // Write things back to conf/acl.auth.php
                 file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
-//                if (!$this->getConf('edit_before_create')) {
-                    //writes the user info to private page
-                    lock($id);
-                    saveWikiText($id,$this->_template_private(),$lang['created']);
-                    unlock($id);
-//                }
-                // redirect to edit home page
-                send_redirect(wl($id, array("do" => ($this->getConf('edit_before_create'))?"edit":"show"), false, "&"));
+                // Read private start page template
+                $this->private_page_template = DOKU_INC . $this->getConf('templatepath');
+                // Create private page
+                lock($this->private_page);
+                saveWikiText($this->private_page,$this->_template_private(),$lang['created']);
+                unlock($this->private_page);
+                // Note that we created private page
+                $created['private'] = true;
             }
+            // Public page?
+            // If public page doesn't exists, create it (from template)
+            if ($this->getConf('create_public_page') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
+                // Read public page template
+				$this->public_page_template = DOKU_INC . $this->getConf('templatepathpublic');
+				// Create public page
+				lock($this->public_page);
+				saveWikiText($this->public_page,$this->_template_public(),$lang['created']);
+				unlock($this->public_page);
+                // Note that we created public page
+                $created['public'] = true;
+			}
             // If Translation plugin is active, determine if we're at wikistart
             if (!plugin_isdisabled('translation')) {
                 foreach (explode(' ',$conf['plugin']['translation']['translations']) as $lang){
@@ -61,40 +85,16 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     }
                 }
             }
-            // If the user was at a specific page (beside wiki start), then don't redirect to personal page.
-            if (($_REQUEST['id']==$conf['start'])||(!isset($_REQUEST['id']))||($wikistart)) {
-                send_redirect(wl($id));
+            // If Public page was just created, redirect to it and edit
+            if ($created['public']) {
+                send_redirect(wl($this->public_page, 'do=edit', false, '&'));
+            // Else if private start page was just created and edit option is set, redirect to it and edit
+            } elseif (($created['private']) && ($this->getConf('edit_before_create'))) {
+                send_redirect(wl($this->private_page, 'do=edit', false, '&'));
+            // Else if the user was not at a specific page (beside wiki start) and private page exists, redirect to it.
+            } elseif ((($_REQUEST['id']==$conf['start'])||(!isset($_REQUEST['id']))||($wikistart)) && (page_exists($this->private_page))) {
+                send_redirect(wl($this->private_page));
             }
-        }
-    }
-    function init() {
-        global $conf;
-        require_once (DOKU_INC.'inc/search.php');
-        if($_SERVER['REMOTE_USER']!=null) {
-            $this->doku_page_path = $conf['datadir'];
-            $this->private_page_template = DOKU_INC . $this->getConf('templatepath');
-            if ($this->getConf('group_by_name')) {
-                // private:s:simon
-                $this->private_ns = cleanID($this->getConf('users_namespace').':'.strtolower(substr($this->privateNamespace(), 0, 1)).':'. $this->privateNamespace());
-            } else {
-                // private:simon
-                $this->private_ns = cleanID($this->getConf('users_namespace').':'. $this->privateNamespace());
-            }
-            // private:simon:start.txt
-            $this->private_page= cleanID($this->private_ns . ':' . $this->privatePage());
-            // Public page?
-            if ($this->getConf('create_public_page')) {
-				$this->public_page_template = DOKU_INC . $this->getConf('templatepathpublic');
-                // user:simon.txt
-				$this->public_page= cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
-				// If public page doesn't exists, create it (from template)
-				if ($this->getConf('create_public_page') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
-					//writes the user info to public page
-					lock($this->public_page);
-					saveWikiText($this->public_page,$this->_template_public(),$lang['created']);
-					unlock($this->public_page);
-				}
-			}
         }
     }
     function privateNamespace() {
