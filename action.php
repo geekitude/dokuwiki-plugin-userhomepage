@@ -20,7 +20,13 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     }
     function templates(&$event, $param) {
         if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
-            if (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_private.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
+            if (file_exists(DOKU_INC.$this->getConf('templatepath'))) {
+                if (!copy(DOKU_INC.$this->getConf('templatepath'), DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
+//                    echo ' An error occured while attempting to copy old template to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
+//                } else {
+//                    echo ' Successfully copied private template.';
+                }
+            } elseif (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_private.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
 //                echo ' An error occured while attempting to copy userhomepage_private.default to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
 //            } else {
 //                echo ' Successfully copied private template.';

@@ -23,3 +23,4 @@ $lang['edit_before_create'] = 'Allow users to edit their namespace start page be
 $lang['create_public_page'] = 'Create a public page for user';
 $lang['public_pages_ns'] = 'Namespace under wich public pages are created. If a value other than <code>user</code> is used, you will have to manually handle interwiki user link used by <code>showuseras</code> option (in Display settings).';
 $lang['templates_path'] = 'Path from DokuWiki root to store templates (userhomepage_private.txt and userhomepage_public.txt). Examples: <code>data/pages/wiki</code> (wich will make templates editable within DokuWiki) or <code>lib/plugins/userhomepage</code> (usefull in a farm setup to centralize templates).';
+$lang['templatepath'] = 'Template path from version 3.0.4. Don\'t change it, it is only there for backward compatibility. If this file exists, it will be used as default for new private namespace start page template.';

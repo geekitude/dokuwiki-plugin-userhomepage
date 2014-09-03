@@ -17,3 +17,4 @@ $conf['edit_before_create'] = 0;
 $conf['create_public_page'] = 0;
 $conf['public_pages_ns'] = 'user';
 $conf['templates_path'] = 'data/pages/wiki';
+$conf['templatepath'] = 'lib/plugins/userhomepage/_template.txt';
