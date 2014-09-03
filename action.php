@@ -20,15 +20,15 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     }
     function templates(&$event, $param) {
         if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
-            if (!copy(DOKU_INC.'lib/plugins/userhomepage/default_private.txt', DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
-                echo ' An error occured while attempting to copy default_private.txt to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
+            if (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_private.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
+                echo ' An error occured while attempting to copy userhomepage_private.default to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
 //            } else {
 //                echo ' Successfully copied private template.';
             }
         }
         if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
-            if (!copy(DOKU_INC.'lib/plugins/userhomepage/default_public.txt', DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
-                echo ' An error occured while attempting to copy default_public.txt to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
+            if (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_public.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
+                echo ' An error occured while attempting to copy userhomepage_public.default to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
 //            } else {
 //                echo ' Successfully copied public template.';
             }
