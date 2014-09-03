@@ -55,9 +55,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $this->private_ns = cleanID($this->getConf('users_namespace').':'. $this->privateNamespace());
             }
             // private:simon:start.txt
-            $this->private_page= cleanID($this->private_ns . ':' . $this->privatePage());
+            $this->private_page = cleanID($this->private_ns . ':' . $this->privatePage());
             // user:simon.txt
-            $this->public_page= cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
+            $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
             // if private page doesn't exists, create it (from template)
             if ($this->getConf('create_private_ns') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
                 // set acl's if requested
@@ -136,7 +136,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             return $conf['start'];
         } else {
             return $this->homeNamespace();
-        };
+        }
     }
     function _template_private() {
         global $INFO;
