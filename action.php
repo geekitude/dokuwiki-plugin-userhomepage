@@ -19,18 +19,18 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         $controller->register_hook('AUTH_LOGIN_CHECK', 'AFTER', $this, 'templates',array());
     }
     function templates(&$event, $param) {
-        if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private_template.txt')) {
-            if (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_private_template.txt', DOKU_INC.$this->getConf('templates_path').'/userhomepage_private_template.txt')) {
-                echo ' An error occured while attempting to copy private template.';
-            } else {
-                echo ' Successfully copied private template.';
+        if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
+            if (!copy(DOKU_INC.'lib/plugins/userhomepage/default_private.txt', DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
+                echo ' An error occured while attempting to copy default_private.txt to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
+//            } else {
+//                echo ' Successfully copied private template.';
             }
         }
-        if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public_template.txt')) {
-            if (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_public_template.txt', DOKU_INC.$this->getConf('templates_path').'/userhomepage_public_template.txt')) {
-                echo ' An error occured while attempting to copy public template.';
-            } else {
-                echo ' Successfully copied public template.';
+        if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
+            if (!copy(DOKU_INC.'lib/plugins/userhomepage/default_public.txt', DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
+                echo ' An error occured while attempting to copy default_public.txt to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
+//            } else {
+//                echo ' Successfully copied public template.';
             }
         }
     }
@@ -72,7 +72,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 // Write things back to conf/acl.auth.php
                 file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
                 // Read private start page template
-                $this->private_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_private_template.txt';
+                $this->private_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
                 // Create private page
                 lock($this->private_page);
                 saveWikiText($this->private_page,$this->_template_private(),$lang['created']);
@@ -84,7 +84,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // If public page doesn't exists, create it (from template)
             if ($this->getConf('create_public_page') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
                 // Read public page template
-                $this->public_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_public_template.txt';
+                $this->public_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
                 // Create public page
                 lock($this->public_page);
                 saveWikiText($this->public_page,$this->_template_public(),$lang['created']);
