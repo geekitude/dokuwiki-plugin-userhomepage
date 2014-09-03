@@ -156,18 +156,4 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         $content = str_replace('@USER@',$user,$content);
         return $content;
     }
-    //draws a home button, used by calls from main.php in template folder
-    function homeButton() {
-        $this->init();
-        if ($_SERVER['REMOTE_USER']!=null) {
-            echo '<form class="button btn_show" method="post" action="doku.php?id='.$this->private_page.'"><input class="button" type="submit" value="Home"/></form>';
-        }
-    }
-    //draws a home link, used by calls from main.php in template folder
-    function homeLink() {
-        $this->init();
-        if ($_SERVER['REMOTE_USER']!=null) {
-            echo '<a href="doku.php?id='.$this->private_page.'">Home</a>';
-        }
-    }
 }
