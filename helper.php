@@ -57,9 +57,10 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
 //        }
 //    }
 //    //draws a home link, used by calls from main.php in template folder
-//    function homeLink() {
+//    function privateLink() {
 //        $this->init();
 //        if ($_SERVER['REMOTE_USER']!=null) {
+//            echo '<li>'.$lang['loggedinas'].' : <a href="'.wl($privatens).'"  class="iw_user" rel="nofollow" title="Private NS">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
 //            echo '<a href="doku.php?id='.$this->private_page.'">Home</a>';
 //        }
 //    }
