@@ -141,19 +141,23 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function _template_private() {
         global $INFO;
         $content = io_readFile($this->private_page_template, false);
-        $name = $INFO['userinfo']['name'];
-        $user = strtolower($_SERVER['REMOTE_USER']);
-        $content = str_replace('@NAME@',$name,$content);
-        $content = str_replace('@USER@',$user,$content);
+        // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates
+        // Code by Christian Nancy
+		// Build a fake data structure for the parser
+		$data = array('tpl' => $content, 'id' => $this->private_page);
+		// Use the built-in parser
+		$content = parsePageTemplate($data);
         return $content;
     }
     function _template_public() {
         global $INFO;
         $content = io_readFile($this->public_page_template, false);
-        $name = $INFO['userinfo']['name'];
-        $user = strtolower($_SERVER['REMOTE_USER']);
-        $content = str_replace('@NAME@',$name,$content);
-        $content = str_replace('@USER@',$user,$content);
+        // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates
+        // Code by Christian Nancy
+		// Build a fake data structure for the parser
+		$data = array('tpl' => $content, 'id' => $this->public_page);
+		// Use the built-in parser
+		$content = parsePageTemplate($data);
         return $content;
     }
 }
