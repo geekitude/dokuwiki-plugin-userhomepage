@@ -140,7 +140,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     }
     function _template_private() {
         global $INFO;
+        global $lang;
         $content = io_readFile($this->private_page_template, false);
+        $content = str_replace('@PRIVATENAMESPACE@',$this->getLang('privatenamespace'),$content);
         // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates
         // Code by Christian Nancy
 		// Build a fake data structure for the parser
@@ -151,11 +153,13 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     }
     function _template_public() {
         global $INFO;
+        global $lang;
         $content = io_readFile($this->public_page_template, false);
+        $content = str_replace('@PUBLICPAGE@',$this->getLang('publicpage'),$content);
         // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates
         // Code by Christian Nancy
 		// Build a fake data structure for the parser
-		$data = array('tpl' => $content, 'id' => $this->public_page);
+		$data = array('tpl' => $content, 'id' => $this->private_page);
 		// Use the built-in parser
 		$content = parsePageTemplate($data);
         return $content;
