@@ -6,16 +6,16 @@
  * @license: CC Attribution-Share Alike 3.0 Unported <http://creativecommons.org/licenses/by-sa/3.0/>
  */
 
-$conf['create_private_ns'] = 0;
-$conf['use_name_string'] = 0;
-$conf['use_start_page'] = 1;
-$conf['users_namespace'] = 'private';
-$conf['set_permissions'] = 1;
-$conf['set_permissions_others'] = '0';
-$conf['group_by_name'] = 1;
-$conf['edit_before_create'] = 0;
-$conf['create_public_page'] = 0;
-$conf['public_pages_ns'] = 'user';
-$conf['set_permissions_public'] = 1;
-$conf['templates_path'] = 'data/pages/wiki';
-$conf['templatepath'] = '';
+    $conf['create_private_ns'] = 0;
+    $conf['use_name_string'] = 0;
+    $conf['use_start_page'] = 1;
+    $conf['users_namespace'] = 'private';
+    $conf['set_permissions'] = 1;
+    $conf['set_permissions_others'] = '0';
+    $conf['group_by_name'] = 1;
+    $conf['edit_before_create'] = 0;
+    $conf['create_public_page'] = 0;
+    $conf['public_pages_ns'] = 'user';
+    $conf['set_permissions_public'] = 1;
+    $conf['templates_path'] = 'data/pages/wiki';
+    $conf['templatepath'] = '';

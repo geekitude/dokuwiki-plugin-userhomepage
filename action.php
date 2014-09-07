@@ -14,16 +14,18 @@ require_once (DOKU_PLUGIN . 'action.php');
 require_once (DOKU_PLUGIN . '/acl/admin.php');
 
 class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
+
     function register(&$controller) {
         $controller->register_hook('AUTH_LOGIN_CHECK', 'AFTER', $this, 'init',array());
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'redirect',array());
     }
+
     function init(&$event, $param) {
         global $conf;
         global $INFO;
-		// COPY TEMPLATES IF NEEDED
+        // COPY TEMPLATES IF NEEDED
         if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
-			// If version 3.0.4 was installed, 'templatepath' option isn't empty and points to former template
+            // If version 3.0.4 was installed, 'templatepath' option isn't empty and points to former template
             if (($this->getConf('templatepath') != null) && (file_exists(DOKU_INC.$this->getConf('templatepath')))) {
                 if (!copy(DOKU_INC.$this->getConf('templatepath'), DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
 //                    echo ' An error occured while attempting to copy old template to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
@@ -51,7 +53,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // private:simon or private:simon_delage
             $this->private_ns = cleanID($this->getConf('users_namespace').':'. $this->privateNamespace());
         }
-        // private:simon:start.txt
+        // ...:start.txt or ...:simon_delage.txt
         $this->private_page = $this->private_ns . ':' . $this->privatePage();
         // user:simon.txt
         $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
@@ -61,16 +63,16 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         if (($this->getConf('create_private_ns')) && ($this->getConf('set_permissions'))) {
             // If use_name_string is enabled, we can't use ACL wildcard
             if ($this->getConf('use_name_string')) {
-				$ns = $this->private_ns.':*';
-				$acl->_acl_add($ns, $INFO['userinfo']['name'], AUTH_DELETE);
-			} else {
-				$acl->_acl_add(cleanID($this->getConf('users_namespace')).':%USER%:*', '%USER%', AUTH_DELETE);
-			}
+                $ns = $this->private_ns.':*';
+                $acl->_acl_add($ns, $INFO['userinfo']['name'], AUTH_DELETE);
+            } else {
+                $acl->_acl_add(cleanID($this->getConf('users_namespace')).':%USER%:*', '%USER%', AUTH_DELETE);
+            }
             $acl->_acl_add(cleanID($this->getConf('users_namespace')).':*', '@ALL', (int)$this->getConf('set_permissions_others'));
             $acl->_acl_add(cleanID($this->getConf('users_namespace')).':*', '@user', (int)$this->getConf('set_permissions_others'));
-		}
+        }
         // For public user pages
-		if (($this->getConf('create_public_page')) && ($this->getConf('set_permissions_public'))) {
+        if (($this->getConf('create_public_page')) && ($this->getConf('set_permissions_public'))) {
             $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':%USER%', '%USER%', AUTH_EDIT);
             $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@ALL', AUTH_READ);
             $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@user', AUTH_READ);
@@ -82,6 +84,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         // Write things back to conf/acl.auth.php
         file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
     }
+
     function redirect(&$event, $param) {
         global $conf;
         global $INFO;
@@ -132,6 +135,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             }
         }
     }
+
     function privateNamespace() {
         if ( $this->getConf('use_name_string')) {
             global $INFO;
@@ -143,6 +147,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             return strtolower($_SERVER['REMOTE_USER']);
         }
     }
+
     function privatePage() {
         if ($this->getConf('use_start_page')) {
             global $conf;
@@ -151,47 +156,23 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             return $this->privateNamespace();
         }
     }
-//    function _template_private() {
-//        global $INFO;
-//        global $lang;
-//        $content = io_readFile($this->private_page_template, false);
-//        $content = str_replace('@PRIVATENAMESPACE@',$this->getLang('privatenamespace'),$content);
-//        // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates
-//        // Code by Christian Nancy
-//		// Build a fake data structure for the parser
-//		$data = array('tpl' => $content, 'id' => $this->private_page);
-//		// Use the built-in parser
-//		$content = parsePageTemplate($data);
-//        return $content;
-//    }
-//    function _template_public() {
-//        global $INFO;
-//        global $lang;
-//        $content = io_readFile($this->public_page_template, false);
-//        $content = str_replace('@PUBLICPAGE@',$this->getLang('publicpage'),$content);
-//        // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates
-//        // Code by Christian Nancy
-//		// Build a fake data structure for the parser
-//		$data = array('tpl' => $content, 'id' => $this->private_page);
-//		// Use the built-in parser
-//		$content = parsePageTemplate($data);
-//        return $content;
-//    }
+
     function apply_template($type) {
         global $INFO;
         global $lang;
         // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates based on code proposed by Christian Nancy
         if ($type == 'private') {
-			$content = io_readFile($this->private_page_template, false);
-			$content = str_replace('@PRIVATENAMESPACE@',$this->getLang('privatenamespace'),$content);
-			$data = array('tpl' => $content, 'id' => $this->private_page);
-		} elseif ($type == 'public') {
-			$content = io_readFile($this->public_page_template, false);
-			$content = str_replace('@PUBLICPAGE@',$this->getLang('publicpage'),$content);
-			$data = array('tpl' => $content, 'id' => $this->public_page);
-		}
-		// Use the built-in parser
-		$content = parsePageTemplate($data);
+            $content = io_readFile($this->private_page_template, false);
+            $content = str_replace('@PRIVATENAMESPACE@',$this->getLang('privatenamespace'),$content);
+            $data = array('tpl' => $content, 'id' => $this->private_page);
+        } elseif ($type == 'public') {
+            $content = io_readFile($this->public_page_template, false);
+            $content = str_replace('@PUBLICPAGE@',$this->getLang('publicpage'),$content);
+            $data = array('tpl' => $content, 'id' => $this->public_page);
+        }
+        // Use the built-in parser
+        $content = parsePageTemplate($data);
         return $content;
     }
+
 }

@@ -21,7 +21,6 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         }
         // ...:start.txt
         return $this->private_page = cleanID($this->private_ns.':'.$this->privateStart());
-
     }
 
     function getPublicID() {
@@ -32,24 +31,24 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $INFO;
         global $lang;
         if ($param == "loggedinas") {
-			return '<li>'.$lang['loggedinas'].' : <a href="'.wl($this->getPrivateID()).'"  class="uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
-		} elseif ($param != null) {
-			return '<a href="'.wl($this->getPrivateID()).'"  rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$param.'</a>';
-		} else {
-			return '<a href="'.wl($this->getPrivateID()).'"  rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$this->getLang('privatenamespace').'</a>';
-		}
+            return '<li>'.$lang['loggedinas'].' : <a href="'.wl($this->getPrivateID()).'"  class="uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
+        } elseif ($param != null) {
+            return '<a href="'.wl($this->getPrivateID()).'"  rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$param.'</a>';
+        } else {
+            return '<a href="'.wl($this->getPrivateID()).'"  rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$this->getLang('privatenamespace').'</a>';
+        }
     }
 
     function getPublicLink($param=null) {
         global $INFO;
         global $lang;
         if ($param == "loggedinas") {
-			return '<li>'.$lang['loggedinas'].' : <a href="'.wl($this->getPublicID()).'"  class="uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
-		} elseif ($param != null) {
-			return '<a href="'.wl($this->getPublicID()).'"  rel="nofollow" title="'.$this->getLang('publicpage').'">'.$param.'</a>';
-		} else {
-			return '<a href="'.wl($this->getPublicID()).'"  rel="nofollow" title="'.$this->getLang('publicpage').'">'.$this->getLang('publicpage').'</a>';
-		}
+            return '<li>'.$lang['loggedinas'].' : <a href="'.wl($this->getPublicID()).'"  class="uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
+        } elseif ($param != null) {
+            return '<a href="'.wl($this->getPublicID()).'"  rel="nofollow" title="'.$this->getLang('publicpage').'">'.$param.'</a>';
+        } else {
+            return '<a href="'.wl($this->getPublicID()).'"  rel="nofollow" title="'.$this->getLang('publicpage').'">'.$this->getLang('publicpage').'</a>';
+        }
     }
 
     function privateNamespace() {

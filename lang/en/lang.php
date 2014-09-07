@@ -5,6 +5,6 @@
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  */
 
-$lang['created'] = 'Created from template by Userhompage plugin';
-$lang['privatenamespace'] = 'Private Namespace';
-$lang['publicpage'] = 'Public Page';
+    $lang['created'] = 'Created from template by Userhompage plugin';
+    $lang['privatenamespace'] = 'Private Namespace';
+    $lang['publicpage'] = 'Public Page';
