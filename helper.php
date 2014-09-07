@@ -51,6 +51,14 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         }
     }
 
+	function getButton($type="private") {
+        global $INFO;
+        global $lang;
+		if ($type == "private") {
+			echo '<form class="button btn_show" method="post" action="doku.php?id='.$this->private_page.'"><input class="button" type="submit" value="'.$this->getLang('privatenamespace').'"/></form>';
+		}
+	}
+
     function privateNamespace() {
         if ( $this->getConf('use_name_string')) {
             global $INFO;
