@@ -54,7 +54,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $this->private_ns = cleanID($this->getConf('users_namespace').':'. $this->privateNamespace());
         }
         // ...:start.txt or ...:simon_delage.txt
-        $this->private_page = $this->private_ns . ':' . $this->privatePage();
+        $this->private_page = $this->private_ns . ':' . $this->privateStart();
         // user:simon.txt
         $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
         // ACL
@@ -148,7 +148,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         }
     }
 
-    function privatePage() {
+    function privateStart() {
         if ($this->getConf('use_start_page')) {
             global $conf;
             return cleanID($conf['start']);
