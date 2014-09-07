@@ -23,6 +23,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function init(&$event, $param) {
         global $conf;
         global $INFO;
+        // CREATE AND/OR READ LOCAL REPLACEMENT FILE
+        if (!file_exists(DOKU_INC.'conf/userhomepage_replace.php')) {
+            $content = io_readFile(DOKU_INC.'lib/plugins/userhomepage/userhomepage_replace.default', false);
+            $content = str_replace('lang_privatenamespace',$this->getLang('lang_privatenamespace'),$content);
+            $content = str_replace('lang_publicpage',$this->getLang('lang_publicpage'),$content);
+            file_put_contents(DOKU_INC.'conf/userhomepage_replace.php', $content);
+        }
+        if (file_exists(DOKU_INC.'conf/userhomepage_replace.php')) { require_once(DOKU_INC.'conf/userhomepage_replace.php'); }
         // COPY TEMPLATES IF NEEDED
         if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
             // If version 3.0.4 was installed, 'templatepath' option isn't empty and points to former template
@@ -93,11 +101,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         if (($_SERVER['REMOTE_USER']!=null)&&($_REQUEST['do']=='login')) {
             // if private page doesn't exists, create it (from template)
             if ($this->getConf('create_private_ns') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
-                // Read private start page template
+                // Target private start page template
                 $this->private_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
                 // Create private page
                 lock($this->private_page);
-                saveWikiText($this->private_page,$this->apply_template('private'),$lang['created']);
+                saveWikiText($this->private_page,$this->applyTemplate('private'),$lang['created']);
                 unlock($this->private_page);
                 // Note that we created private page
                 $created['private'] = true;
@@ -105,11 +113,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // Public page?
             // If public page doesn't exists, create it (from template)
             if ($this->getConf('create_public_page') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
-                // Read public page template
+                // Target public page template
                 $this->public_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
                 // Create public page
                 lock($this->public_page);
-                saveWikiText($this->public_page,$this->apply_template('public'),$lang['created']);
+                saveWikiText($this->public_page,$this->applyTemplate('public'),$lang['created']);
                 unlock($this->public_page);
                 // Note that we created public page
                 $created['public'] = true;
@@ -157,21 +165,28 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         }
     }
 
-    function apply_template($type) {
+    function applyTemplate($type) {
         global $INFO;
         global $lang;
-        // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates based on code proposed by Christian Nancy
+        // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates based on code proposed by Christian Nancy or local ones from conf/userhomepage_replace.php file
         if ($type == 'private') {
             $content = io_readFile($this->private_page_template, false);
-            $content = str_replace('@PRIVATENAMESPACE@',$this->getLang('privatenamespace'),$content);
+            $content = replace($content);
             $data = array('tpl' => $content, 'id' => $this->private_page);
         } elseif ($type == 'public') {
             $content = io_readFile($this->public_page_template, false);
-            $content = str_replace('@PUBLICPAGE@',$this->getLang('publicpage'),$content);
+            $content = replace($content);
             $data = array('tpl' => $content, 'id' => $this->public_page);
         }
         // Use the built-in parser
         $content = parsePageTemplate($data);
+        return $content;
+    }
+
+    function replace($content) {
+        foreach ($uhpreplace as $pattern => $replacement){
+            $content = str_replace($pattern,$replacement,$content);
+        }
         return $content;
     }
 
