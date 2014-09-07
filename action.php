@@ -57,10 +57,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
         // ACL
         // For private namespace
+        $acl = new admin_plugin_acl();
         if ($this->getConf('set_permissions')) {
-            $acl = new admin_plugin_acl();
-            $acl->_acl_add(cleanID($this->getConf('users_namespace')).':*', '@ALL', (int)$this->getConf('set_permissions_others'));
-            $acl->_acl_add(cleanID($this->getConf('users_namespace')).':*', '@user', (int)$this->getConf('set_permissions_others'));
             // If use_name_string is enabled, we can't use ACL wildcard
             if ($this->getConf('use_name_string')) {
 				$ns = $this->private_ns.':*';
@@ -68,12 +66,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 			} else {
 				$acl->_acl_add(cleanID($this->getConf('users_namespace')).':%USER%:*', '%USER%', AUTH_DELETE);
 			}
+            $acl->_acl_add(cleanID($this->getConf('users_namespace')).':*', '@ALL', (int)$this->getConf('set_permissions_others'));
+            $acl->_acl_add(cleanID($this->getConf('users_namespace')).':*', '@user', (int)$this->getConf('set_permissions_others'));
 		}
         // For public user pages
-		if ($this->getConf('set_permissions_public')) {
+		if (($this->getConf('create_public_page')) && ($this->getConf('set_permissions_public'))) {
+            $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':%USER%', '%USER%', AUTH_EDIT);
             $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@ALL', AUTH_READ);
             $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@user', AUTH_READ);
-            $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':%USER%', '%USER%', AUTH_EDIT);
         }
         // Some lines in conf/acl.auth.php file have probably been duplicated so let's read the file
         $lines = file(DOKU_INC.'conf/acl.auth.php');
