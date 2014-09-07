@@ -48,7 +48,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             }
         }
         // CREATE PUBLIC PAGE TEMPLATES IF NEEDED
-        if (($this->getConf('create_public_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt'))) {
+        if (($this->getConf('create_public_page')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt'))) {
             if (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_public.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
 //                echo ' An error occured while attempting to copy userhomepage_public.default to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
 //            } else {

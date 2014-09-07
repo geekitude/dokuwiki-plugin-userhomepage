@@ -12,7 +12,7 @@
     $lang['users_namespace'] = 'Espace de nom sous lequel créer les espaces privés des utilisateurs (peut-être n\'importe quel espace à part <code>user</code> sans perturber le comportement par défaut de DokuWiki).';
     $lang['set_permissions'] = 'Configurer automatiquement les droits d\'accès à l\'espace choisit ci-dessus et donner tous les droits aux utilisateurs sur leur espace privé réspectif.';
     $lang['set_permissions_others'] = 'Si l\'option [set_permissions] est activée, quels droits donner aux autres personnes (aussi bien le groupe <code>@ALL</code> que <code>@user</code>) ?';
-    $lang['set_permissions_others_o_0'] = 'None';
+    $lang['set_permissions_others_o_0'] = 'Aucun';
     $lang['set_permissions_others_o_1'] = 'Lecture';
     $lang['set_permissions_others_o_2'] = 'Écriture';
     $lang['set_permissions_others_o_4'] = 'Création';
