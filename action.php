@@ -24,7 +24,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         global $conf;
         global $INFO;
         global $uhpreplace;
-        // CREATE LOCAL REPLACEMENT FILE IF NEEDED
+        // CREATE LOCAL REPLACEMENT FILE IF IT DOESN'T EXIST YET
         if (!file_exists(DOKU_INC.'conf/userhomepage_replace.php')) {
             $content = io_readFile(DOKU_INC.'lib/plugins/userhomepage/userhomepage_replace.default', false);
             $content = str_replace('lang_privatenamespace',$this->getLang('lang_privatenamespace'),$content);
@@ -32,8 +32,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             file_put_contents(DOKU_INC.'conf/userhomepage_replace.php', $content);
         }
         if (file_exists(DOKU_INC.'conf/userhomepage_replace.php')) { require_once(DOKU_INC.'conf/userhomepage_replace.php'); }
-        // COPY TEMPLATES IF NEEDED
-        if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
+        // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED
+        if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt'))) {
             // If version 3.0.4 was installed, 'templatepath' option isn't empty and points to former template
             if (($this->getConf('templatepath') != null) && (file_exists(DOKU_INC.$this->getConf('templatepath')))) {
                 if (!copy(DOKU_INC.$this->getConf('templatepath'), DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
@@ -47,7 +47,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 //                echo ' Successfully copied private template.';
             }
         }
-        if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
+        // CREATE PUBLIC PAGE TEMPLATES IF NEEDED
+        if (($this->getConf('create_public_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt'))) {
             if (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_public.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
 //                echo ' An error occured while attempting to copy userhomepage_public.default to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
 //            } else {
