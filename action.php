@@ -23,6 +23,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function init(&$event, $param) {
         global $conf;
         global $INFO;
+        global $uhpreplace;
         // CREATE LOCAL REPLACEMENT FILE IF NEEDED
         if (!file_exists(DOKU_INC.'conf/userhomepage_replace.php')) {
             $content = io_readFile(DOKU_INC.'lib/plugins/userhomepage/userhomepage_replace.default', false);
@@ -30,6 +31,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $content = str_replace('lang_publicpage',$this->getLang('lang_publicpage'),$content);
             file_put_contents(DOKU_INC.'conf/userhomepage_replace.php', $content);
         }
+        if (file_exists(DOKU_INC.'conf/userhomepage_replace.php')) { require_once(DOKU_INC.'conf/userhomepage_replace.php'); }
         // COPY TEMPLATES IF NEEDED
         if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
             // If version 3.0.4 was installed, 'templatepath' option isn't empty and points to former template
@@ -183,7 +185,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     }
 
     function replace($content) {
-        if (file_exists(DOKU_INC.'conf/userhomepage_replace.php')) { require(DOKU_INC.'conf/userhomepage_replace.php'); }
+        global $uhpreplace;
         foreach ($uhpreplace as $pattern => $replacement){
             $content = str_replace($pattern,$replacement,$content);
         }
