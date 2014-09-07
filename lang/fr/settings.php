@@ -19,9 +19,9 @@
     $lang['set_permissions_others_o_8'] = 'Envoyer';
     $lang['set_permissions_others_o_16'] = 'Effacer';
     $lang['group_by_name'] = 'Grouper les espaces personnels des utilisateurs par la première lettre de leur nom ?';
-    $lang['edit_before_create'] = 'Permettre aux utilisateurs d\'éditer la page d\'accueil de leur espace personnel avant sa création (fonctionnera uniquement si [create_public_page] est désactivée).';
+    $lang['edit_before_create'] = 'Permettre aux l\'utilisateurs d\'éditer la page d\'accueil de leur espace personnel à sa création (fonctionnera uniquement si une page publique n\'est pas créée en même temps).';
     $lang['create_public_page'] = 'Créer une page publique pour les utilisateurs (vérifier soigneusement toutes les options avant l\'activation)';
     $lang['public_pages_ns'] = 'Espace de nom sous lequel créer les pages publiques. Si une valeur autre que <code>user</code> est choisie, il faudra manuellement gérer les liens générés par l\'option  <code>showuseras</code> (dans les [Paramètres d\'affichage]).';
-    $lang['set_permissions_public'] = 'Automatiquement configurer les droits d\'accès aux pages publiques (lecture pour quiconque et écriture pour chaque utilisateur sur sa page publique).';
+    $lang['set_permissions_public'] = 'Automatiquement configurer les droits d\'accès aux pages publiques (lecture seule pour <code>@ALL</code> et <code>@user</code> mais écriture pour chaque utilisateur sur sa propre page publique).';
     $lang['templates_path'] = 'Chemin où les modèles seront stockés (userhomepage_private.txt and userhomepage_public.txt). Examples: <code>data/pages/wiki</code> (qui permettra d\'éditer les modèles depuis le wiki) ou <code>lib/plugins/userhomepage</code> (utile pour centraliser les modèles dans une ferme de wikis).';
     $lang['templatepath'] = 'Chemin vers le modèle de la version 3.0.4 si elle était installée précédement. Cette option n\'est là que pour permettre la rétro-compatibilité. Si le fichier existe, il sera utilisé comme source pour le modèle des pages d\'accueil des espaces privés (videz le chemin si vous ne le voulez pas).';
