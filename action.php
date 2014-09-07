@@ -24,7 +24,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 		// COPY TEMPLATES IF NEEDED
         if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
 			// If version 3.0.4 was installed, 'templatepath' option isn't empty and points to former template
-            if (file_exists(DOKU_INC.$this->getConf('templatepath'))) {
+            if (($this->getConf('templatepath') != null) && (file_exists(DOKU_INC.$this->getConf('templatepath')))) {
                 if (!copy(DOKU_INC.$this->getConf('templatepath'), DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
 //                    echo ' An error occured while attempting to copy old template to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
 //                } else {
