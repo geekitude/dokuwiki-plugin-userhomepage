@@ -56,9 +56,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         // user:simon.txt
         $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
         // ACL
-        // For private namespace
         $acl = new admin_plugin_acl();
-        if ($this->getConf('set_permissions')) {
+        // For private namespace
+        if (($this->getConf('create_private_ns')) && ($this->getConf('set_permissions'))) {
             // If use_name_string is enabled, we can't use ACL wildcard
             if ($this->getConf('use_name_string')) {
 				$ns = $this->private_ns.':*';

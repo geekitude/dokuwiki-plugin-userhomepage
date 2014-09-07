@@ -6,7 +6,7 @@
  * @license: CC Attribution-Share Alike 3.0 Unported <http://creativecommons.org/licenses/by-sa/3.0/>
  */
 
-$conf['create_private_ns'] = 1;
+$conf['create_private_ns'] = 0;
 $conf['use_name_string'] = 0;
 $conf['use_start_page'] = 1;
 $conf['users_namespace'] = 'private';
