@@ -6,5 +6,5 @@
  */
 
     $lang['created'] = 'Page created from template by Userhompage plugin.';
-    $lang['lang_privatenamespace'] = 'Private Namespace';
-    $lang['lang_publicpage'] = 'Public Page';
+    $lang['privatenamespace'] = 'Private Namespace';
+    $lang['publicpage'] = 'Public Page';
