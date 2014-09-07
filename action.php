@@ -120,7 +120,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin
                     if ( $this->getConf('set_permissions') == 1 )
                     {
                         $acl = new admin_plugin_acl();
-                        $ns = cleanID($this->home_wiki_ns.':'.$this->homePage());
+                        // Lines changed following suggestion from Luitzen van Gorkum
+                        // Old user-page ACL:
+			// $ns = cleanID($this->home_wiki_ns.':'.$this->homePage());
+			// New user-namespace ACL:
+			$ns = cleanID($this->home_wiki_ns).':*';
                         $acl->_acl_add($ns, '@ALL', (int)$this->getConf('set_permissions_others'));
                         $acl->_acl_add($ns, strtolower($_SERVER['REMOTE_USER']), AUTH_DELETE);
                     }
