@@ -8,7 +8,7 @@
 
     $lang['create_private_ns'] = 'Créer les espaces privés des utilisateurs (vérifier soigneusement toutes les options avant l\'activation)';
     $lang['use_name_string'] = 'Utiliser le nom complet des utilisateurs au lieu du login pour son espace privé (activer cette option empêchera l\'utilisation du joker <code>%USER%</code> au niveau de l\'ACL qui sera plus complexe).';
-    $lang['use_start_page'] = 'Utiliser le nom de page d\'accueil du wiki au lieu de réutiliser le nom de son espace personnel pour la page d\'accueil de celui-ci.';
+    $lang['use_start_page'] = 'Utiliser le nom de page d\'accueil du wiki pour celle de chaque espace personnel (sinon le même nom que ci-dessus sera utilisé).';
     $lang['users_namespace'] = 'Espace de nom sous lequel créer les espaces privés des utilisateurs (peut-être n\'importe quel espace à part <code>user</code> sans perturber le comportement par défaut de DokuWiki).';
     $lang['set_permissions'] = 'Configurer automatiquement les droits d\'accès à l\'espace choisit ci-dessus et donner tous les droits aux utilisateurs sur leur espace privé réspectif.';
     $lang['set_permissions_others'] = 'Si l\'option [set_permissions] est activée, quels droits donner aux autres personnes (aussi bien le groupe <code>@ALL</code> que <code>@user</code>) ?';

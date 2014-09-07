@@ -8,7 +8,7 @@
 
     $lang['create_private_ns'] = 'Create user\'s private namespace (double-check all options before enabling)';
     $lang['use_name_string'] = 'Use user\'s full name instead of login for his private namespace (enabling this option will prevent using <code>%USER%</code> ACL wildcard and make ACL more complex).';
-    $lang['use_start_page'] = 'Use the wiki\'s start page string instead of the user\'s namespace string set above for the start page of his namespace.';
+    $lang['use_start_page'] = 'Use the wiki\'s start page name for the one of each private namespace (otherwise, the same as above will be used).';
     $lang['users_namespace'] = 'Namespace under which user namespaces are created (can be anything but <code>user</code> without messing up with Dokuwiki default behaviour).';
     $lang['set_permissions'] = 'Automatically configure ACL for the namespace set above and give full rights to users on their own namespace.';
     $lang['set_permissions_others'] = 'If [set_permissions] is enabled, what permission for other people (both <code>@ALL</code> and <code>@user</code> groups) ?';
