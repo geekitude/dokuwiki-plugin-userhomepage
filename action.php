@@ -23,14 +23,13 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function init(&$event, $param) {
         global $conf;
         global $INFO;
-        // CREATE AND/OR READ LOCAL REPLACEMENT FILE
+        // CREATE LOCAL REPLACEMENT FILE IF NEEDED
         if (!file_exists(DOKU_INC.'conf/userhomepage_replace.php')) {
             $content = io_readFile(DOKU_INC.'lib/plugins/userhomepage/userhomepage_replace.default', false);
             $content = str_replace('lang_privatenamespace',$this->getLang('lang_privatenamespace'),$content);
             $content = str_replace('lang_publicpage',$this->getLang('lang_publicpage'),$content);
             file_put_contents(DOKU_INC.'conf/userhomepage_replace.php', $content);
         }
-        if (file_exists(DOKU_INC.'conf/userhomepage_replace.php')) { require_once(DOKU_INC.'conf/userhomepage_replace.php'); }
         // COPY TEMPLATES IF NEEDED
         if (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
             // If version 3.0.4 was installed, 'templatepath' option isn't empty and points to former template
@@ -171,11 +170,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates based on code proposed by Christian Nancy or local ones from conf/userhomepage_replace.php file
         if ($type == 'private') {
             $content = io_readFile($this->private_page_template, false);
-            $content = replace($content);
+            $content = $this->replace($content);
             $data = array('tpl' => $content, 'id' => $this->private_page);
         } elseif ($type == 'public') {
             $content = io_readFile($this->public_page_template, false);
-            $content = replace($content);
+            $content = $this->replace($content);
             $data = array('tpl' => $content, 'id' => $this->public_page);
         }
         // Use the built-in parser
@@ -184,6 +183,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     }
 
     function replace($content) {
+        if (file_exists(DOKU_INC.'conf/userhomepage_replace.php')) { require(DOKU_INC.'conf/userhomepage_replace.php'); }
         foreach ($uhpreplace as $pattern => $replacement){
             $content = str_replace($pattern,$replacement,$content);
         }
