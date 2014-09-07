@@ -60,23 +60,6 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
             // if private page doesn't exists, create it (from template)
             if ($this->getConf('create_private_ns') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
-                // set acl's if requested
-                if ( $this->getConf('set_permissions') == 1 ) {
-                    $acl = new admin_plugin_acl();
-                    // Old user-page ACL (version 3.0.4):
-                    // $ns = cleanID($this->private_ns.':'.$this->privatePage());
-                    // New user-namespace ACL (based on Luitzen van Gorkum and Harmen P. (Murf) de Ruiter suggestions):
-                    $ns = cleanID($this->private_ns).':*';
-                    $acl->_acl_add($this->getConf('users_namespace').':*', '@ALL', (int)$this->getConf('set_permissions_others'));
-                    $acl->_acl_add($this->getConf('users_namespace').':*', '@user', (int)$this->getConf('set_permissions_others'));
-                    $acl->_acl_add($ns, strtolower($_SERVER['REMOTE_USER']), AUTH_DELETE);
-                }
-                // If the 2 lines concerning set_permissions_others above allready existed in conf/acl.auth.php file they've been duplicated so let's read the file
-                $lines = file(DOKU_INC.'conf/acl.auth.php');
-                // Only keep unique lines (OK, we loose an empty comment line...)
-                $lines = array_unique($lines);
-                // Write things back to conf/acl.auth.php
-                file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
                 // Read private start page template
                 $this->private_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
                 // Create private page
@@ -98,6 +81,28 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 // Note that we created public page
                 $created['public'] = true;
             }
+            // Set ACL?
+            if ($this->getConf('set_permissions')) {
+                $acl = new admin_plugin_acl();
+                $acl->_acl_add($this->getConf('users_namespace').':*', '@ALL', (int)$this->getConf('set_permissions_others'));
+                $acl->_acl_add($this->getConf('users_namespace').':*', '@user', (int)$this->getConf('set_permissions_others'));
+                if ($this->getConf('use_name_string')) {
+					$ns = cleanID($this->private_ns).':*';
+					$acl->_acl_add($ns, strtolower($_SERVER['REMOTE_USER']), AUTH_DELETE);
+				} else {
+					$acl->_acl_add($this->getConf('users_namespace').':%USER%:*', '%USER%', AUTH_DELETE);
+				}
+                // ACL for public user pages
+                $acl->_acl_add($this->getConf('public_pages_ns').':*', '@ALL', AUTH_READ);
+                $acl->_acl_add($this->getConf('public_pages_ns').':*', '@user', AUTH_READ);
+                $acl->_acl_add($this->getConf('public_pages_ns').':%USER%', '%USER%', AUTH_EDIT);
+            }
+            // If the 2 lines concerning set_permissions_others above allready existed in conf/acl.auth.php file they've been duplicated so let's read the file
+            $lines = file(DOKU_INC.'conf/acl.auth.php');
+            // Only keep unique lines (OK, we loose an empty comment line...)
+            $lines = array_unique($lines);
+            // Write things back to conf/acl.auth.php
+            file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
             // If Translation plugin is active, determine if we're at wikistart
             if (!plugin_isdisabled('translation')) {
                 foreach (explode(' ',$conf['plugin']['translation']['translations']) as $lang){

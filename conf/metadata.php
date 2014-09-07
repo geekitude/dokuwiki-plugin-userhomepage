@@ -16,5 +16,6 @@ $meta['group_by_name'] = array('onoff');
 $meta['edit_before_create'] = array('onoff');
 $meta['create_public_page'] = array('onoff');
 $meta['public_pages_ns'] = array('string','_pattern' => '/^(|[a-zA-Z\-:]+)$/','_caution' => 'warning');
+$meta['set_permissions_public'] = array('onoff');
 $meta['templates_path'] = array('string');
 $meta['templatepath'] = array('string');

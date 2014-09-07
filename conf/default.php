@@ -16,5 +16,6 @@ $conf['group_by_name'] = 1;
 $conf['edit_before_create'] = 0;
 $conf['create_public_page'] = 0;
 $conf['public_pages_ns'] = 'user';
+$conf['set_permissions_public'] = 1;
 $conf['templates_path'] = 'data/pages/wiki';
 $conf['templatepath'] = '';
