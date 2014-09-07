@@ -20,7 +20,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
             $this->private_ns = cleanID($this->getConf('users_namespace').':'. $this->privateNamespace());
         }
         // ...:start.txt
-        return $this->private_page = cleanID($this->private_ns.':'.$this->privateStart());
+        return $this->private_page = $this->private_ns.':'.$this->privateStart();
     }
 
     function getPublicID() {
@@ -54,7 +54,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
     function privateNamespace() {
         if ( $this->getConf('use_name_string')) {
             global $INFO;
-            $raw_string = $INFO['userinfo']['name'];
+            $raw_string = cleanID($INFO['userinfo']['name']);
             // simon_delage
             return $raw_string;
         } else {
@@ -66,9 +66,9 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
     function privateStart() {
         if ( $this->getConf('use_start_page')) {
             global $conf;
-            return $conf['start'];
+            return cleanID($conf['start']);
         } else {
-            return $this->homeNamespace();
+            return $this->privateNamespace();
         }
     }
 
