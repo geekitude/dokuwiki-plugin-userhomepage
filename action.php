@@ -27,8 +27,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         // CREATE LOCAL REPLACEMENT FILE IF IT DOESN'T EXIST YET
         if (!file_exists(DOKU_INC.'conf/userhomepage_replace.php')) {
             $content = io_readFile(DOKU_INC.'lib/plugins/userhomepage/userhomepage_replace.default', false);
-            $content = str_replace('lang_privatenamespace',$this->getLang('lang_privatenamespace'),$content);
-            $content = str_replace('lang_publicpage',$this->getLang('lang_publicpage'),$content);
+            $content = str_replace('privatenamespace',$this->getLang('privatenamespace'),$content);
+            $content = str_replace('publicpage',$this->getLang('publicpage'),$content);
             file_put_contents(DOKU_INC.'conf/userhomepage_replace.php', $content);
         }
         if (file_exists(DOKU_INC.'conf/userhomepage_replace.php')) { require_once(DOKU_INC.'conf/userhomepage_replace.php'); }
