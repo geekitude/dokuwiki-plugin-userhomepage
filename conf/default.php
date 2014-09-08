@@ -18,4 +18,4 @@
     $conf['public_pages_ns'] = 'user';
     $conf['set_permissions_public'] = 1;
     $conf['templates_path'] = 'data/pages/wiki';
-    $conf['templatepath'] = '';
+    $conf['templatepath'] = 'lib/plugins/userhomepage/_template.txt';
