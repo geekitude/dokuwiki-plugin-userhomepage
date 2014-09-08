@@ -32,16 +32,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             file_put_contents(DOKU_INC.'conf/userhomepage_replace.php', $content);
         }
         if (file_exists(DOKU_INC.'conf/userhomepage_replace.php')) { require_once(DOKU_INC.'conf/userhomepage_replace.php'); }
+        // IF OLD TEMPLATE EXISTS, RENAME userhomepage_private.default to .original and rename old template to userhomepage_private.default
+        if (file_exists(DOKU_INC.$this->getConf('templatepath'))) {
+            rename(DOKU_INC.'lib/plugins/userhomepage/userhomepage_private.default', DOKU_INC.'lib/plugins/userhomepage/userhomepage_private.original');
+            rename(DOKU_INC.$this->getConf('templatepath'), DOKU_INC.'lib/plugins/userhomepage/userhomepage_private.default');
+        }
         // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED
         if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt'))) {
-            // If version 3.0.4 was installed, 'templatepath' option isn't empty and points to former template
-            if (file_exists(DOKU_INC.$this->getConf('templatepath'))) {
-                if (!copy(DOKU_INC.$this->getConf('templatepath'), DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
-//                    echo ' An error occured while attempting to copy old template to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
-//                } else {
-//                    echo ' Successfully copied private template.';
-                }
-            } elseif (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_private.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
+            if (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_private.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
 //                echo ' An error occured while attempting to copy userhomepage_private.default to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
 //            } else {
 //                echo ' Successfully copied private template.';
