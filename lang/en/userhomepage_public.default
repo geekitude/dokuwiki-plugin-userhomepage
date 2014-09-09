@@ -1,8 +1,9 @@
-====== @NAME@ (@USER@) - Page Publique ======
-Cet page publique (@TARGETPUBLICPAGE@) est par définition **accessible à tous en lecture mais vous seul pouvez la modifier** (ainsi que l'administrateur)...
-  * Vous pouvez vous présenter, raconter une histoire ou présenter vos travaux personnels (même sans lien avec ce wiki)
-  * Vous pouvez inclure un avatar ou autre image
-  * Ne créez pas d'autre page dans cet espace de nom (@TARGETPUBLICNS@)
-  * Pensez à respecter la [[wpfr>http://en.wikipedia.org/wiki/Etiquette_in_technology|nétiquette]] ainsi que la loi ;-)
-Vous pouvez évidement supprimer ce paragraphe...
-A vos claviers! :-D
+====== @NAME@ (@USER@) - Public Page ======
+This public page (//@TARGETPUBLICPAGE@.txt//), as stated by it's name,  **can be read by anyone but only you can edit it** (or a superuser)...
+  * You can introduce yourself, add links to your contributions in this wiki, tell a story or present your other works
+  * You can add an avatar or a picture
+  * Please, don't create any other page in that namespace (//@TARGETPUBLICNS@//)
+  * Think about [[wp>http://en.wikipedia.org/wiki/Etiquette_in_technology|netiquette]] ;-)
+
+Feel free to remove this paragraph (beside the title)...\\
+Now, write something! :-D
