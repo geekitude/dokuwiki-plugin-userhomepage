@@ -1,4 +1,0 @@
-<?php
-
-    $uhpreplace['@PRIVATENAMESPACE@'] = 'privatenamespace';
-    $uhpreplace['@PUBLICPAGE@'] = 'publicpage';

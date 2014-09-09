@@ -23,7 +23,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function init(&$event, $param) {
         global $conf;
         global $INFO;
-        global $uhpreplace;
+//        global $uhpreplace;
 //        // CREATE AND LOAD LOCAL REPLACEMENT FILE IF IT DOESN'T EXIST YET
 //        if (!file_exists(DOKU_INC.'conf/userhomepage_replace.php')) {
 //            $content = io_readFile(DOKU_INC.'lib/plugins/userhomepage/userhomepage_replace.default', false);
@@ -38,7 +38,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             if (file_exists(DOKU_INC.$this->getConf('templatepath'))) {
                 $source_private = DOKU_INC.$this->getConf('templatepath');
             } else {
-                $source_private = DOKU_INC.'lib/plugins/userhomepage/userhomepage_private.default';
+                $source_private = DOKU_INC.'lib/plugins/userhomepage/lang/'.'/lang/'.$conf['lang'].'userhomepage_private.default';
             }
             if (!copy($source_private, DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
 //                echo ' An error occured while attempting to copy userhomepage_private.default to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
@@ -48,7 +48,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         }
         // CREATE PUBLIC PAGE TEMPLATES IF NEEDED
         if (($this->getConf('create_public_page')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt'))) {
-            if (!copy(DOKU_INC.'lib/plugins/userhomepage/userhomepage_public.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
+            if (!copy(DOKU_INC.'lib/plugins/userhomepage/lang/'.$conf['lang'].'userhomepage_public.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
 //                echo ' An error occured while attempting to copy userhomepage_public.default to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
 //            } else {
 //                echo ' Successfully copied public template.';

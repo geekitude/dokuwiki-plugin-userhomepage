@@ -1,9 +1,9 @@
 ====== @NAME@ (@USER@) - Espace Privé ======
-Cet espace de nom (@TARGETPRIVATENS@) et son contenu (pages, images, ...) vous est réservé et **vous seul y avez accès** (ainsi que l'administrateur)...
-  * Pour créer une page au sein de cet espace réservé (et donc protégée), utiliser la syntaxe de lien __sans aucun espace de nom__ :
-<code>[[page exemple 1]]
-[[exemple2|Ma page exemple2]]</code>
-  * Pour créer un sous espace de nom, le créer sous l'espace __@TARGETPRIVATENS@__ :
-<code>[[@TARGETPRIVATENS@:<sous_espace>:exemple3]]</code>
-Vous pouvez évidement supprimer ce paragraphe...
-A vos claviers! :-D
+This namespace (@TARGETPRIVATENS@) and it's content (pages, images, ...) is **reserved for your own usage**...
+  * To create a page inside this private space, simply use the standard link syntax __without any namespace__ :
+<code>[[exemple page 1]]
+[[exemple2|My example page2]]</code>
+  * To create a sub-namespace, simply indicate it's full position :
+<code>[[@TARGETPRIVATENS@:<sub-namespace_to_create>:exemple3]]</code>
+Feel free to delete this paragraph...
+Now write something! :-D
