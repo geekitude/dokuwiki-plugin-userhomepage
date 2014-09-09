@@ -6,5 +6,3 @@
  */
 
     $lang['created'] = 'Page créée à partir du modèle par le plugin Userhomepage.';
-    $lang['privatenamespace'] = 'Espace Privé';
-    $lang['publicpage'] = 'Page Publique';

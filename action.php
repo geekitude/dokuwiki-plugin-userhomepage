@@ -24,14 +24,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         global $conf;
         global $INFO;
         global $uhpreplace;
-        // CREATE AND LOAD LOCAL REPLACEMENT FILE IF IT DOESN'T EXIST YET
-        if (!file_exists(DOKU_INC.'conf/userhomepage_replace.php')) {
-            $content = io_readFile(DOKU_INC.'lib/plugins/userhomepage/userhomepage_replace.default', false);
-            $content = str_replace('privatenamespace',$this->getLang('privatenamespace'),$content);
-            $content = str_replace('publicpage',$this->getLang('publicpage'),$content);
-            file_put_contents(DOKU_INC.'conf/userhomepage_replace.php', $content);
-        }
-        if (file_exists(DOKU_INC.'conf/userhomepage_replace.php')) { require_once(DOKU_INC.'conf/userhomepage_replace.php'); }
+//        // CREATE AND LOAD LOCAL REPLACEMENT FILE IF IT DOESN'T EXIST YET
+//        if (!file_exists(DOKU_INC.'conf/userhomepage_replace.php')) {
+//            $content = io_readFile(DOKU_INC.'lib/plugins/userhomepage/userhomepage_replace.default', false);
+//            $content = str_replace('privatenamespace',$this->getLang('privatenamespace'),$content);
+//            $content = str_replace('publicpage',$this->getLang('publicpage'),$content);
+//            file_put_contents(DOKU_INC.'conf/userhomepage_replace.php', $content);
+//        }
+//        if (file_exists(DOKU_INC.'conf/userhomepage_replace.php')) { require_once(DOKU_INC.'conf/userhomepage_replace.php'); }
         // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED
         if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt'))) {
             // If old template exists, use it as source to create userhomepage_private.txt in templates_path
@@ -169,27 +169,35 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function applyTemplate($type) {
         global $INFO;
         global $lang;
-        // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates based on code proposed by Christian Nancy or local ones from conf/userhomepage_replace.php file
+//        // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates based on code proposed by Christian Nancy or local ones from conf/userhomepage_replace.php file
         if ($type == 'private') {
             $content = io_readFile($this->private_page_template, false);
-            $content = $this->replace($content);
-            $data = array('tpl' => $content, 'id' => $this->private_page);
+//            $content = $this->replace($content);
+//            $data = array('tpl' => $content, 'id' => $this->private_page);
         } elseif ($type == 'public') {
             $content = io_readFile($this->public_page_template, false);
-            $content = $this->replace($content);
-            $data = array('tpl' => $content, 'id' => $this->public_page);
+//            $content = $this->replace($content);
+//            $data = array('tpl' => $content, 'id' => $this->public_page);
         }
+//        // Use the built-in parser
+//        $content = parsePageTemplate($data);
+        str_replace('@TARGETPRIVATENS@', $this->private_ns, $content);
+        str_replace('@TARGETPUBLICPAGE@', $this->public_page, $content);
+        str_replace('@TARGETPUBLICNS@', cleanID($this->getConf('public_pages_ns')), $content);
+        // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates based on code proposed by Christian Nancy
+        // Build a fake data structure for the parser
+        $data = array('tpl' => $content, 'id' => $this->private_page);
         // Use the built-in parser
         $content = parsePageTemplate($data);
         return $content;
     }
 
-    function replace($content) {
-        global $uhpreplace;
-        foreach ($uhpreplace as $pattern => $replacement){
-            $content = str_replace($pattern,$replacement,$content);
-        }
-        return $content;
-    }
+//    function replace($content) {
+//        global $uhpreplace;
+//        foreach ($uhpreplace as $pattern => $replacement){
+//            $content = str_replace($pattern,$replacement,$content);
+//        }
+//        return $content;
+//    }
 
 }
