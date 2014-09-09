@@ -160,7 +160,6 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function applyTemplate($type) {
         global $INFO;
         global $lang;
-//        // Improved template process to use any replacement patterns from https://www.dokuwiki.org/namespace_templates based on code proposed by Christian Nancy or local ones from conf/userhomepage_replace.php file
         if ($type == 'private') {
             $content = io_readFile($this->private_page_template, false);
         } elseif ($type == 'public') {
