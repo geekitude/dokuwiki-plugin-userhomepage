@@ -16,28 +16,28 @@ require_once (DOKU_PLUGIN . '/acl/admin.php');
 class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function register(&$controller) {
-        $controller->register_hook('AUTH_LOGIN_CHECK', 'AFTER', $this, 'init',array());
-        $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'redirect',array());
+        $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'init',array());
+        $controller->register_hook('ACTION_ACT_PREPROCESS', 'AFTER', $this, 'redirect',array());
     }
 
     function init(&$event, $param) {
         global $conf;
         global $INFO;
         // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED
-        if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt'))) {
+        if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
             // If old template exists, use it as source to create userhomepage_private.txt in templates_path
             if (file_exists(DOKU_INC.$this->getConf('templatepath'))) {
-                $source = DOKU_INC.$this->getConf('templatepath');
+                $source = $this->getConf('templatepath');
             } else {
-                $source = DOKU_INC.'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
+                $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
             }
-            $dest = DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
+            $dest = $this->getConf('templates_path').'/userhomepage_private.txt';
             $this->copyFile($source, $dest);
         }
         // CREATE PUBLIC PAGE TEMPLATES IF NEEDED
-        if (($this->getConf('create_public_page')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt'))) {
-            $source = DOKU_INC.'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
-            $dest = DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
+        if (($this->getConf('create_public_page')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
+            $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
+            $dest = $this->getConf('templates_path').'/userhomepage_public.txt';
             $this->copyFile($source, $dest);
         }
         // TARGETS
@@ -81,10 +81,10 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     }
 
     function copyFile($source = null, $dest = null) {
-        if (!copy($source, $dest)) {
-            msg('Can\'t create '.$dest, -1);
+        if (!copy(DOKU_INC.$source, DOKU_INC.$dest)) {
+            msg('Can\'t create '.$dest.' from '.$source, -1);
         } else {
-            msg('Successfully created '.$dest, 1);
+            msg('Successfully created '.$dest.' from '.$source, 1);
         }
     }
 
@@ -103,7 +103,6 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 lock($this->private_page);
                 saveWikiText($this->private_page,$this->applyTemplate('private'),'Automatically created');
                 unlock($this->private_page);
-                msg('Created your private namespace ('.$this->private_page.')', 0);
                 // Note that we created private page
                 $created['private'] = true;
             }
@@ -116,10 +115,18 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 lock($this->public_page);
                 saveWikiText($this->public_page,$this->applyTemplate('public'),'Automatically created');
                 unlock($this->public_page);
-                msg('Created your public page ('.$this->public_page.')', 0);
                 // Note that we created public page
                 $created['public'] = true;
             }
+            $msg = null;
+            if (count($created) == 2) {
+                $msg = 'Created your private namespace ('.$this->private_page.') and public page ('.$this->public_page.')';
+            } elseif ($created['private']) {
+                $msg = 'Created your private namespace ('.$this->private_page.')';
+            } elseif ($created['public']) {
+                $msg = 'Created your public page ('.$this->public_page.')';
+            }
+            if ($msg) { msg($msg, 0); }
             // If Translation plugin is active, determine if we're at wikistart
             if (!plugin_isdisabled('translation')) {
                 foreach (explode(' ',$conf['plugin']['translation']['translations']) as $lang){
