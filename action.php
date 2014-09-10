@@ -103,6 +103,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 lock($this->private_page);
                 saveWikiText($this->private_page,$this->applyTemplate('private'),'Automatically created');
                 unlock($this->private_page);
+                msg('Created your private namespace ('.$this->private_page.')', 0);
                 // Note that we created private page
                 $created['private'] = true;
             }
@@ -115,6 +116,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 lock($this->public_page);
                 saveWikiText($this->public_page,$this->applyTemplate('public'),'Automatically created');
                 unlock($this->public_page);
+                msg('Created your public page ('.$this->private_page.')', 2);
                 // Note that we created public page
                 $created['public'] = true;
             }
