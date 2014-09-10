@@ -5,6 +5,3 @@
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  */
 
-    $lang['created'] = 'Page créée à partir du modèle par le plugin Userhomepage.';
-    $lang['copyerror'] = 'Une erreur est survenue à la création de ';
-    $lang['copysuccess'] = 'Création avec succès de ';

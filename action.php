@@ -82,15 +82,16 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function copyFile($source = null, $dest = null) {
         if (!copy($source, $dest)) {
-            msg($lang['copyerror'].$dest, -1);
+            msg('Can\'t create '.$dest, -1);
         } else {
-            msg($lang['copysuccess'].$dest, 1);
+            msg('Successfully created '.$dest, 1);
         }
     }
 
     function redirect(&$event, $param) {
         global $conf;
         global $INFO;
+        global $lang;
         $created = array();
         // If user just logged in
         if (($_SERVER['REMOTE_USER']!=null)&&($_REQUEST['do']=='login')) {
@@ -100,7 +101,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $this->private_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
                 // Create private page
                 lock($this->private_page);
-                saveWikiText($this->private_page,$this->applyTemplate('private'),$lang['created']);
+                saveWikiText($this->private_page,$this->applyTemplate('private'),'Automatically created');
                 unlock($this->private_page);
                 // Note that we created private page
                 $created['private'] = true;
@@ -112,7 +113,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $this->public_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
                 // Create public page
                 lock($this->public_page);
-                saveWikiText($this->public_page,$this->applyTemplate('public'),$lang['created']);
+                saveWikiText($this->public_page,$this->applyTemplate('public'),'Automatically created');
                 unlock($this->public_page);
                 // Note that we created public page
                 $created['public'] = true;
@@ -162,7 +163,6 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function applyTemplate($type) {
         global $INFO;
-        global $lang;
         if ($type == 'private') {
             $content = io_readFile($this->private_page_template, false);
         } elseif ($type == 'public') {
