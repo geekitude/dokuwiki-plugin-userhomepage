@@ -16,6 +16,7 @@ require_once (DOKU_PLUGIN . '/acl/admin.php');
 class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function register(&$controller) {
+//        $controller->register_hook('AUTH_LOGIN_CHECK', 'AFTER', $this, 'init',array());
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'init',array());
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'AFTER', $this, 'redirect',array());
     }
@@ -82,9 +83,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function copyFile($source = null, $dest = null) {
         if (!copy(DOKU_INC.$source, DOKU_INC.$dest)) {
-            msg('Can\'t create '.$dest.' from '.$source, -1);
+            msg($this->getLang('copyerror').' '.$source.' '.$this->getLang('to').' '.$dest, -1);
         } else {
-            msg('Successfully created '.$dest.' from '.$source, 1);
+            msg($this->getLang('copysuccess').' '.$source.' '.$this->getLang('to').' '.$dest, 1);
         }
     }
 
@@ -120,11 +121,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             }
             $msg = null;
             if (count($created) == 2) {
-                $msg = 'Created your private namespace ('.$this->private_page.') and public page ('.$this->public_page.')';
+                $msg = $this->getLang('createdboth').' ('.$this->private_page.' & '.$this->public_page.')';
             } elseif ($created['private']) {
-                $msg = 'Created your private namespace ('.$this->private_page.')';
+                $msg = $this->getLang('createdprivatens').' ('.$this->private_page.')';
             } elseif ($created['public']) {
-                $msg = 'Created your public page ('.$this->public_page.')';
+                $msg = $this->getLang('createdpublicpage').' ('.$this->public_page.')';
             }
             if ($msg) { msg($msg, 0); }
             // If Translation plugin is active, determine if we're at wikistart
