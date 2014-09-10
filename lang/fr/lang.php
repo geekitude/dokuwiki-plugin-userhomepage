@@ -6,3 +6,5 @@
  */
 
     $lang['created'] = 'Page créée à partir du modèle par le plugin Userhomepage.';
+    $lang['copyerror'] = 'Une erreur est survenue à la création de ';
+    $lang['copysuccess'] = 'Création avec succès de ';

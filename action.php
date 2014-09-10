@@ -27,23 +27,18 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt'))) {
             // If old template exists, use it as source to create userhomepage_private.txt in templates_path
             if (file_exists(DOKU_INC.$this->getConf('templatepath'))) {
-                $source_private = DOKU_INC.$this->getConf('templatepath');
+                $source = DOKU_INC.$this->getConf('templatepath');
             } else {
-                $source_private = DOKU_INC.'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
+                $source = DOKU_INC.'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
             }
-            if (!copy($source_private, DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) {
-//                echo ' An error occured while attempting to copy userhomepage_private.default to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
-//            } else {
-//                echo ' Successfully copied private template.';
-            }
+            $dest = DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
+            copyFile($source, $dest);
         }
         // CREATE PUBLIC PAGE TEMPLATES IF NEEDED
         if (($this->getConf('create_public_page')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt'))) {
-            if (!copy(DOKU_INC.'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default', DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) {
-//                echo ' An error occured while attempting to copy userhomepage_public.default to '.DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
-//            } else {
-//                echo ' Successfully copied public template.';
-            }
+            $source = DOKU_INC.'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
+            $dest = DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
+            copyFile($source, $dest);
         }
         // TARGETS
         if ($this->getConf('group_by_name')) {
@@ -83,6 +78,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         $lines = array_unique($lines);
         // Write things back to conf/acl.auth.php
         file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
+    }
+
+    function copyFile($source = null, $dest = null) {
+        if (!copy($source, $dest)) {
+            msg($lang['copyerror'].$dest, -1);
+        } else {
+            msg($lang['copysuccess'].$dest, 1);
+        }
     }
 
     function redirect(&$event, $param) {

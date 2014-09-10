@@ -6,3 +6,5 @@
  */
 
     $lang['created'] = 'Page created from template by Userhompage plugin.';
+    $lang['copyerror'] = 'An error occured while attempting to create ';
+    $lang['copysuccess'] = 'Successfully created ';
