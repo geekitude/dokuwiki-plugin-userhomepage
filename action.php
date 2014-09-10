@@ -32,13 +32,13 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $source = DOKU_INC.'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
             }
             $dest = DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
-            copyFile($source, $dest);
+            $this->copyFile($source, $dest);
         }
         // CREATE PUBLIC PAGE TEMPLATES IF NEEDED
         if (($this->getConf('create_public_page')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt'))) {
             $source = DOKU_INC.'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
             $dest = DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
-            copyFile($source, $dest);
+            $this->copyFile($source, $dest);
         }
         // TARGETS
         if ($this->getConf('group_by_name')) {
