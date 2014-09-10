@@ -116,7 +116,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 lock($this->public_page);
                 saveWikiText($this->public_page,$this->applyTemplate('public'),'Automatically created');
                 unlock($this->public_page);
-                msg('Created your public page ('.$this->private_page.')', 2);
+                msg('Created your public page ('.$this->public_page.')', 0);
                 // Note that we created public page
                 $created['public'] = true;
             }
