@@ -11,6 +11,7 @@ if(!defined('DOKU_INC')) die();
 
 class helper_plugin_userhomepage extends DokuWiki_Plugin {
 
+    // Returns the ID of current user's private namespace start page (even if it doesn't exist)
     function getPrivateID() {
         if ($this->getConf('group_by_name')) {
             // private:s:simon or private:s:simon_delage
@@ -23,10 +24,12 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         return $this->private_page = $this->private_ns.':'.$this->privateStart();
     }
 
+    // Returns the ID of current user's public page (even if it doesn't exist)
     function getPublicID() {
         return $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
     }
 
+    // Returns a link 
     function getPrivateLink($param=null) {
         global $INFO;
         global $lang;

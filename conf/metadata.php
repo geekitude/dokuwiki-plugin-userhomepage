@@ -7,7 +7,7 @@
  */
 
     $meta['create_private_ns'] = array('onoff');
-    $meta['use_name_string'] = array('onoff','_caution' => 'warning');
+    $meta['use_name_string'] = array('onoff');
     $meta['use_start_page'] = array('onoff');
     $meta['users_namespace'] = array('string','_pattern' => '/^(|[a-zA-Z\-:]+)$/');
     $meta['set_permissions'] = array('onoff');

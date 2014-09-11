@@ -12,7 +12,7 @@
     $conf['users_namespace'] = 'private';
     $conf['set_permissions'] = 1;
     $conf['set_permissions_others'] = '0';
-    $conf['group_by_name'] = 1;
+    $conf['group_by_name'] = 0;
     $conf['edit_before_create'] = 0;
     $conf['create_public_page'] = 0;
     $conf['public_pages_ns'] = 'user';
