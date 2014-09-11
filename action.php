@@ -83,9 +83,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function copyFile($source = null, $dest = null) {
         if (!copy(DOKU_INC.$source, DOKU_INC.$dest)) {
-            msg($this->getLang('copyerror').' '.$source.' '.$this->getLang('to').' '.$dest, -1);
+            msg($this->getLang('copyerror').' : '.$source.' > '.$dest, -1);
         } else {
-            msg($this->getLang('copysuccess').' '.$source.' '.$this->getLang('to').' '.$dest, 1);
+            msg($this->getLang('copysuccess').' '.$source.' > '.$dest, 1);
         }
     }
 
@@ -104,6 +104,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 lock($this->private_page);
                 saveWikiText($this->private_page,$this->applyTemplate('private'),'Automatically created');
                 unlock($this->private_page);
+                // Announce private namespace was created
+                msg($this->getLang('createdprivatens').' ('.$this->private_page.')', 0);
                 // Note that we created private page
                 $created['private'] = true;
             }
@@ -116,18 +118,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 lock($this->public_page);
                 saveWikiText($this->public_page,$this->applyTemplate('public'),'Automatically created');
                 unlock($this->public_page);
+                // Announce plubic page was created
+                msg($this->getLang('createdpublicpage').' ('.$this->public_page.')', 0);
                 // Note that we created public page
                 $created['public'] = true;
             }
-            $msg = null;
-            if (count($created) == 2) {
-                $msg = $this->getLang('createdboth').' ('.$this->private_page.' & '.$this->public_page.')';
-            } elseif ($created['private']) {
-                $msg = $this->getLang('createdprivatens').' ('.$this->private_page.')';
-            } elseif ($created['public']) {
-                $msg = $this->getLang('createdpublicpage').' ('.$this->public_page.')';
-            }
-            if ($msg) { msg($msg, 0); }
             // If Translation plugin is active, determine if we're at wikistart
             if (!plugin_isdisabled('translation')) {
                 foreach (explode(' ',$conf['plugin']['translation']['translations']) as $lang){
