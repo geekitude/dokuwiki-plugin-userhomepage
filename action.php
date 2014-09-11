@@ -83,9 +83,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function copyFile($source = null, $dest = null) {
         if (!copy(DOKU_INC.$source, DOKU_INC.$dest)) {
-            msg($this->getLang('copyerror').' : '.$source.' > '.$dest, -1);
+            msg($this->getLang('copyerror').' ('.$source.' > '.$dest.')', -1);
         } else {
-            msg($this->getLang('copysuccess').' '.$source.' > '.$dest, 1);
+            msg($this->getLang('copysuccess').' ('.$source.' > '.$dest.')', 1);
         }
     }
 
