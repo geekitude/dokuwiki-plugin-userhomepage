@@ -11,7 +11,7 @@
     $lang['use_start_page'] = 'Use the wiki\'s start page name for the start page of each private namespace (otherwise, the private namespace name will be used).';
     $lang['users_namespace'] = 'Namespace under which user namespaces are created.';
     $lang['set_permissions'] = 'Automatically configure ACL for the namespace set above and give full rights to users on their own namespace.';
-    $lang['set_permissions_others'] = 'If [set_permissions] is enabled, what permission for others (<code>@ALL</code> and <code>@user</code> groups)?';
+    $lang['set_permissions_others'] = 'If [set_permissions] is enabled, what permission for others?';
     $lang['set_permissions_others_o_0'] = 'None';
     $lang['set_permissions_others_o_1'] = 'Read';
     $lang['set_permissions_others_o_2'] = 'Edit';

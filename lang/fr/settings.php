@@ -11,7 +11,7 @@
     $lang['use_start_page'] = 'Utiliser le nom de page d\'accueil du wiki pour celle de chaque espace privé (sinon le nom de l\'espace privé sera utilisé).';
     $lang['users_namespace'] = 'Espace de nom sous lequel créer les espaces privés des utilisateurs.';
     $lang['set_permissions'] = 'Configurer automatiquement les droits d\'accès à l\'espace choisit ci-dessus et donner tous les droits aux utilisateurs sur leur espace privé réspectif.';
-    $lang['set_permissions_others'] = 'Si l\'option [set_permissions] est activée, quels droits donner aux autres (groupes <code>@ALL</code> et <code>@user</code>)?';
+    $lang['set_permissions_others'] = 'Si l\'option [set_permissions] est activée, quels droits donner aux autres?';
     $lang['set_permissions_others_o_0'] = 'Aucun';
     $lang['set_permissions_others_o_1'] = 'Lecture';
     $lang['set_permissions_others_o_2'] = 'Écriture';
