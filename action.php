@@ -16,7 +16,6 @@ require_once (DOKU_PLUGIN . '/acl/admin.php');
 class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function register(&$controller) {
-//        $controller->register_hook('AUTH_LOGIN_CHECK', 'AFTER', $this, 'init',array());
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'init',array());
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'AFTER', $this, 'redirect',array());
     }
@@ -32,14 +31,12 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             } else {
                 $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
             }
-            $dest = $this->getConf('templates_path').'/userhomepage_private.txt';
-            $this->copyFile($source, $dest);
+            $this->copyFile($source, $this->getConf('templates_path'), 'userhomepage_private.txt');
         }
         // CREATE PUBLIC PAGE TEMPLATES IF NEEDED
         if (($this->getConf('create_public_page')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
             $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
-            $dest = $this->getConf('templates_path').'/userhomepage_public.txt';
-            $this->copyFile($source, $dest);
+            $this->copyFile($source, $this->getConf('templates_path'), 'userhomepage_public.txt');
         }
         // TARGETS
         if ($this->getConf('group_by_name')) {
@@ -90,11 +87,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         }
     }
 
-    function copyFile($source = null, $dest = null) {
-        if (!copy(DOKU_INC.$source, DOKU_INC.$dest)) {
-            msg($this->getLang('copyerror').' ('.$source.' > '.$dest.')', -1);
+    function copyFile($source = null, $target_dir = null, $target_file = null) {
+        if(!@is_dir($target_dir)){
+            io_mkdir_p($target_dir) || msg("Creating directory $target_dir failed",-1);
+        }
+        if (!copy(DOKU_INC.$source, $target_dir.'/'.$target_file)) {
+            msg($this->getLang('copyerror').' ('.$source.' > '.$target_dir.'/'.$target_file.')', -1);
         } else {
-            msg($this->getLang('copysuccess').' ('.$source.' > '.$dest.')', 1);
+            msg($this->getLang('copysuccess').' ('.$source.' > '.$target_dir.'/'.$target_file.')', 1);
         }
     }
 
