@@ -69,12 +69,20 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // If both private and public namespaces are identical, we need more ACL to force read rights for @ALL on public pages
             if ($this->getConf('users_namespace') == $this->getConf('public_pages_ns')) {
                 foreach (glob("data/pages/".$this->getConf('public_pages_ns')."/*.txt") as $filename) {
-                    $acl->_acl_add($this->getConf('public_pages_ns').':'.explode('.', end(explode('/', $filename)))[0], '@ALL', AUTH_READ);
+                    // ACL on templates will be managed another way
+                    if (strpos($filename, 'userhomepage_p') == false) {
+                        $acl->_acl_add($this->getConf('public_pages_ns').':'.explode('.', end(explode('/', $filename)))[0], '@ALL', AUTH_READ);
+                    }
                 }
             // Otherwise we just need to give read access to @ALL on public pages namespace
             } else {
                 $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@ALL', AUTH_READ);
             }
+        }
+        // For templates if they're in data/pages
+        if (strpos($this->getConf('templates_path'),'data/pages') !== false) {
+            $acl->_acl_add(end(explode('/',$this->getConf('templates_path'))).':userhomepage_private', '@ALL', (int)$this->getConf('set_permissions_templates'));
+            $acl->_acl_add(end(explode('/',$this->getConf('templates_path'))).':userhomepage_public', '@ALL', (int)$this->getConf('set_permissions_templates'));
         }
         // If we changed some ACL, we probably duplicated some lines
         if (($this->getConf('set_permissions')) or ($this->getConf('set_permissions_public'))) {

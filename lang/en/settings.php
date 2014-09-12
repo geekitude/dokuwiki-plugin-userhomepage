@@ -24,4 +24,8 @@
     $lang['public_pages_ns'] = 'Namespace under wich public pages are created.';
     $lang['set_permissions_public'] = 'Automatically configure ACL for the public pages (anyone can read but only user can edit his own).';
     $lang['templates_path'] = 'Path where templates will be stored (userhomepage_private.txt and userhomepage_public.txt). Examples: <code>data/pages/wiki</code> (makes templates editable within DokuWiki) or <code>lib/plugins/userhomepage</code> (to protect templates or centralize them in a farm setup).';
+    $lang['set_permissions_templates'] = 'If templates are stored in <code>data/pages...</code>, automatically set following ACL for @ALL)';
+    $lang['set_permissions_templates_o_0'] = 'None';
+    $lang['set_permissions_templates_o_1'] = 'Read';
+    $lang['set_permissions_templates_o_2'] = 'Edit';
     $lang['templatepath'] = 'Template path from version 3.0.4 if it was installed before. If this file exists, it will be used as default source for new private namespace start page template (clear the path if you don\'t want to).';

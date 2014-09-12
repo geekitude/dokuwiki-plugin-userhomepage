@@ -24,4 +24,8 @@
     $lang['public_pages_ns'] = 'Espace de nom sous lequel créer les pages publiques.';
     $lang['set_permissions_public'] = 'Automatiquement configurer les droits d\'accès aux pages publiques (lecture pour tous mais seul l\'utilisateur peut modifier sa page).';
     $lang['templates_path'] = 'Chemin où les modèles seront stockés (userhomepage_private.txt et userhomepage_public.txt). Examples: <code>data/pages/wiki</code> (permet d\'éditer les modèles depuis le wiki) ou <code>lib/plugins/userhomepage</code> (pour protéger les modèles ou les centraliser dans une ferme de wikis).';
+    $lang['set_permissions_templates'] = 'If templates are stored in <code>data/pages...</code>, automatically set following ACL for @ALL)';
+    $lang['set_permissions_templates_o_0'] = 'None';
+    $lang['set_permissions_templates_o_1'] = 'Read';
+    $lang['set_permissions_templates_o_2'] = 'Edit';
     $lang['templatepath'] = 'Chemin vers le modèle de la version 3.0.4 si elle était installée précédement. Cette option n\'est là que pour permettre la rétro-compatibilité. Si le fichier existe, il sera utilisé comme source pour le modèle des pages d\'accueil des espaces privés (videz le chemin si vous ne le voulez pas).';
