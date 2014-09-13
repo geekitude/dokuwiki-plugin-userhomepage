@@ -40,8 +40,8 @@
     $lang['acl_user_public_o_1'] = 'Read (Default)';
     $lang['acl_user_public_o_2'] = 'Edit';
     $lang['acl_user_public_o_noacl'] = 'No automatic ACL';
-    $lang['templates_path'] = 'Path where templates will be stored (userhomepage_private.txt and userhomepage_public.txt). Examples: <code>data/pages/user</code> (makes templates editable within DokuWiki) or <code>lib/plugins/userhomepage</code> (to add more protection or centralize them in a farm setup).';
-    $lang['templatepath'] = 'Template path from version 3.0.4 if it was installed before. If this file exists, it will be used as default source for new private namespace start page template (clear the path if you don\'t want to).';
+    $lang['templates_path'] = 'Path where templates will be stored (userhomepage_private.txt and userhomepage_public.txt). Examples: <code>data/pages/user</code> or <code>lib/plugins/userhomepage</code>.';
+    $lang['templatepath'] = 'Template path from version 3.0.4. If this file exists, it will be used as default source for new private namespace start page template (clear the path if you don\'t want to).';
     $lang['acl_all_templates'] = 'Permissions for @ALL group on Templates (if they are stored in <code>data/pages...</code>)';
     $lang['acl_all_templates_o_0'] = 'None';
     $lang['acl_all_templates_o_1'] = 'Read (Default)';

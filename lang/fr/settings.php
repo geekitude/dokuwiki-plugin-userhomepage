@@ -41,7 +41,7 @@
     $lang['acl_user_public_o_2'] = 'Écriture';
     $lang['acl_user_public_o_noacl'] = 'Pas de gestion automatique des droits';
     $lang['templates_path'] = 'Chemin où les modèles seront stockés (userhomepage_private.txt et userhomepage_public.txt). Exemples: <code>data/pages/wiki</code> (permet d\'éditer les modèles depuis le wiki) ou <code>lib/plugins/userhomepage</code> (pour plus de protecion ou les centraliser dans une ferme de wikis).';
-    $lang['templatepath'] = 'Chemin vers le modèle de la version 3.0.4 si elle était installée précédement. Si le fichier existe, il sera utilisé comme source pour le modèle des pages d\'accueil des espaces privés (videz le chemin si vous ne le souhaitez pas).';
+    $lang['templatepath'] = 'Chemin vers le modèle de la version 3.0.4. Si le fichier existe, il sera utilisé comme source pour le modèle des pages d\'accueil des espaces privés (videz le chemin si vous ne le souhaitez pas).';
     $lang['acl_all_templates'] = 'Permissions for @ALL group on Templates (if they are stored in <code>data/pages...</code>)';
     $lang['acl_all_templates_o_0'] = 'Aucun';
     $lang['acl_all_templates_o_1'] = 'Lecture (Défaut)';
