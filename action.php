@@ -16,13 +16,13 @@ require_once (DOKU_PLUGIN . '/acl/admin.php');
 class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function register(&$controller) {
-        $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'init',array());
-        $controller->register_hook('ACTION_ACT_PREPROCESS', 'AFTER', $this, 'redirect',array());
+        $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, 'init',array());
+        $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'redirect',array());
+        $controller->register_hook('ACTION_ACT_PREPROCESS', 'AFTER', $this, 'acl',array());
     }
 
     function init(&$event, $param) {
         global $conf;
-        global $INFO;
         // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED
         if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
             // If old template exists, use it as source to create userhomepage_private.txt in templates_path
@@ -50,65 +50,10 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         $this->private_page = $this->private_ns . ':' . $this->privateStart();
         // user:simon.txt
         $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
-        // ACL
-        $acl = new admin_plugin_acl();
-        // For private namespace
-        if (($this->getConf('create_private_ns')) && ($this->getConf('set_permissions'))) {
-            // If use_name_string or group_by_name is enabled, we can't use ACL wildcard
-            if (($this->getConf('use_name_string')) or ($this->getConf('group_by_name'))) {
-                $ns = $this->private_ns.':*';
-                if ($_SERVER['REMOTE_USER'] != null) $acl->_acl_add($ns, strtolower($_SERVER['REMOTE_USER']), AUTH_DELETE);
-            } else {
-                $acl->_acl_add(cleanID($this->getConf('users_namespace')).':%USER%:*', '%USER%', AUTH_DELETE);
-            }
-            $acl->_acl_add(cleanID($this->getConf('users_namespace')).':*', '@ALL', (int)$this->getConf('set_permissions_others'));
-        }
-        // For public user pages
-        if (($this->getConf('create_public_page')) && ($this->getConf('set_permissions_public'))) {
-            $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':%USER%', '%USER%', AUTH_EDIT);
-            // If both private and public namespaces are identical, we need more ACL to force read rights for @ALL on public pages
-            if ($this->getConf('users_namespace') == $this->getConf('public_pages_ns')) {
-                foreach (glob("data/pages/".$this->getConf('public_pages_ns')."/*.txt") as $filename) {
-                    // ACL on templates will be managed another way
-                    if (strpos($filename, 'userhomepage_p') == false) {
-                        $acl->_acl_add($this->getConf('public_pages_ns').':'.explode('.', end(explode('/', $filename)))[0], '@ALL', AUTH_READ);
-                    }
-                }
-            // Otherwise we just need to give read access to @ALL on public pages namespace
-            } else {
-                $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@ALL', AUTH_READ);
-            }
-        }
-        // For templates if they're in data/pages
-        if (strpos($this->getConf('templates_path'),'data/pages') !== false) {
-            $acl->_acl_add(end(explode('/',$this->getConf('templates_path'))).':userhomepage_private', '@ALL', (int)$this->getConf('set_permissions_templates'));
-            $acl->_acl_add(end(explode('/',$this->getConf('templates_path'))).':userhomepage_public', '@ALL', (int)$this->getConf('set_permissions_templates'));
-        }
-        // If we changed some ACL, we probably duplicated some lines
-        if (($this->getConf('set_permissions')) or ($this->getConf('set_permissions_public'))) {
-            // Some lines in conf/acl.auth.php file have probably been duplicated so let's read the file
-            $lines = file(DOKU_INC.'conf/acl.auth.php');
-            // And only keep unique lines (OK, we loose an empty comment line...)
-            $lines = array_unique($lines);
-            // Write things back to conf/acl.auth.php
-            file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
-        }
-    }
-
-    function copyFile($source = null, $target_dir = null, $target_file = null) {
-        if(!@is_dir($target_dir)){
-            io_mkdir_p($target_dir) || msg("Creating directory $target_dir failed",-1);
-        }
-        if (!copy(DOKU_INC.$source, $target_dir.'/'.$target_file)) {
-            msg($this->getLang('copyerror').' ('.$source.' > '.$target_dir.'/'.$target_file.')', -1);
-        } else {
-            msg($this->getLang('copysuccess').' ('.$source.' > '.$target_dir.'/'.$target_file.')', 1);
-        }
     }
 
     function redirect(&$event, $param) {
         global $conf;
-        global $INFO;
         global $lang;
         $created = array();
         // If user just logged in
@@ -162,6 +107,95 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         }
     }
 
+    function acl(&$event, $param) {
+        global $conf;
+        // ACL
+        $acl = new admin_plugin_acl();
+        // On private namespace
+        if ($this->getConf('create_private_ns')) {
+            // For known users
+            // If use_name_string or group_by_name is enabled, we can't use ACL wildcards so let's create ACL for current user on his private ns
+            if (($this->getConf('use_name_string')) or ($this->getConf('group_by_name'))) {
+                $ns = $this->private_ns.':*';
+                if ($_SERVER['REMOTE_USER'] != null) $acl->_acl_add($ns, strtolower($_SERVER['REMOTE_USER']), AUTH_DELETE);
+            // Otherwise we can set ACL for all known users at once
+            } else {
+                $acl->_acl_add(cleanID($this->getConf('users_namespace')).':%USER%:*', '%USER%', AUTH_DELETE);
+            }
+            // For @ALL
+            if ($this->getConf('acl_all_private') != 'noacl') {
+                $acl->_acl_add(cleanID($this->getConf('users_namespace')).':*', '@ALL', (int)$this->getConf('acl_all_private'));
+            }
+            // For @user
+            if (($this->getConf('acl_user_private') != 'noacl') && ($this->getConf('acl_user_private') !== $this->getConf('acl_all_private'))) {
+                $acl->_acl_add(cleanID($this->getConf('users_namespace')).':*', '@user', (int)$this->getConf('acl_user_private'));
+            }
+        } // end of private namespaces acl
+        // On public user pages
+        if ($this->getConf('create_public_page')) {
+            // For known users
+            $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':%USER%', '%USER%', AUTH_EDIT);
+            // For others
+            if ($this->getConf('acl_all_public') != 'noacl') {
+                // If both private and public namespaces are identical, we need to force rights for @ALL and/or @user on each public page
+                if ($this->getConf('users_namespace') == $this->getConf('public_pages_ns')) {
+                    foreach (glob("data/pages/".$this->getConf('public_pages_ns')."/*.txt") as $filename) {
+                        // ACL on templates will be managed another way
+                        if (strpos($filename, 'userhomepage_p') == false) {
+                            // @ALL
+                            $acl->_acl_add($this->getConf('public_pages_ns').':'.explode('.', end(explode('/', $filename)))[0], '@ALL', $this->getConf('acl_all_public'));
+                            // @user
+                            if (($this->getConf('acl_user_public') != 'noacl') && ($this->getConf('acl_user_public') !== $this->getConf('acl_all_public'))) {
+                                $acl->_acl_add($this->getConf('public_pages_ns').':'.explode('.', end(explode('/', $filename)))[0], '@user', $this->getConf('acl_user_public'));
+                            }
+                        }
+                    }
+                // Otherwise we just need to give the right permission to each group on public pages namespace
+                } else {
+                    // @ALL
+                    $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@ALL', $this->getConf('acl_all_public'));
+                    // @user
+                    if (($this->getConf('acl_user_public') != 'noacl') && ($this->getConf('acl_user_public') !== $this->getConf('acl_all_public'))) {
+                        $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@user', $this->getConf('acl_user_public'));
+                    }
+                }
+            }
+        } // end for public pages acl
+        // On templates if they're in data/pages
+        if (strpos($this->getConf('templates_path'),'data/pages') !== false) {
+            // For @ALL
+            if (($this->getConf('acl_all_templates') != 'noacl') && (($this->getConf('create_private_ns')) or ($this->getConf('create_public_page')))) {
+                $acl->_acl_add(end(explode('/',$this->getConf('templates_path'))).':userhomepage_private', '@ALL', (int)$this->getConf('acl_all_templates'));
+                $acl->_acl_add(end(explode('/',$this->getConf('templates_path'))).':userhomepage_public', '@ALL', (int)$this->getConf('acl_all_templates'));
+            }
+            // For @user
+            if (($this->getConf('acl_user_templates') != 'noacl') && ($this->getConf('acl_user_templates') !== $this->getConf('acl_all_templates')) && (($this->getConf('create_private_ns')) or ($this->getConf('create_public_page')))) {
+                $acl->_acl_add(end(explode('/',$this->getConf('templates_path'))).':userhomepage_private', '@user', (int)$this->getConf('acl_user_templates'));
+                $acl->_acl_add(end(explode('/',$this->getConf('templates_path'))).':userhomepage_public', '@user', (int)$this->getConf('acl_user_templates'));
+            }
+        } // end of templates acl
+        // If we changed some ACL, we probably duplicated some lines
+        if (($this->getConf('set_permissions')) or ($this->getConf('set_permissions_public'))) {
+            // Some lines in conf/acl.auth.php file have probably been duplicated so let's read the file
+            $lines = file(DOKU_INC.'conf/acl.auth.php');
+            // And only keep unique lines (OK, we loose an empty comment line...)
+            $lines = array_unique($lines);
+            // Write things back to conf/acl.auth.php
+            file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
+        }
+    }
+
+    function copyFile($source = null, $target_dir = null, $target_file = null) {
+        if(!@is_dir($target_dir)){
+            io_mkdir_p($target_dir) || msg("Creating directory $target_dir failed",-1);
+        }
+        if (!copy(DOKU_INC.$source, $target_dir.'/'.$target_file)) {
+            msg($this->getLang('copyerror').' ('.$source.' > '.$target_dir.'/'.$target_file.')', -1);
+        } else {
+            msg($this->getLang('copysuccess').' ('.$source.' > '.$target_dir.'/'.$target_file.')', 1);
+        }
+    }
+
     function privateNamespace() {
         if ( $this->getConf('use_name_string')) {
             global $INFO;
@@ -184,7 +218,6 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     }
 
     function applyTemplate($type) {
-        global $INFO;
         if ($type == 'private') {
             $content = io_readFile($this->private_page_template, false);
         } elseif ($type == 'public') {
