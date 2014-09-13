@@ -7,4 +7,4 @@ I started to work on it in 2014-08.
 
 This is the old version with only a few fixes to enable saving options and make ACL work.
 
-Simon Delage, simon.geekitude@gmail.com
+Simon Delage
