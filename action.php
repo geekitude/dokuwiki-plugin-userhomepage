@@ -223,6 +223,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         } elseif ($type == 'public') {
             $content = io_readFile($this->public_page_template, false);
         }
+        $content = str_replace('@TARGETPRIVATEPAGE@', $this->private_page, $content);
         $content = str_replace('@TARGETPRIVATENS@', $this->private_ns, $content);
         $content = str_replace('@TARGETPUBLICPAGE@', $this->public_page, $content);
         $content = str_replace('@TARGETPUBLICNS@', cleanID($this->getConf('public_pages_ns')), $content);
