@@ -26,7 +26,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED
         if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
             // If old template exists, use it as source to create userhomepage_private.txt in templates_path
-            if (file_exists(DOKU_INC.$this->getConf('templatepath'))) {
+            if ((file_exists(DOKU_INC.$this->getConf('templatepath'))) && ($this->getConf('templatepath') != null)) {
                 $source = $this->getConf('templatepath');
             } else {
                 $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
