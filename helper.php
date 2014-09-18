@@ -33,7 +33,9 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
     function getPrivateLink($param=null) {
         global $INFO;
         global $lang;
-        if ($param == "loggedinas") {
+        if ($param == "complex") {
+            return '<li>'.$lang['loggedinas'].' : <a href="'.wl($this->getPrivateID()).'"  class="uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].'</a> (<a href="'.wl($this->getPublicID()).'"  class="uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').'">'.$_SERVER['REMOTE_USER'].'</a>)</li>';
+        } elseif ($param == "loggedinas") {
             return '<li>'.$lang['loggedinas'].' : <a href="'.wl($this->getPrivateID()).'"  class="uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
         } elseif ($param != null) {
             return '<a href="'.wl($this->getPrivateID()).'"  rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$param.'</a>';
