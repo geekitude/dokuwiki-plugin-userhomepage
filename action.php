@@ -50,14 +50,21 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         $this->private_page = $this->private_ns . ':' . $this->privateStart();
         // user:simon.txt
         $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
+        // If a user is logged in, store timestamp (if it wasn't stored yet)
+        if (($_SERVER['REMOTE_USER']!=null) && (!isset($_SESSION['uhptimestamp']))) {
+            $_SESSION['uhptimestamp'] = time();
+        // If no user is logged in and a timestamp exists, set timestamp to null (ensures that redirection will work if user just logged out and comes back before closing browser)
+        } elseif (($_SERVER['REMOTE_USER']==null) && (isset($_SESSION['uhptimestamp']))) {
+            $_SESSION['uhptimestamp'] = null;
+        }
     }
 
     function redirect(&$event, $param) {
         global $conf;
         global $lang;
         $created = array();
-        // If user just logged in
-        if (($_SERVER['REMOTE_USER']!=null)&&($_REQUEST['do']=='login')) {
+        // If a user is logged in and not allready requesting his private namespace start page
+        if (($_SERVER['REMOTE_USER']!=null)&&($_REQUEST['id']!=$this->private_page)) {
             // if private page doesn't exists, create it (from template)
             if ($this->getConf('create_private_ns') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
                 // Target private start page template
@@ -85,13 +92,13 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 // Note that we created public page
                 $created['public'] = true;
             }
-            // If Translation plugin is active, determine if we're at wikistart
+            // List IDs that can match wiki start
+            $wikistart = array($conf['start'], ':'.$conf['start']);
+            // If Translation plugin is active, wiki start page can also be '??:start'
             if (!plugin_isdisabled('translation')) {
-                foreach (explode(' ',$conf['plugin']['translation']['translations']) as $lang){
-                    if (getID() === $lang.':'.$conf['start']) {
-                        $wikistart = true;
-                        break;
-                    }
+                // For each language in Translation settings
+                foreach (explode(' ',$conf['plugin']['translation']['translations']) as $language){
+                    array_push($wikistart, $language.':'.$conf['start'], ':'.$language.':'.$conf['start']);
                 }
             }
             // If Public page was just created, redirect to it and edit
@@ -100,8 +107,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // Else if private start page was just created and edit option is set, redirect to it and edit
             } elseif (($created['private']) && ($this->getConf('edit_before_create'))) {
                 send_redirect(wl($this->private_page, 'do=edit', false, '&'));
-            // Else if the user was not at a specific page (beside wiki start) and private page exists, redirect to it.
-            } elseif ((($_REQUEST['id']==$conf['start'])||(!isset($_REQUEST['id']))||($wikistart)) && (page_exists($this->private_page))) {
+            // Else if user's private page exists AND [(user isn't requesting a specific page OR he's requesting wiki start page) AND logged in 2sec ago max]
+            } elseif ((page_exists($this->private_page)) && (((!isset($_GET['id'])) or (in_array($_GET['id'], $wikistart))) && (time()-$_SESSION["uhptimestamp"] <= 2))) {
                 send_redirect(wl($this->private_page));
             }
         }
