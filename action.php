@@ -24,7 +24,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function init(&$event, $param) {
         global $conf;
         // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED
-        if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
+        if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
             // If old template exists, use it as source to create userhomepage_private.txt in templates_path
             if ((file_exists(DOKU_INC.$this->getConf('templatepath'))) && ($this->getConf('templatepath') != null)) {
                 $source = $this->getConf('templatepath');
@@ -34,7 +34,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $this->copyFile($source, $this->getConf('templates_path'), 'userhomepage_private.txt');
         }
         // CREATE PUBLIC PAGE TEMPLATES IF NEEDED
-        if (($this->getConf('create_public_page')) && (!file_exists(DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
+        if (($this->getConf('create_public_page')) && (!file_exists(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
             $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
             $this->copyFile($source, $this->getConf('templates_path'), 'userhomepage_public.txt');
         }
@@ -196,7 +196,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         if(!@is_dir($target_dir)){
             io_mkdir_p($target_dir) || msg("Creating directory $target_dir failed",-1);
         }
-        if (!copy(DOKU_INC.$source, $target_dir.'/'.$target_file)) {
+        if (!copy(DOKU_INC.$source, DOKU_CONF.'../'.$target_dir.'/'.$target_file)) {
             msg($this->getLang('copyerror').' ('.$source.' > '.$target_dir.'/'.$target_file.')', -1);
         } else {
             msg($this->getLang('copysuccess').' ('.$source.' > '.$target_dir.'/'.$target_file.')', 1);
