@@ -68,7 +68,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // if private page doesn't exists, create it (from template)
             if ($this->getConf('create_private_ns') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
                 // Target private start page template
-                $this->private_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_private.txt';
+                $this->private_page_template = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt';
                 // Create private page
                 lock($this->private_page);
                 saveWikiText($this->private_page,$this->applyTemplate('private'),'Automatically created');
@@ -82,7 +82,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // If public page doesn't exists, create it (from template)
             if ($this->getConf('create_public_page') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
                 // Target public page template
-                $this->public_page_template = DOKU_INC.$this->getConf('templates_path').'/userhomepage_public.txt';
+                $this->public_page_template = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt';
                 // Create public page
                 lock($this->public_page);
                 saveWikiText($this->public_page,$this->applyTemplate('public'),'Automatically created');
