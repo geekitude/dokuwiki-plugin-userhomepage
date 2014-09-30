@@ -181,15 +181,12 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $acl->_acl_add(end(explode('/',$this->getConf('templates_path'))).':userhomepage_public', '@user', (int)$this->getConf('acl_user_templates'));
             }
         } // end of templates acl
-        // If we changed some ACL, we probably duplicated some lines
-        if (($this->getConf('set_permissions')) or ($this->getConf('set_permissions_public'))) {
-            // Some lines in conf/acl.auth.php file have probably been duplicated so let's read the file
-            $lines = file(DOKU_INC.'conf/acl.auth.php');
-            // And only keep unique lines (OK, we loose an empty comment line...)
-            $lines = array_unique($lines);
-            // Write things back to conf/acl.auth.php
-            file_put_contents(DOKU_INC.'conf/acl.auth.php', implode($lines));
-        }
+        // Cleaning duplicated lines in acl
+        $lines = file(DOKU_CONF.'acl.auth.php');
+        // And only keep unique lines (OK, we loose an empty comment line...)
+        $lines = array_unique($lines);
+        // Write things back to conf/acl.auth.php
+        file_put_contents(DOKU_CONF.'acl.auth.php', implode($lines));
     }
 
     function copyFile($source = null, $target_dir = null, $target_file = null) {
