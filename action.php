@@ -76,7 +76,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 // Announce private namespace was created
                 msg($this->getLang('createdprivatens').' ('.$this->private_page.')', 0);
                 // Note that we created private page
-                $created['private'] = true;
+                $created['private'] = page_exists($this->private_page);
             }
             // Public page?
             // If public page doesn't exists, create it (from template)
@@ -90,7 +90,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 // Announce plubic page was created
                 msg($this->getLang('createdpublicpage').' ('.$this->public_page.')', 0);
                 // Note that we created public page
-                $created['public'] = true;
+                $created['public'] = page_exists($this->public_page);
             }
             // List IDs that can match wiki start
             $wikistart = array($conf['start'], ':'.$conf['start']);
