@@ -58,7 +58,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $lang;
         // If user's private namespace and public page exist, return a 'Logged in as' string with both style links)
         if ((page_exists($this->getPrivateID())) && (page_exists($this->getPublicID()))) {
-            return '<li>'.$lang['loggedinas'].' : <a href="'.wl($this->getPrivateID()).'"  class="uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].'</a> (<a href="'.wl($this->getPublicID()).'"  class="uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').'">'.$_SERVER['REMOTE_USER'].'</a>)</li>';
+            return '<li>'.$lang['loggedinas'].' <a href="'.wl($this->getPrivateID()).'"  class="uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].'</a> (<a href="'.wl($this->getPublicID()).'"  class="uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').'">'.$_SERVER['REMOTE_USER'].'</a>)</li>';
         // Else if only private namespace exists, return 'Logged in as' string with private namespace link
         } elseif (page_exists($this->getPrivateID())) {
             return $this->getPrivateLink("loggedinas");
