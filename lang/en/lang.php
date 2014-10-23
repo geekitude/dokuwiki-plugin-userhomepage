@@ -1,6 +1,6 @@
 <?php
 /**
- * English language file for Namespaced template
+ * English language file for Userhomepage plugin
  * @author     Simon DELAGE <simon.geekitude@gmail.com>
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  */
