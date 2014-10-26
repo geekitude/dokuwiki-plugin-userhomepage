@@ -24,9 +24,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function init(&$event, $param) {
         global $conf;
         // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED
-        if (($this->getConf('create_private_ns')) && (!file_exists(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
+        if (($this->getConf('create_private_ns')) && (!is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
             // If old template exists, use it as source to create userhomepage_private.txt in templates_path
-            if ((file_exists(DOKU_INC.$this->getConf('templatepath'))) && ($this->getConf('templatepath') != null)) {
+            if ((is_file(DOKU_INC.$this->getConf('templatepath'))) && ($this->getConf('templatepath') != null)) {
                 $source = $this->getConf('templatepath');
             } else {
                 $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
@@ -34,7 +34,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $this->copyFile($source, $this->getConf('templates_path'), 'userhomepage_private.txt');
         }
         // CREATE PUBLIC PAGE TEMPLATES IF NEEDED
-        if (($this->getConf('create_public_page')) && (!file_exists(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
+        if (($this->getConf('create_public_page')) && (!is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
             $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
             $this->copyFile($source, $this->getConf('templates_path'), 'userhomepage_public.txt');
         }
