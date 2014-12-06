@@ -22,3 +22,4 @@
     $conf['templatepath'] = 'lib/plugins/userhomepage/_template.txt';
     $conf['acl_all_templates'] = '1';
     $conf['acl_user_templates'] = '1';
+    $conf['no_acl'] = 0;

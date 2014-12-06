@@ -52,3 +52,4 @@
     $lang['acl_user_templates_o_1'] = 'Lecture (Défaut)';
     $lang['acl_user_templates_o_2'] = 'Écriture';
     $lang['acl_user_templates_o_noacl'] = 'Pas de gestion automatique des droits';
+    $lang['no_acl'] = 'Aucun règlage automatique des droits d\'accès mais vous devrez nettoyer manuellement les règles déjà créées. Pensez à protéger les modèles.';
