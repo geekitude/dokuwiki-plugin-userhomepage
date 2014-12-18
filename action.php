@@ -147,23 +147,30 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 if ($this->getConf('acl_all_public') != 'noacl') {
                     // If both private and public namespaces are identical, we need to force rights for @ALL and/or @user on each public page
                     if ($this->getConf('users_namespace') == $this->getConf('public_pages_ns')) {
-                        foreach (glob("data/pages/".$this->getConf('public_pages_ns')."/*.txt") as $filename) {
-                            // ACL on templates will be managed another way
-                            if (strpos($filename, 'userhomepage_p') == false) {
-                                // @ALL
-                                $acl->_acl_add($this->getConf('public_pages_ns').':'.explode('.', end(explode('/', $filename)))[0], '@ALL', $this->getConf('acl_all_public'));
-                                // @user
-                                if (($this->getConf('acl_user_public') != 'noacl') && ($this->getConf('acl_user_public') !== $this->getConf('acl_all_public'))) {
-                                    $acl->_acl_add($this->getConf('public_pages_ns').':'.explode('.', end(explode('/', $filename)))[0], '@user', $this->getConf('acl_user_public'));
+                        $files = scandir(DOKU_CONF.'../data/pages/'.$this->getConf('public_pages_ns'));
+                        foreach($files as $file) {
+                            if (is_file(DOKU_CONF.'../data/pages/'.$this->getConf('public_pages_ns').'/'.$file)) {
+                                // ACL on templates will be managed another way
+                                if (strpos($file, 'userhomepage_p') !== 0) {
+                                    // @ALL
+                                    if ($this->getConf('acl_all_public') != 'noacl') {
+                                        $acl->_acl_add($this->getConf('public_pages_ns').':'.substr($file, 0, -4), '@ALL', $this->getConf('acl_all_public'));
+                                    }
+                                    // @user
+                                    if ($this->getConf('acl_user_public') != 'noacl') {
+                                        $acl->_acl_add($this->getConf('public_pages_ns').':'.substr($file, 0, -4), '@user', $this->getConf('acl_user_public'));
+                                    }
                                 }
                             }
                         }
                     // Otherwise we just need to give the right permission to each group on public pages namespace
                     } else {
                         // @ALL
-                        $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@ALL', $this->getConf('acl_all_public'));
+                        if ($this->getConf('acl_all_public') != 'noacl') {
+                            $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@ALL', $this->getConf('acl_all_public'));
+                        }
                         // @user
-                        if (($this->getConf('acl_user_public') != 'noacl') && ($this->getConf('acl_user_public') !== $this->getConf('acl_all_public'))) {
+                        if ($this->getConf('acl_user_public') != 'noacl') {
                             $acl->_acl_add(cleanID($this->getConf('public_pages_ns')).':*', '@user', $this->getConf('acl_user_public'));
                         }
                     }
