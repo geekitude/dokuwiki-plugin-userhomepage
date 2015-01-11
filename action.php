@@ -116,7 +116,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function acl(&$event, $param) {
         global $conf;
-        if (!$this->getConf('no_acl')) {
+        if ((!$this->getConf('no_acl')) && ($conf['useacl'])) {
             // ACL
             $acl = new admin_plugin_acl();
             // On private namespace
