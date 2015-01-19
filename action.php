@@ -194,7 +194,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // And only keep unique lines (OK, we loose an empty comment line...)
             $lines = array_unique($lines);
             // Write things back to conf/acl.auth.php
-            file_put_contents(DOKU_CONF.'acl.auth.php', implode($lines));
+//            file_put_contents(DOKU_CONF.'acl.auth.php', implode($lines));
+            io_saveFile(DOKU_CONF.'acl.auth.php', join('',$lines));
         }
     }
 
