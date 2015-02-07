@@ -28,7 +28,7 @@
     $lang['acl_user_private_o_8'] = 'Upload';
     $lang['acl_user_private_o_16'] = 'Delete';
     $lang['acl_user_private_o_noacl'] = 'No automatic ACL';
-    $lang['create_public_page'] = 'Create a user\s public page?';
+    $lang['create_public_page'] = 'Create a user\'s public page?';
     $lang['public_pages_ns'] = 'Namespace under wich public pages are created.';
     $lang['acl_all_public'] = 'Permissions for @ALL group on Public Pages';
     $lang['acl_all_public_o_0'] = 'None';
