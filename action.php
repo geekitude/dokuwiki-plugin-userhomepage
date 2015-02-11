@@ -66,7 +66,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         // If a user is logged in and not allready requesting his private namespace start page
         if (($_SERVER['REMOTE_USER']!=null)&&($_REQUEST['id']!=$this->private_page)) {
             // if private page doesn't exists, create it (from template)
-            if ($this->getConf('create_private_ns') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
+            if ($this->getConf('create_private_ns') && is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
                 // Target private start page template
                 $this->private_page_template = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt';
                 // Create private page
@@ -80,7 +80,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             }
             // Public page?
             // If public page doesn't exists, create it (from template)
-            if ($this->getConf('create_public_page') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
+            if ($this->getConf('create_public_page') && is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
                 // Target public page template
                 $this->public_page_template = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt';
                 // Create public page
@@ -245,13 +245,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     }
 
     function copyFile($source = null, $target_dir = null, $target_file = null) {
-        if(!@is_dir($target_dir)){
-            io_mkdir_p($target_dir) || msg("Creating directory $target_dir failed",-1);
+        if(!is_dir(DOKU_CONF."../".$target_dir)){
+            io_mkdir_p(DOKU_CONF."../".$target_dir) || msg("Creating directory $target_dir failed",-1);
         }
-        if (!copy(DOKU_INC.$source, DOKU_CONF.'../'.$target_dir.'/'.$target_file)) {
-            msg($this->getLang('copyerror').' ('.$source.' > '.$target_dir.'/'.$target_file.')', -1);
-        } else {
+        copy(DOKU_INC.$source, DOKU_CONF.'../'.$target_dir.'/'.$target_file);
+        if (is_file(DOKU_INC.$source, DOKU_CONF.'../'.$target_dir.'/'.$target_file)) {
             msg($this->getLang('copysuccess').' ('.$source.' > '.$target_dir.'/'.$target_file.')', 1);
+        } else {
+            msg($this->getLang('copyerror').' ('.$source.' > '.$target_dir.'/'.$target_file.')', -1);
         }
     }
 
