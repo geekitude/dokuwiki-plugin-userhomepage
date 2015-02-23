@@ -24,9 +24,13 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         return $this->private_page = $this->private_ns.':'.$this->privateStart();
     }
 
-    // Returns the ID of current user's public page (even if it doesn't exist)
-    function getPublicID() {
-        return $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
+    // Returns the ID of any (or current) user's public page (even if it doesn't exist)
+    function getPublicID($userLogin=null) {
+        if ($user) {
+            return $this->public_page = cleanID($this->getConf('public_pages_ns').':'.$userLogin);
+        } else {
+            return $this->public_page = cleanID($this->getConf('public_pages_ns').':'.$_SERVER['REMOTE_USER']);
+        }
     }
 
     function getPrivateLink($param=null) {
@@ -68,6 +72,24 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         // Else default back to standard string
         } else {
             return '<li class="user">'.$lang['loggedinas'].' '.userlink().'</li>';
+        }
+    }
+
+    function getAnyPublicLink($userLogin) {
+//        global $INFO;
+        global $lang;
+        if ($userLogin != null) {
+            $publicID = $this->getPublicID($userLogin);
+            $result = '<a href="'.wl($publicID).'"  class="uhp_public ';
+            if (page_exists($publicID)) {
+                $result = $result.'wikilink1';
+            } else {
+                $result = $result.'wikilink2';
+            }
+            $result = $result.'" rel="nofollow" title="'.$this->getLang('publicpage').'">'.editorinfo($userLogin, true).'</a>';
+            return $result;
+        } else {
+            return false;
         }
     }
 
