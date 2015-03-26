@@ -33,6 +33,8 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         }
     }
 
+    // Returns a link to current user's private namespace start page (even if it doesn't exist)
+    // If @param == "loggedinas", the link will be wraped in an <li> element
     function getPrivateLink($param=null) {
         global $INFO;
         global $lang;
@@ -45,6 +47,8 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         }
     }
 
+    // Returns a link to current user's public page (even if it doesn't exist)
+    // If @param == "loggedinas", the link will be wraped in an <li> element
     function getPublicLink($param=null) {
         global $INFO;
         global $lang;
@@ -75,8 +79,9 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         }
     }
 
+    // Returns a link to any user's public page (user login is required and page must exist)
+    // This is to provide proper "Last update by" link
     function getAnyPublicLink($userLogin) {
-//        global $INFO;
         global $lang;
         if ($userLogin != null) {
             $publicID = $this->getPublicID($userLogin);
