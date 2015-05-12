@@ -23,6 +23,10 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function init(&$event, $param) {
         global $conf;
+        $this->dataDir = realpath($conf['savedir']);
+        $this->confDir = realpath(DOKU_CONF);
+        $this->templatesDir = realpath($this->getConf('templates_path'));
+        msg("dataDir=".$this->dataDir."; confDir=".$this->confDir."; templatesDir=".$this->templatesDir,0);
         // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED
         if (($this->getConf('create_private_ns')) && (!is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
             // If old template exists, use it as source to create userhomepage_private.txt in templates_path
@@ -249,7 +253,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             io_mkdir_p(DOKU_CONF."../".$target_dir) || msg("Creating directory $target_dir failed",-1);
         }
         copy(DOKU_INC.$source, DOKU_CONF.'../'.$target_dir.'/'.$target_file);
-        if (is_file(DOKU_INC.$source, DOKU_CONF.'../'.$target_dir.'/'.$target_file)) {
+        if (is_file(DOKU_CONF.'../'.$target_dir.'/'.$target_file)) {
             msg($this->getLang('copysuccess').' ('.$source.' > '.$target_dir.'/'.$target_file.')', 1);
         } else {
             msg($this->getLang('copyerror').' ('.$source.' > '.$target_dir.'/'.$target_file.')', -1);
