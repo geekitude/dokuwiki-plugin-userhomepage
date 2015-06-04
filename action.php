@@ -23,24 +23,38 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function init(&$event, $param) {
         global $conf;
-        $this->dataDir = realpath($conf['savedir']);
-//        $this->confDir = realpath(DOKU_CONF);
-//        $this->templatesDir = realpath($this->getConf('templates_path'));
-//        msg("dataDir=".$this->dataDir."; confDir=".$this->confDir."; templatesDir=".$this->templatesDir,0);
-        // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED
-        if (($this->getConf('create_private_ns')) && (!is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
-            // If old template exists, use it as source to create userhomepage_private.txt in templates_path
-            if ((is_file(DOKU_INC.$this->getConf('templatepath'))) && ($this->getConf('templatepath') != null)) {
+
+        // If templates_path option starts with 'data/pages' it can automatically be adapted but should be changed
+        if (substr($this->getConf('templates_path'),0,10) == 'data/pages') {
+            $dest = str_replace("data/pages", "./pages", $this->getConf('templates_path'));
+            msg("Userhomepage option [<code>templates_path</code>] should be changed to a path relative to data folder (as set by Dokuwiki's [<code>savedir</code>] setting). Current value is based on former default (i.e. <code>data/pages/...</code>) and will still work but this message will keep appearing until the value is corrected, check <a href='https://www.dokuwiki.org/plugin:userhomepage'>this page</a> for details.",2);
+        } else {
+            $dest = $this->getConf('templates_path');
+        }
+        $this->dataDir = $conf['savedir'];
+        // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED (is required by options, doesn't exist yet and a known user is logged in)
+        if (($this->getConf('create_private_ns')) && (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
+            // If a template exists in path as builded before 2015/05/14 version, use it as source to create userhomepage_private.txt in new templates_path
+            if ((is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($this->getConf('templatepath') != null)) {
+                $source = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt';
+            // If a template from version 3.0.4 exists, use it as source to create userhomepage_private.txt in templates_path
+            } elseif ((is_file(DOKU_INC.$this->getConf('templatepath'))) && ($this->getConf('templatepath') != null)) {
                 $source = $this->getConf('templatepath');
+            // Otherwise, we're on a fresh install
             } else {
                 $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
             }
-            $this->copyFile($source, $this->getConf('templates_path'), 'userhomepage_private.txt');
+            $this->copyFile($source, $dest, 'userhomepage_private.txt');
         }
-        // CREATE PUBLIC PAGE TEMPLATES IF NEEDED
-        if (($this->getConf('create_public_page')) && (!is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
-            $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
-            $this->copyFile($source, $this->getConf('templates_path'), 'userhomepage_public.txt');
+        // CREATE PUBLIC PAGE TEMPLATES IF NEEDED (is required by options, doesn't exist yet and a known user is logged in)
+        if (($this->getConf('create_public_page')) && (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
+            // If a template exists in path as builded before 2015/05/14 version, use it as source to create userhomepage_private.txt in new templates_path
+            if ((is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($this->getConf('templatepath') != null)) {
+                $source = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt';
+            } else {
+                $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
+            }
+            $this->copyFile($source, $dest, 'userhomepage_public.txt');
         }
         // TARGETS
         if ($this->getConf('group_by_name')) {
@@ -70,9 +84,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         // If a user is logged in and not allready requesting his private namespace start page
         if (($_SERVER['REMOTE_USER']!=null)&&($_REQUEST['id']!=$this->private_page)) {
             // if private page doesn't exists, create it (from template)
-            if ($this->getConf('create_private_ns') && is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
+            if ($this->getConf('create_private_ns') && is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
                 // Target private start page template
-                $this->private_page_template = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt';
+                $this->private_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt';
                 // Create private page
                 lock($this->private_page);
                 saveWikiText($this->private_page,$this->applyTemplate('private'),'Automatically created');
@@ -84,9 +98,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             }
             // Public page?
             // If public page doesn't exists, create it (from template)
-            if ($this->getConf('create_public_page') && is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
+            if ($this->getConf('create_public_page') && is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
                 // Target public page template
-                $this->public_page_template = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt';
+                $this->public_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt';
                 // Create public page
                 lock($this->public_page);
                 saveWikiText($this->public_page,$this->applyTemplate('public'),'Automatically created');
@@ -166,9 +180,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 if ($this->getConf('acl_all_public') != 'noacl') {
                     // If both private and public namespaces are identical, we need to force rights for @ALL and/or @user on each public page
                     if ($this->getConf('users_namespace') == $this->getConf('public_pages_ns')) {
-                        $files = scandir(DOKU_CONF.'../data/pages/'.$this->getConf('public_pages_ns'));
+                        $files = scandir($this->dataDir.'/pages/'.$this->getConf('public_pages_ns'));
                         foreach($files as $file) {
-                            if (is_file(DOKU_CONF.'../data/pages/'.$this->getConf('public_pages_ns').'/'.$file)) {
+                            if (is_file($this->dataDir.'/pages/'.$this->getConf('public_pages_ns').'/'.$file)) {
                                 // ACL on templates will be managed another way
                                 if (strpos($file, 'userhomepage_p') !== 0) {
                                     // @ALL
@@ -208,7 +222,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 }
             } // end for public pages acl
             // On templates if they're in data/pages
-            if (strpos($this->getConf('templates_path'),'data/pages') !== false) {
+            if (strpos($this->getConf('templates_path'),'/pages') !== false) {
                 // For @ALL
                 if (($this->getConf('acl_all_templates') != 'noacl') && (($this->getConf('create_private_ns')) or ($this->getConf('create_public_page')))) {
                     $where = end(explode('/',$this->getConf('templates_path'))).':userhomepage_private';
@@ -242,21 +256,24 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                         $acl->_acl_add($line['where'], $line['who'], $line['perm']);
                     }
                 }
-//            } else {
-//                msg("Userhomepage has no ACL rules to update or add.",0);
             }
         }
     }
 
     function copyFile($source = null, $target_dir = null, $target_file = null) {
-        if(!is_dir(DOKU_CONF."../".$target_dir)){
-            io_mkdir_p(DOKU_CONF."../".$target_dir) || msg("Creating directory $target_dir failed",-1);
-        }
-        copy(DOKU_INC.$source, DOKU_CONF.'../'.$target_dir.'/'.$target_file);
-        if (is_file(DOKU_CONF.'../'.$target_dir.'/'.$target_file)) {
-            msg($this->getLang('copysuccess').' ('.$source.' > '.$target_dir.'/'.$target_file.')', 1);
+        if (!is_file($this->dataDir.DIRECTORY_SEPARATOR.$target_dir.DIRECTORY_SEPARATOR.$target_file)) {
+            if(!is_dir($this->dataDir.DIRECTORY_SEPARATOR.$target_dir)){
+                io_mkdir_p($this->dataDir.DIRECTORY_SEPARATOR.$target_dir) || msg("Creating directory $target_dir failed",-1);
+            }
+            $source = str_replace('/', DIRECTORY_SEPARATOR, $source);
+            copy($source, $this->dataDir.DIRECTORY_SEPARATOR.$target_dir.DIRECTORY_SEPARATOR.$target_file);
+            if (is_file($this->dataDir.DIRECTORY_SEPARATOR.$target_dir.DIRECTORY_SEPARATOR.$target_file)) {
+                msg($this->getLang('copysuccess').' ('.$source.' > '.$this->dataDir.DIRECTORY_SEPARATOR.$target_dir.DIRECTORY_SEPARATOR.$target_file.')', 1);
+            } else {
+                msg($this->getLang('copyerror').' ('.$source.' > '.$this->dataDir.DIRECTORY_SEPARATOR.$target_dir.DIRECTORY_SEPARATOR.$target_file.')', -1);
+            }
         } else {
-            msg($this->getLang('copyerror').' ('.$source.' > '.$target_dir.'/'.$target_file.')', -1);
+            msg($this->getLang('copynotneeded').' ('.$source.' > '.$this->dataDir.DIRECTORY_SEPARATOR.$target_dir.DIRECTORY_SEPARATOR.$target_file.')', 0);
         }
     }
 

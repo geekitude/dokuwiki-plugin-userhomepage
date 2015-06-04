@@ -7,6 +7,7 @@
 
     $lang['copyerror'] = 'Erreur de copie';
     $lang['copysuccess'] = 'Copie réussie';
+    $lang['copynotneeded'] = 'Copie non nécessaire';
     $lang['createdprivatens'] = 'Votre espace privé est créé';
     $lang['createdpublicpage'] = 'Votre page publique est créée';
     $lang['privatenamespace'] = 'Espace Privé';

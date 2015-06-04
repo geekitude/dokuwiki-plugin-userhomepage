@@ -18,7 +18,7 @@
     $conf['public_pages_ns'] = 'user';
     $conf['acl_all_public'] = '1';
     $conf['acl_user_public'] = '1';
-    $conf['templates_path'] = 'data/pages/user';
+    $conf['templates_path'] = './pages/user';
     $conf['templatepath'] = 'lib/plugins/userhomepage/_template.txt';
     $conf['acl_all_templates'] = '1';
     $conf['acl_user_templates'] = '1';

@@ -7,6 +7,7 @@
 
     $lang['copyerror'] = 'Fehler beim Kopieren';
     $lang['copysuccess'] = 'Erfolgreich kopiert';
+// TRANSLATION NEEDED    $lang['copynotneeded'] = 'Copy not needed';
     $lang['createdprivatens'] = 'Privaten Namespace erstellt';
     $lang['createdpublicpage'] = 'Öffentliche Seite erstellt';
     $lang['privatenamespace'] = 'Privater Namespace';

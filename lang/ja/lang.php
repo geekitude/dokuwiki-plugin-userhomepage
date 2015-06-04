@@ -7,6 +7,7 @@
  */
 $lang['copyerror'] = 'コピー失敗';
 $lang['copysuccess'] = 'コピー成功';
+// TRANSLATION NEEDED    $lang['copynotneeded'] = 'Copy not needed';
 $lang['createdprivatens'] = '私用の名前空間を作成した。';
 $lang['createdpublicpage'] = '公開ページを作成した。';
 $lang['privatenamespace'] = '私用の名前空間';
