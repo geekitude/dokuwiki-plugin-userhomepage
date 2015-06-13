@@ -119,12 +119,12 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     array_push($wikistart, $language.':'.$conf['start'], ':'.$language.':'.$conf['start']);
                 }
             }
-            // If Public page was just created, redirect to it and edit
+            // If Public page was just created, redirect to it and edit (or show)
             if ($created['public']) {
-                send_redirect(wl($this->public_page, 'do=edit', false, '&'));
+                send_redirect(wl($this->public_page, 'do='.$this->getConf('action'), false, '&'));
             // Else if private start page was just created and edit option is set, redirect to it and edit
             } elseif (($created['private']) && ($this->getConf('edit_before_create'))) {
-                send_redirect(wl($this->private_page, 'do=edit', false, '&'));
+                send_redirect(wl($this->private_page, 'do='.$this->getConf('action'), false, '&'));
             // Else if user's private page exists AND [(user isn't requesting a specific page OR he's requesting wiki start page) AND logged in 2sec ago max]
             } elseif ((page_exists($this->private_page)) && (((!isset($_GET['id'])) or (in_array($_GET['id'], $wikistart))) && (time()-$_SESSION["uhptimestamp"] <= 2))) {
                 send_redirect(wl($this->private_page));
