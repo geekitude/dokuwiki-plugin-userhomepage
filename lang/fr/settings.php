@@ -56,3 +56,5 @@
     $lang['action'] = 'Action à la première redirection vers la page publique après sa création (ou la page d\'accueil de l\'espace de nom privé).';
     $lang['action_o_edit'] = 'Editer (Défaut)';
     $lang['action_o_show'] = 'Afficher';
+    $lang['userlink_replace'] = 'Activer le remplacement du lien interwiki [<code>Connecté en tant que</code>], selon les pages créées par Userhomepage (ne fonctionne que si l\'option <code>showuseras</code> est configurée pour le lien interwiki).';
+    $lang['userlink_classes'] = 'Liste séparée par des espaces de classes CSS à appliquer aux liens de la chaîne [<code>Connecté en tant que</code>] (défaut: <code>interwiki iw_user wikilink1 uhp_private</code>, ajoutez <code>iw_user</code> pour l\'icône par défaut du thème).';

@@ -56,3 +56,5 @@
     $lang['action'] = 'Action on first redirection to public page after it\'s creation (or private namespace start page).';
     $lang['action_o_edit'] = 'Edit (Default)';
     $lang['action_o_show'] = 'Show';
+    $lang['userlink_replace'] = 'Enable replacement of [<code>Logged in as</code>] interwiki link, depending on pages created by Userhomepage (only works if <code>showuseras</code> option is set to interwiki link).';
+    $lang['userlink_classes'] = 'Space separated list of CSS classes to apply to [<code>Logged in as</code>] interwiki links (default: <code>interwiki iw_user wikilink1 uhp_private</code>, add <code>iw_user</code> for template\'s default icon).';

@@ -19,10 +19,12 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, 'init',array());
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'redirect',array());
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'AFTER', $this, 'acl',array());
+        $controller->register_hook('COMMON_USER_LINK', 'AFTER', $this, 'replaceUserLink',array());
     }
 
     function init(&$event, $param) {
         global $conf;
+        $this->helper = plugin_load('helper','userhomepage');
 
         // If templates_path option starts with 'data/pages' it can automatically be adapted but should be changed
         if (substr($this->getConf('templates_path'),0,10) == 'data/pages') {
@@ -317,6 +319,47 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         // Use the built-in parser
         $content = parsePageTemplate($data);
         return $content;
+    }
+
+    function replaceUserLink(&$event, $param) {
+        global $INFO;
+        global $conf;
+
+        if (($conf['showuseras'] == "username_link") and ($this->getConf('userlink_replace'))) {
+            $classes = $this->getConf('userlink_classes');
+            $this->username = $event->data['username'];
+            $this->name = $event->data['name'];
+            $this->link = $event->data['link'];
+            $this->userlink = $event->data['userlink'];
+            $this->textonly = $event->data['textonly'];
+            // Logged in as...
+            if (strpos($this->name, '<bdi>') !== false) {
+                $privateId = $this->helper->getPrivateID();
+                $publicId = $this->helper->getPublicID();
+                if ((page_exists($privateId)) && (page_exists($publicId))) {
+                    $return  = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_private" title="'.$this->getLang('privatenamespace').'"><bdi>'.$INFO['userinfo']['name'].'</bdi></a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_public" title="'.$this->getLang('publicpage').'"><bdi>'.$_SERVER['REMOTE_USER'].'</bdi></a>)';
+                } elseif (page_exists($publicId)) {
+                    $return  = '<bdi>'.$INFO['userinfo']['name'].'</bdi> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_public" title="'.$this->getLang('publicpage').'"><bdi>'.$_SERVER['REMOTE_USER'].'</bdi></a>)';
+                } elseif (page_exists($privateId)) {
+                    $return  = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_private" title="'.$this->getLang('privatenamespace').'"><bdi>'.$INFO['userinfo']['name'].'</bdi></a> (<bdi>'.$_SERVER['REMOTE_USER'].'</bdi>)';
+                } else {
+                    $return = null;
+                }
+                // ... or Last modified...
+            } else {
+                // No change for this right now
+                $return = null;
+            }
+            if ($return != null) {
+                $event->data = array(
+                    'username' => $this->username,
+                    'name' => $this->name,
+                    'link' => $this->link,
+                    'userlink' => $return,
+                    'textonly' => $this->textonly
+                );
+            }
+        }
     }
 
 }
