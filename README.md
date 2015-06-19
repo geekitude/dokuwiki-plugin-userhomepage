@@ -1,4 +1,4 @@
-UserHomepage
+User HomePage
 ============
 
 Dokuwiki plugin to automatically create user's homepage and/or namespace.
