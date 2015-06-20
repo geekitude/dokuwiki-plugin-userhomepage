@@ -122,17 +122,19 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 }
             }
             // If Public page was just created, redirect to it and edit (or show)
-            if ($created['public']) {
+            if (($created['public']) && (page_exists($this->public_page))) {
 //                send_redirect(wl($this->public_page, 'do='.$this->getConf('action'), false, '&'));
                 send_redirect(wl($this->public_page, array('do='.$this->getConf('action')), true));
             // Else if private start page was just created and edit option is set, redirect to it and edit
-            } elseif (($created['private']) && ($this->getConf('edit_before_create'))) {
+            } elseif (($created['private']) && (page_exists($this->private_page)) && ($this->getConf('edit_before_create'))) {
 //                send_redirect(wl($this->private_page, 'do='.$this->getConf('action'), false, '&'));
                 send_redirect(wl($this->private_page, array('do='.$this->getConf('action')), true));
             // Else if user's private page exists AND [(user isn't requesting a specific page OR he's requesting wiki start page) AND logged in 2sec ago max]
             } elseif ((page_exists($this->private_page)) && (((!isset($_GET['id'])) or (in_array($_GET['id'], $wikistart))) && (time()-$_SESSION["uhptimestamp"] <= 2))) {
 //                send_redirect(wl($this->private_page));
                 send_redirect(wl($this->private_page, '', true));
+            } else {
+                break;
             }
         }
     }
