@@ -133,8 +133,6 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             } elseif ((page_exists($this->private_page)) && (((!isset($_GET['id'])) or (in_array($_GET['id'], $wikistart))) && (time()-$_SESSION["uhptimestamp"] <= 2))) {
 //                send_redirect(wl($this->private_page));
                 send_redirect(wl($this->private_page, '', true));
-            } else {
-                break;
             }
         }
     }
