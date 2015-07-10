@@ -58,3 +58,4 @@
     $lang['action_o_show'] = 'Afficher';
     $lang['userlink_replace'] = 'Activer le remplacement du lien interwiki [<code>Connecté en tant que</code>], selon les pages créées par Userhomepage (ne fonctionne que si l\'option <code>showuseras</code> est configurée pour le lien interwiki).';
     $lang['userlink_classes'] = 'Liste séparée par des espaces de classes CSS à appliquer aux liens de la chaîne [<code>Connecté en tant que</code>] (défaut: <code>interwiki wikilink1</code>).';
+    $lang['userlink_fa'] = 'Utiliser des icônes Fontawesome au lieu d\'images (Fontawesome doit être installé par le thème ou un plugin) ?';

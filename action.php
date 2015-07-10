@@ -328,6 +328,10 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
         if (($conf['showuseras'] == "username_link") and ($this->getConf('userlink_replace'))) {
             $classes = $this->getConf('userlink_classes');
+            $classes = str_replace(',', ' ', $classes);
+            if ($this->getConf('userlink_fa')) {
+                $classes = str_replace('interwiki', '', $classes);
+            }
             $this->username = $event->data['username'];
             $this->name = $event->data['name'];
             $this->link = $event->data['link'];
@@ -338,11 +342,23 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $privateId = $this->helper->getPrivateID();
                 $publicId = $this->helper->getPublicID();
                 if ((page_exists($privateId)) && (page_exists($publicId))) {
-                    $return  = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').' ('.$privateId.')'.'"><bdi>'.$INFO['userinfo']['name'].'</bdi></a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').' ('.$publicId.')'.'"><bdi>'.$_SERVER['REMOTE_USER'].'</bdi></a>)';
+                    if ($this->getConf('userlink_fa')) {
+                        $return = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('privatenamespace').' ('.$privateId.')'.'"><bdi><i class="fa fa-user-secret"></i>'.$INFO['userinfo']['name'].'</bdi></a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('publicpage').'('.$publicId.')'.'"><bdi><i class="fa fa-user"></i> '.$_SERVER['REMOTE_USER'].'</bdi></a>)';
+                    } else {
+                        $return = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').' ('.$privateId.')'.'"><bdi>'.$INFO['userinfo']['name'].'</bdi></a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').' ('.$publicId.')'.'"><bdi>'.$_SERVER['REMOTE_USER'].'</bdi></a>)';
+                    }
                 } elseif (page_exists($publicId)) {
-                    $return  = '<bdi>'.$INFO['userinfo']['name'].'</bdi> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').' ('.$publicId.')'.'"><bdi>'.$_SERVER['REMOTE_USER'].'</bdi></a>)';
+                    if ($this->getConf('userlink_fa')) {
+                        $return = '</a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('publicpage').'('.$publicId.')'.'"><bdi><i class="fa fa-user"></i> '.$_SERVER['REMOTE_USER'].'</bdi></a>)';
+                    } else {
+                        $return = '<bdi>'.$INFO['userinfo']['name'].'</bdi> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').' ('.$publicId.')'.'"><bdi>'.$_SERVER['REMOTE_USER'].'</bdi></a>)';
+                    }
                 } elseif (page_exists($privateId)) {
-                    $return  = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').' ('.$privateId.')'.'"><bdi>'.$INFO['userinfo']['name'].'</bdi></a> (<bdi>'.$_SERVER['REMOTE_USER'].'</bdi>)';
+                    if ($this->getConf('userlink_fa')) {
+                        $return = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('privatenamespace').' ('.$privateId.')'.'"><bdi><i class="fa fa-user-secret"></i>'.$INFO['userinfo']['name'].'</bdi></a>';
+                    } else {
+                        $return = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').' ('.$privateId.')'.'"><bdi>'.$INFO['userinfo']['name'].'</bdi></a> (<bdi>'.$_SERVER['REMOTE_USER'].'</bdi>)';
+                    }
                 } else {
                     $return = null;
                 }
