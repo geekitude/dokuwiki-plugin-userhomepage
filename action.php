@@ -129,8 +129,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             } elseif (($created['private']) && (page_exists($this->private_page)) && ($this->getConf('edit_before_create'))) {
 //                send_redirect(wl($this->private_page, 'do='.$this->getConf('action'), false, '&'));
                 send_redirect(wl($this->private_page, array('do='.$this->getConf('action')), true));
-            // Else if user's private page exists AND [(user isn't requesting a specific page OR he's requesting wiki start page) AND logged in 2sec ago max]
-            } elseif ((page_exists($this->private_page)) && (((!isset($_GET['id'])) or (in_array($_GET['id'], $wikistart))) && (time()-$_SESSION["uhptimestamp"] <= 2))) {
+            // Else if redirection is enabled and user's private page exists AND [(user isn't requesting a specific page OR he's requesting wiki start page) AND logged in 2sec ago max]
+            } elseif (($this->getConf('redirection')) && (page_exists($this->private_page)) && (((!isset($_GET['id'])) or (in_array($_GET['id'], $wikistart))) && (time()-$_SESSION["uhptimestamp"] <= 2))) {
 //                send_redirect(wl($this->private_page));
                 send_redirect(wl($this->private_page, '', true));
             }

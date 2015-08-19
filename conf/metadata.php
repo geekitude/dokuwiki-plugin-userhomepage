@@ -23,6 +23,7 @@
     $meta['acl_all_templates'] = array('multichoice','_choices'=>array('0','1','2','noacl'));
     $meta['acl_user_templates'] = array('multichoice','_choices'=>array('0','1','2','noacl'));
     $meta['no_acl'] = array('onoff');
+    $meta['redirection'] = array('onoff');
     $meta['action'] = array('multichoice','_choices'=>array('edit','show'));
     $meta['userlink_replace'] = array('onoff');
     $meta['userlink_classes'] = array('string');

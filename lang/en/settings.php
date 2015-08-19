@@ -53,6 +53,7 @@
     $lang['acl_user_templates_o_2'] = 'Edit';
     $lang['acl_user_templates_o_noacl'] = 'No automatic ACL';
     $lang['no_acl'] = 'No automated ACL setting at all but you\'ll have to remove those created so far manually. Don\'t forget to set some ACL on templates.';
+    $lang['redirection'] = 'Enable redirection (even if disabled, it will still occur on pages creation).';
     $lang['action'] = 'Action on first redirection to public page after it\'s creation (or private namespace start page).';
     $lang['action_o_edit'] = 'Edit (Default)';
     $lang['action_o_show'] = 'Show';

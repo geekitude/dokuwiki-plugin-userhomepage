@@ -23,6 +23,7 @@
     $conf['acl_all_templates'] = '1';
     $conf['acl_user_templates'] = '1';
     $conf['no_acl'] = 0;
+    $conf['redirection'] = 1;
     $conf['action'] = 'edit';
     $conf['userlink_replace'] = 1;
     $conf['userlink_classes'] = 'interwiki wikilink1';

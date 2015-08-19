@@ -53,6 +53,7 @@
     $lang['acl_user_templates_o_2'] = 'Écriture';
     $lang['acl_user_templates_o_noacl'] = 'Pas de gestion automatique des droits';
     $lang['no_acl'] = 'Aucun règlage automatique des droits d\'accès mais vous devrez nettoyer manuellement les règles déjà créées. Pensez à protéger les modèles.';
+    $lang['redirection'] = 'Activer la  redirection (même désactivée, elle aura tout de même lieu lors de la création des pages).';
     $lang['action'] = 'Action à la première redirection vers la page publique après sa création (ou la page d\'accueil de l\'espace de nom privé).';
     $lang['action_o_edit'] = 'Editer (Défaut)';
     $lang['action_o_show'] = 'Afficher';
