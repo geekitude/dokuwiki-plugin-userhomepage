@@ -108,8 +108,29 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
 		}
 	}
 
+    // Returns an array containing id and language of Private NS Start Page and/or Public Page (depending on options, page existance isn't checked)
+	function getElements() {
+        $return = array();
+        // Don't return anything if no known user is logged in
+        if ($_SERVER['REMOTE_USER'] != null) {
+            // Add PRIVATE NAMESPACE START PAGE INFO IF NEEDED (is required by options)
+            if ($this->getConf('create_private_ns')) {
+                $return['private'] = array();
+                $return['private']['id'] = $this->getPrivateID();
+                $return['private']['string'] = $this->getLang('privatenamespace');
+            }
+            // Add PUBLIC PAGE INFO IF NEEDED (is required by options)
+            if ($this->getConf('create_public_page')) {
+                $return['public'] = array();
+                $return['public']['id'] = $this->getPublicID();
+                $return['public']['string'] = $this->getLang('publicpage');
+            }
+        }
+        return $return;
+    }
+
     function privateNamespace() {
-        if ( $this->getConf('use_name_string')) {
+        if ($this->getConf('use_name_string')) {
             global $INFO;
             $raw_string = cleanID($INFO['userinfo']['name']);
             // simon_delage
