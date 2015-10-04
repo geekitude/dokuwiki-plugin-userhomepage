@@ -373,13 +373,13 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $publicId = $this->helper->getPublicID();
                 if ((page_exists($privateId)) && (page_exists($publicId))) {
                     if ($this->getConf('userlink_fa')) {
-                        $return = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('privatenamespace').' ('.$privateId.')'.'"><bdi><i class="fa fa-user-secret"></i>'.$INFO['userinfo']['name'].'</bdi></a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('publicpage').' ('.$publicId.')'.'"><bdi><i class="fa fa-user"></i> '.$_SERVER['REMOTE_USER'].'</bdi></a>)';
+                        $return = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('privatenamespace').' ('.$privateId.')'.'"><bdi><i class="fa fa-user-secret"></i>'.$INFO['userinfo']['name'].'</bdi></a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('publicpage').' ('.$publicId.')'.'"><bdi><i class="fa fa-user"></i>'.$_SERVER['REMOTE_USER'].'</bdi></a>)';
                     } else {
                         $return = '<a href="'.wl($privateId).'" class="'.$classes.' uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').' ('.$privateId.')'.'"><bdi>'.$INFO['userinfo']['name'].'</bdi></a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').' ('.$publicId.')'.'"><bdi>'.$_SERVER['REMOTE_USER'].'</bdi></a>)';
                     }
                 } elseif (page_exists($publicId)) {
                     if ($this->getConf('userlink_fa')) {
-                        $return = '</a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('publicpage').'('.$publicId.')'.'"><bdi><i class="fa fa-user"></i> '.$_SERVER['REMOTE_USER'].'</bdi></a>)';
+                        $return = '</a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('publicpage').'('.$publicId.')'.'"><bdi><i class="fa fa-user"></i>'.$_SERVER['REMOTE_USER'].'</bdi></a>)';
                     } else {
                         $return = '<bdi>'.$INFO['userinfo']['name'].'</bdi> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').' ('.$publicId.')'.'"><bdi>'.$_SERVER['REMOTE_USER'].'</bdi></a>)';
                     }
