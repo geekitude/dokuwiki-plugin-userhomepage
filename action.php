@@ -95,9 +95,36 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 saveWikiText($this->private_page,$this->applyTemplate('private'),'Automatically created');
                 unlock($this->private_page);
                 // Announce private namespace was created
-                msg($this->getLang('createdprivatens').' ('.$this->private_page.')', 0);
+                msg($this->getLang('createdprivatens').' ('.$this->private_page.')', 1);
                 // Note that we created private page
                 $created['private'] = page_exists($this->private_page);
+            }
+            // If private ns is managed by plugin, check for any template from skeleton that doesn't exist yet
+            if ($this->getConf('create_private_ns') && (is_dir($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_private_skeleton'))) {
+                //$files = scandir($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_private_skeleton/');
+                $path = realpath($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_private_skeleton/');
+                $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
+                if ($this->getConf('group_by_name')) {
+                    // private:s:simon or private:s:simon_delage
+                    $this->private_ns = cleanID($this->getConf('users_namespace').':'.substr($this->privateNamespace(), 0, 1).':'. $this->privateNamespace());
+                } else {
+                    // private:simon or private:simon_delage
+                    $this->private_ns = cleanID($this->getConf('users_namespace').':'. $this->privateNamespace());
+                }
+                foreach($objects as $objectName => $object){
+                    $file = str_replace($path, '', $objectName);
+                    if ((is_file($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_private_skeleton'.$file)) and (strpos($file, '.txt') !== false)) {
+                        $custom_page_id = cleanID(str_replace('.txt', '', str_replace('/', ':', str_replace('\\', ':', $file))));
+                        $this->custom_target = $this->private_ns.':'.$custom_page_id;
+                        if (!page_exists($this->custom_target)) {
+                            $this->custom_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/uhp_private_skeleton'.$file;
+                            lock($this->custom_target);
+                            saveWikiText($this->custom_target,$this->applyTemplate($this->custom_page_template),'Automatically created');
+                            msg("Added  '".$this->custom_target."' page from user namespace skeleton to your private namespace.",0);
+                            unlock($this->custom_target);
+                        }
+                    }
+                }
             }
             // Public page?
             // If public page doesn't exists, create it (from template)
@@ -109,7 +136,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 saveWikiText($this->public_page,$this->applyTemplate('public'),'Automatically created');
                 unlock($this->public_page);
                 // Announce plubic page was created
-                msg($this->getLang('createdpublicpage').' ('.$this->public_page.')', 0);
+                msg($this->getLang('createdpublicpage').' ('.$this->public_page.')', 1);
                 // Note that we created public page
                 $created['public'] = page_exists($this->public_page);
             }
@@ -310,6 +337,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $content = io_readFile($this->private_page_template, false);
         } elseif ($type == 'public') {
             $content = io_readFile($this->public_page_template, false);
+        } else {
+            $content = io_readFile($type, false);
         }
         $content = str_replace('@TARGETPRIVATEPAGE@', $this->private_page, $content);
         $content = str_replace('@TARGETPRIVATENS@', $this->private_ns, $content);
