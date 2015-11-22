@@ -427,7 +427,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $PublicNS = str_replace(':%NAME%:%START%', '', $this->getConf('public_pages_ns'));
             $PublicNS = str_replace(':', '', $PublicNS);
             $PrivateNS = str_replace(':', '', $this->getConf('users_namespace'));
-            if ($PublicNS == $PublicNS) {
+            if ($PublicNS == $PrivateNS) {
                 if ($msg) {
                     msg("UserHomePage error #1 ! Make sure Private and Public namespaces are different. Plugin will have no effect untill this is corrected.", -1);
                 }
