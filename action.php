@@ -26,7 +26,6 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function init(&$event, $param) {
         global $conf;
         $this->helper = plugin_load('helper','userhomepage');
-
         // If templates_path option starts with 'data/pages' it can automatically be adapted but should be changed
         if (substr($this->getConf('templates_path'),0,10) == 'data/pages') {
             $dest = str_replace("data/pages", "./pages", $this->getConf('templates_path'));
@@ -60,17 +59,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $this->copyFile($source, $dest, 'userhomepage_public.txt');
         }
         // TARGETS
-        if ($this->getConf('group_by_name')) {
-            // private:s:simon or private:s:simon_delage
-            $this->private_ns = cleanID($this->getConf('users_namespace').':'.substr($this->privateNamespace(), 0, 1).':'. $this->privateNamespace());
-        } else {
-            // private:simon or private:simon_delage
-            $this->private_ns = cleanID($this->getConf('users_namespace').':'. $this->privateNamespace());
-        }
         // ...:start.txt or ...:simon_delage.txt
-        $this->private_page = $this->private_ns . ':' . $this->privateStart();
+        $this->private_page = $this->helper->getPrivateID();
         // user:simon.txt
-        $this->public_page = cleanID($this->getConf('public_pages_ns').':'. $_SERVER['REMOTE_USER']);
+        $this->public_page = $this->helper->getPublicID();
+
         // If a user is logged in, store timestamp (if it wasn't stored yet)
         if (($_SERVER['REMOTE_USER']!=null) && (!isset($_SESSION['uhptimestamp']))) {
             $_SESSION['uhptimestamp'] = time();
@@ -206,7 +199,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // On public user pages
             if ($this->getConf('create_public_page')) {
                 // For known users
-                $where = cleanID($this->getConf('public_pages_ns')).':%USER%';
+                if (strpos($this->getConf('public_pages_ns'),':%NAME%:%START%') !== false) {
+                    $where = cleanID(str_replace(':%NAME%:%START%', '', $this->getConf('public_pages_ns'))).':*';
+                } else {
+                    $where = cleanID($this->getConf('public_pages_ns')).':%USER%';
+                }
                 $who = '%USER%';
                 $perm = AUTH_EDIT;
                 if (!in_array("$where\t$who\t$perm\n", $existingLines)) { $newLines[] = array('where' => $where, 'who' => $who, 'perm' => $perm); }
@@ -240,14 +237,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     } else {
                         // @ALL
                         if ($this->getConf('acl_all_public') != 'noacl') {
-                            $where = cleanID($this->getConf('public_pages_ns')).':*';
+                            $where = cleanID(str_replace(':%NAME%:%START%', '', $this->getConf('public_pages_ns'))).':*';
                             $who = '@ALL';
                             $perm = $this->getConf('acl_all_public');
                             if (!in_array("$where\t$who\t$perm\n", $existingLines)) { $newLines[] = array('where' => $where, 'who' => $who, 'perm' => $perm); }
                         }
                         // @user
                         if ($this->getConf('acl_user_public') != 'noacl') {
-                            $where = cleanID($this->getConf('public_pages_ns')).':*';
+                            $where = cleanID(str_replace(':%NAME%:%START%', '', $this->getConf('public_pages_ns'))).':*';
                             $who = '@user';
                             $perm = $this->getConf('acl_user_public');
                             if (!in_array("$where\t$who\t$perm\n", $existingLines)) { $newLines[] = array('where' => $where, 'who' => $who, 'perm' => $perm); }
@@ -282,7 +279,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             } // end of templates acl
             $i = count($newLines);
             if ($i > 0) {
-                msg("Userhomepage: adding or updating ".$i." ACL rules.",0);
+                msg("Userhomepage: adding or updating ".$i." ACL rules.",1);
                 foreach($newLines as $line) {
                     if (($line['where'] != null) && ($line['who'] != null)) {
                         // delete potential ACL rule with same scope (aka 'where') and same user (aka 'who')
@@ -340,10 +337,10 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         } else {
             $content = io_readFile($type, false);
         }
-        $content = str_replace('@TARGETPRIVATEPAGE@', $this->private_page, $content);
-        $content = str_replace('@TARGETPRIVATENS@', $this->private_ns, $content);
-        $content = str_replace('@TARGETPUBLICPAGE@', $this->public_page, $content);
-        $content = str_replace('@TARGETPUBLICNS@', cleanID($this->getConf('public_pages_ns')), $content);
+        $content = str_replace('@TARGETPRIVATEPAGE@', $this->helper->getPrivateID(), $content);
+        $content = str_replace('@TARGETPRIVATENS@', cleanID(str_replace(':start', '', $this->helper->getPrivateID())), $content);
+        $content = str_replace('@TARGETPUBLICPAGE@', $this->helper->getPublicID(), $content);
+        $content = str_replace('@TARGETPUBLICNS@', cleanID(str_replace(':start', '', $this->helper->getPublicID())), $content);
         // Improved template process to use standard replacement patterns from https://www.dokuwiki.org/namespace_templates based on code proposed by Christian Nancy
         // Build a fake data structure for the parser
         $data = array('tpl' => $content, 'id' => $this->private_page);
