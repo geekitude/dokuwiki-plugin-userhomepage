@@ -26,11 +26,10 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
 
     // Returns the ID of any (or current) user's public page (even if it doesn't exist)
     function getPublicID($userLogin=null) {
-        if ($user) {
-            return $this->public_page = cleanID($this->getConf('public_pages_ns').':'.$userLogin);
-        } else {
-            return $this->public_page = cleanID($this->getConf('public_pages_ns').':'.$_SERVER['REMOTE_USER']);
+        if ($userLogin == null) {
+            $userLogin = $_SERVER['REMOTE_USER'];
         }
+        return $this->public_page = cleanID($this->getConf('public_pages_ns').':'.$userLogin);
     }
 
     // Returns a link to current user's private namespace start page (even if it doesn't exist)

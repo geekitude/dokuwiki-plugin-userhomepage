@@ -282,7 +282,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             } // end of templates acl
             $i = count($newLines);
             if ($i > 0) {
-                msg("Userhomepage: adding or updating ".$i." ACL rules.",1);
+                msg("Userhomepage: adding or updating ".$i." ACL rules.",0);
                 foreach($newLines as $line) {
                     if (($line['where'] != null) && ($line['who'] != null)) {
                         // delete potential ACL rule with same scope (aka 'where') and same user (aka 'who')
