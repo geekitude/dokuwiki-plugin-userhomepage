@@ -14,10 +14,12 @@
     $conf['edit_before_create'] = 0;
     $conf['acl_all_private'] = '0';
     $conf['acl_user_private'] = '0';
+    $conf['groups_private'] = '';
     $conf['create_public_page'] = 0;
     $conf['public_pages_ns'] = 'user';
     $conf['acl_all_public'] = '1';
     $conf['acl_user_public'] = '1';
+    $conf['groups_public'] = '';
     $conf['templates_path'] = './pages/user';
     $conf['templatepath'] = 'lib/plugins/userhomepage/_template.txt';
     $conf['acl_all_templates'] = '1';

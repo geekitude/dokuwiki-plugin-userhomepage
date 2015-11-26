@@ -28,6 +28,7 @@
     $lang['acl_user_private_o_8'] = 'Upload';
     $lang['acl_user_private_o_16'] = 'Delete';
     $lang['acl_user_private_o_noacl'] = 'No automatic ACL';
+    $lang['groups_private'] = 'Comma separated list of user groups concerned by Private Namespace creation (leave empty to apply above settings to all users).';
     $lang['create_public_page'] = 'Create a user\'s public page?';
     $lang['public_pages_ns'] = 'Namespace under wich public pages are created.';
     $lang['acl_all_public'] = 'Permissions for @ALL group on Public Pages';
@@ -40,6 +41,7 @@
     $lang['acl_user_public_o_1'] = 'Read (Default)';
     $lang['acl_user_public_o_2'] = 'Edit';
     $lang['acl_user_public_o_noacl'] = 'No automatic ACL';
+    $lang['groups_public'] = 'Comma separated list of user groups concerned by Public Page creation (leave empty to apply above settings to all users).';
     $lang['templates_path'] = 'Relative path from [<code>savedir</code>] where templates will be stored (userhomepage_private.txt and userhomepage_public.txt). Examples: <code>./pages/user</code> or <code>../lib/plugins/userhomepage</code>.';
     $lang['templatepath'] = 'Template path from version 3.0.4. If this file exists, it will be used as default source for new private namespace start page template (clear the path if you don\'t want to).';
     $lang['acl_all_templates'] = 'Permissions for @ALL group on templates (if they are stored in <code>data/pages...</code>)';

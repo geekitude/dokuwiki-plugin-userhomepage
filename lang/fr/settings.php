@@ -28,6 +28,7 @@
     $lang['acl_user_private_o_8'] = 'Envoyer';
     $lang['acl_user_private_o_16'] = 'Effacer';
     $lang['acl_user_private_o_noacl'] = 'Pas de gestion automatique des droits';
+    $lang['groups_private'] = 'Liste séparée par des virgules de groupes d\'utilisateurs concernés par la création d\'un espace privé (laisser vide pour appliquer les réglages ci-dessus à tous les utilisateurs).';
     $lang['create_public_page'] = 'Créer une page publique pour chaque utilisateur?';
     $lang['public_pages_ns'] = 'Espace de nom sous lequel créer les pages publiques.';
     $lang['acl_all_public'] = 'Droits d\'accès pour le groupe @ALL sur les Pages Publiques';
@@ -40,6 +41,7 @@
     $lang['acl_user_public_o_1'] = 'Lecture (Défaut)';
     $lang['acl_user_public_o_2'] = 'Écriture';
     $lang['acl_user_public_o_noacl'] = 'Pas de gestion automatique des droits';
+    $lang['groups_public'] = 'Liste séparée par des virgules de groupes d\'utilisateurs concernés par la création d\'une page publique (laisser vide pour appliquer les réglages ci-dessus à tous les utilisateurs).';
     $lang['templates_path'] = 'Chemin relatif depuis [<code>savedir</code>] où les modèles seront stockés (userhomepage_private.txt et userhomepage_public.txt). Exemples: <code>./pages/user</code> (permet d\'éditer les modèles depuis le wiki) ou <code>../lib/plugins/userhomepage</code> (pour plus de protecion ou pour les centraliser dans une ferme de wikis).';
     $lang['templatepath'] = 'Chemin vers le modèle de la version 3.0.4. Si le fichier existe, il sera utilisé comme source pour le modèle des pages d\'accueil des espaces privés (videz le chemin si vous ne le souhaitez pas).';
     $lang['acl_all_templates'] = 'Droits d\'accès pour le groupe @ALL sur les modèles (s\'ils sont stockés dans <code>data/pages...</code>)';

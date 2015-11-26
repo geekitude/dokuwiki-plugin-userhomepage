@@ -26,7 +26,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function init(&$event, $param) {
         global $conf;
 
-        if ($this->settingsCheck(true)) {
+        if ($this->multiNsOk(true)) {
             $this->helper = plugin_load('helper','userhomepage');
             // If templates_path option starts with 'data/pages' it can automatically be adapted but should be changed
             if (substr($this->getConf('templates_path'),0,10) == 'data/pages') {
@@ -37,7 +37,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             }
             $this->dataDir = $conf['savedir'];
             // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED (is required by options, doesn't exist yet and a known user is logged in)
-            if (($this->getConf('create_private_ns')) && (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
+            if (($this->getConf('create_private_ns')) && (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($this->userOk())) {
                 // If a template exists in path as builded before 2015/05/14 version, use it as source to create userhomepage_private.txt in new templates_path
                 if ((is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($this->getConf('templatepath') != null)) {
                     $source = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt';
@@ -51,7 +51,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $this->copyFile($source, $dest, 'userhomepage_private.txt');
             }
             // CREATE PUBLIC PAGE TEMPLATES IF NEEDED (is required by options, doesn't exist yet and a known user is logged in)
-            if (($this->getConf('create_public_page')) && (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($_SERVER['REMOTE_USER'] != null)) {
+            if (($this->getConf('create_public_page')) and (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt')) and ($this->userOk())) {
                 // If a template exists in path as builded before 2015/05/14 version, use it as source to create userhomepage_private.txt in new templates_path
                 if ((is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($this->getConf('templatepath') != null)) {
                     $source = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt';
@@ -66,10 +66,10 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             // user:simon.txt
             $this->public_page = $this->helper->getPublicID();
             // If a user is logged in, store timestamp (if it wasn't stored yet)
-            if (($_SERVER['REMOTE_USER']!=null) && (!isset($_SESSION['uhptimestamp']))) {
+            if (($_SERVER['REMOTE_USER'] != null) && (!isset($_SESSION['uhptimestamp']))) {
                 $_SESSION['uhptimestamp'] = time();
             // If no user is logged in and a timestamp exists, set timestamp to null (ensures that redirection will work if user just logged out and comes back before closing browser)
-            } elseif (($_SERVER['REMOTE_USER']==null) && (isset($_SESSION['uhptimestamp']))) {
+            } elseif (($_SERVER['REMOTE_USER'] == null) && (isset($_SESSION['uhptimestamp']))) {
                 $_SESSION['uhptimestamp'] = null;
             }
         } else {
@@ -81,12 +81,12 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         global $conf;
         global $lang;
 
-        if ($this->settingsCheck()) {
+        if ($this->multiNsOk()) {
             $created = array();
             // If a user is logged in and not allready requesting his private namespace start page
-            if (($_SERVER['REMOTE_USER']!=null)&&($_REQUEST['id']!=$this->private_page)) {
+            if (($this->userOk())&&($_REQUEST['id']!=$this->private_page)) {
                 // if private page doesn't exists, create it (from template)
-                if ($this->getConf('create_private_ns') && is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock()) {
+                if ($this->getConf('create_private_ns') && is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt') && !page_exists($this->private_page) && !checklock($this->private_page) && !checkwordblock() && ($this->userOk('private'))) {
                     // Target private start page template
                     $this->private_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt';
                     // Create private page
@@ -99,7 +99,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     $created['private'] = page_exists($this->private_page);
                 }
                 // If private ns is managed by plugin, check for any template from skeleton that doesn't exist yet
-                if ($this->getConf('create_private_ns') && (is_dir($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_private_skeleton'))) {
+                if ($this->getConf('create_private_ns') && (is_dir($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_private_skeleton')) && ($this->userOk('private'))) {
                     //$files = scandir($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_private_skeleton/');
                     $path = realpath($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_private_skeleton/');
                     $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
@@ -127,7 +127,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 }
                 // Public page?
                 // If public page doesn't exists, create it (from template)
-                if ($this->getConf('create_public_page') && is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock()) {
+                if ($this->getConf('create_public_page') && is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock() && ($this->userOk('public'))) {
                     // Target public page template
                     $this->public_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt';
                     // Create public page
@@ -167,8 +167,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function acl(&$event, $param) {
         global $conf;
 
-        if ($this->settingsCheck()) {
-            if ((!$this->getConf('no_acl')) && ($conf['useacl']) && (isset($_SERVER['REMOTE_USER']))) {
+        if ($this->multiNsOk()) {
+            if ((!$this->getConf('no_acl')) && ($conf['useacl']) && ($this->userOk())) {
                 $existingLines = file(DOKU_CONF.'acl.auth.php');
                 $newLines = array();
                 // ACL
@@ -362,7 +362,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         global $INFO;
         global $conf;
 
-        if ($this->settingsCheck()) {
+        if ($this->multiNsOk()) {
             if (($conf['showuseras'] == "username_link") and ($this->getConf('userlink_replace'))) {
                 $classes = $this->getConf('userlink_classes');
                 $classes = str_replace(',', ' ', $classes);
@@ -415,21 +415,19 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 }
             }
         } else {
-            return flase;
+            return false;
         }
     }
 
-    function settingsCheck($msg=false) {
-        global $conf;
-
-        // Error #1: Public page switched to namespace and is in conflict with Private namespace
+    function multiNsOk($msg=false) {
+        // Error: Public page switched to namespace and is in conflict with Private namespace
         if (strpos($this->getConf('public_pages_ns'),':%NAME%:%START%') !== false) {
             $PublicNS = str_replace(':%NAME%:%START%', '', $this->getConf('public_pages_ns'));
             $PublicNS = str_replace(':', '', $PublicNS);
             $PrivateNS = str_replace(':', '', $this->getConf('users_namespace'));
             if ($PublicNS == $PrivateNS) {
                 if ($msg) {
-                    msg("UserHomePage error #1 ! Make sure Private and Public namespaces are different. Plugin will have no effect untill this is corrected.", -1);
+                    msg("UserHomePage settings conflict ! Make sure Private and Public namespaces are different. Plugin will have no effect untill this is corrected.", -1);
                 }
                 return false;
             } else {
@@ -437,6 +435,41 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             }
         } else {
             return true;
+        }
+    }
+
+    function userOk($check = null) {
+        global $INFO;
+
+        // Proceed only if named user is connected...
+        if ($_SERVER['REMOTE_USER'] != null) {
+            // Check if user is member of a group in 'groups_private' or 'groups_public' (depending on $check)
+            if (($check == 'private') or ($check == 'public')) {
+                // Stop if 'groups_private' is set and and user is not member of at least one of said groups
+                $groups = $this->getConf('groups_'.$check);
+                $groups = str_replace(' ','', $groups);
+                $groups = explode(',', $groups);
+                $userGroups = $INFO['userinfo']['grps'];
+                // If UHP is set to check user's group(s) 
+                if (($groups != null) and ($groups[0] != null) and ($userGroups != null)) {
+                    $test = array_intersect($groups, $userGroups);
+                    // Proceed if user is member of at least one group set UHP's corresponding setting
+                    if (count($test) > 0) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                // If UHP isn't set to ckeck user's group(s) we can proceed
+                } else {
+                    return true;
+                }
+            // If $check is null, we only need to know that a named user is connected (wich we allready know if we went that far)
+            } else {
+                return true;
+            }
+        // ... else stop
+        } else {
+            return false;
         }
     }
 
