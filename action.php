@@ -15,7 +15,7 @@ require_once (DOKU_PLUGIN . '/acl/admin.php');
 
 class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
-    function register(&$controller) {
+    function register(Doku_Event_Handler $controller) {
         $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, 'init',array());
         $controller->register_hook('DETAIL_STARTED', 'AFTER', $this, 'init',array());
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'redirect',array());
