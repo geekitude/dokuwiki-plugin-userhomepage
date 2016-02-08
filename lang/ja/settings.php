@@ -27,6 +27,7 @@ $lang['acl_user_private_o_4']  = '作成';
 $lang['acl_user_private_o_8']  = 'アップロード';
 $lang['acl_user_private_o_16'] = '削除';
 $lang['acl_user_private_o_noacl'] = '自動的にアクセス権限を与えない';
+$lang['groups_private']        = '私用の名前空間を作成するユーザーグループのカンマ区切り一覧（上記の設定を全ユーザーに適用する場合、空のままにします）';
 $lang['create_public_page']    = 'ユーザーの公開ページの作成';
 $lang['public_pages_ns']       = '公開ページを作成する名前空間';
 $lang['acl_all_public']        = '公開ページに対する @ALL グループのアクセス権限';
@@ -39,6 +40,7 @@ $lang['acl_user_public_o_0']   = '無し';
 $lang['acl_user_public_o_1']   = '読取（デフォルト）';
 $lang['acl_user_public_o_2']   = '編集';
 $lang['acl_user_public_o_noacl'] = '自動的にアクセス権限を与えない';
+$lang['groups_public']         = '公開ページを作成するユーザーグループのカンマ区切り一覧（上記の設定を全ユーザーに適用する場合、空のままにします）';
 $lang['templates_path']        = 'テンプレートが保存される [<code>savedir</code>] からの相対パス（userhomepage_private.txt と userhomepage_public.txt）。
 例： <code>./pages/user</code> または <code>../lib/plugins/userhomepage</code>';
 $lang['templatepath']          = 'バージョン 3.0.4 から引き継いだテンプレートのパス。このファイルがある場合、私用の名前空間の新規スタートページテンプレートのデフォルト元として使用する（望まない場合は初期化する）。';
