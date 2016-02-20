@@ -35,9 +35,10 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             } else {
                 $dest = $this->getConf('templates_path');
             }
+            //if ($event == "DETAIL_STARTED") { return false; }
             $this->dataDir = $conf['savedir'];
-            // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED (is required by options, doesn't exist yet and a known user is logged in)
-            if (($this->getConf('create_private_ns')) && (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($this->userOk())) {
+            // CREATE PRIVATE NAMESPACE START PAGE TEMPLATES IF NEEDED (is required by options, doesn't exist yet and a known user is logged in and not showing image details page)
+            if (($this->getConf('create_private_ns')) && (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($this->userOk()) && ($event != "DETAIL_STARTED")) {
                 // If a template exists in path as builded before 2015/05/14 version, use it as source to create userhomepage_private.txt in new templates_path
                 if ((is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt')) && ($this->getConf('templatepath') != null)) {
                     $source = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_private.txt';
@@ -50,8 +51,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 }
                 $this->copyFile($source, $dest, 'userhomepage_private.txt');
             }
-            // CREATE PUBLIC PAGE TEMPLATES IF NEEDED (is required by options, doesn't exist yet and a known user is logged in)
-            if (($this->getConf('create_public_page')) and (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt')) and ($this->userOk())) {
+            // CREATE PUBLIC PAGE TEMPLATES IF NEEDED (is required by options, doesn't exist yet and a known user is logged in and not showing image details page)
+            if (($this->getConf('create_public_page')) and (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt')) and ($this->userOk()) && ($event != "DETAIL_STARTED")) {
                 // If a template exists in path as builded before 2015/05/14 version, use it as source to create userhomepage_private.txt in new templates_path
                 if ((is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($this->getConf('templatepath') != null)) {
                     $source = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt';
