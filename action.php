@@ -371,9 +371,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             if (($conf['showuseras'] == "username_link") and ($this->getConf('userlink_replace'))) {
                 $classes = $this->getConf('userlink_classes');
                 $classes = str_replace(',', ' ', $classes);
-                if ($this->getConf('userlink_fa')) {
+                //if ($this->getConf('userlink_fa')) {
                     $classes = str_replace('interwiki', '', $classes);
-                }
+                //}
                 $this->username = $event->data['username'];
                 $this->name = $event->data['name'];
                 $this->link = $event->data['link'];
