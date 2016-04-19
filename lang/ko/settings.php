@@ -59,5 +59,5 @@ $lang['action']                = '공개 문서(또는 개인 이름공간의 �
 $lang['action_o_edit']         = '수정 (기본설정)';
 $lang['action_o_show']         = '보기';
 $lang['userlink_replace']      = '위키 내부로 연결된 [<code>로그인한 사용자</code>]를 Userhomepage가 만든 문서로 대체하는걸 허용함 (<code>showuseras</code> 옵션이 위키 내부 연결로 설정된 경우에만 작동함)';
-$lang['userlink_classes']      = '띄어쓰기로 구분된 [<code>로그인한 사용자</code>]의 위키 내부 연결에 사용할 CSS 클래스의 목록. (기본설정: <code>interwiki wikilink1</code>).';
+$lang['userlink_classes']      = '띄어쓰기로 구분된 [<code>로그인한 사용자</code>]의 위키 내부 연결에 사용할 CSS 클래스의 목록. (기본설정: <code>interwiki iw_user</code>).';
 $lang['userlink_fa']           = '이미지 대신에 Fontawesome 아이콘을 사용하시겠습니까? (Fontawesome 기능이 템플릿이나 플러그인으로 설치되어있어야합니다)';
