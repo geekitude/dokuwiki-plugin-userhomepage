@@ -28,5 +28,5 @@
     $conf['redirection'] = 1;
     $conf['action'] = 'edit';
     $conf['userlink_replace'] = 1;
-    $conf['userlink_classes'] = 'wikilink1';
+    $conf['userlink_classes'] = 'interwiki iw_user';
     $conf['userlink_fa'] = 0;
