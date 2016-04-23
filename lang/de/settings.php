@@ -61,5 +61,5 @@ $lang['action']                = 'Aktion bei der ersten Weiterleitung auf eine √
 $lang['action_o_edit']         = 'Bearbeiten';
 $lang['action_o_show']         = 'Anzeigen';
 $lang['userlink_replace']      = 'Aktivieren des Ersetzens des [<code>Logged in as</code>] interwiki-Links, abh√§ngig von Seiten erstellt durch Userhomepage (Funktioniert nur, wenn <code>showuseras</code> Option auf interwiki-Link gesetzt ist).';
-$lang['userlink_classes']      = 'Durch Leerzeichen getrennte Liste von CSS-Klassen die auf  [<code>Logged in as</code>] Interwiki-Links angewendet werden (Default: <code>interwiki iw_user</code>).';
+$lang['userlink_classes']      = 'Durch Leerzeichen getrennte Liste von CSS-Klassen die auf  [<code>Logged in as</code>] Interwiki-Links angewendet werden (Default: <code>interwiki iw_user wikilink1</code>).';
 $lang['userlink_fa']           = 'Benutzen von Fontawesome-Icons anstelle von Bildern (Fontawesome muss durch ein Template oder Plugin installiert sein) ?';

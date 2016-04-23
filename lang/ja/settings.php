@@ -61,5 +61,5 @@ $lang['action']                = '公開ページ（または私用の名前空�
 $lang['action_o_edit']         = '編集（デフォルト）';
 $lang['action_o_show']         = '表示';
 $lang['userlink_replace']      = 'Userhomepage が作成したページに応じて、[<code>Logged in as</code>] インターウィキリンクの置換えを有効にします。（<code>showuseras</code> オプションがインターウィキリンクに設定されている場合のみ動作します）';
-$lang['userlink_classes']      = '[<code>Logged in as</code>] インターウィキリンクに適用する CSS クラスのスペース区切り一覧（デフォルト： <code>interwiki iw_user</code>）';
+$lang['userlink_classes']      = '[<code>Logged in as</code>] インターウィキリンクに適用する CSS クラスのスペース区切り一覧（デフォルト： <code>interwiki iw_user wikilink1</code>）';
 $lang['userlink_fa']           = '画像の代わりに Fontawesome アイコンを使用しますか（テンプレートやプラグインには Fontawesome をインストールする必要がある）？';
