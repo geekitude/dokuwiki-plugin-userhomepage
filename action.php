@@ -174,7 +174,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
         if ($this->multiNsOk()) {
             if ((!$this->getConf('no_acl')) && ($conf['useacl']) && ($this->userOk())) {
-                $existingLines = file(DOKU_CONF.'acl.auth.php');
+                global $config_cascade;
+                $existingLines = file($config_cascade['acl']['default']);
                 $newLines = array();
                 // ACL
                 $acl = new admin_plugin_acl();
@@ -455,7 +456,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $groups = str_replace(' ','', $groups);
                 $groups = explode(',', $groups);
                 $userGroups = $INFO['userinfo']['grps'];
-                // If UHP is set to check user's group(s) 
+                // If UHP is set to check user's group(s)
                 if (($groups != null) and ($groups[0] != null) and ($userGroups != null)) {
                     $test = array_intersect($groups, $userGroups);
                     // Proceed if user is member of at least one group set UHP's corresponding setting
