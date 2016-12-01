@@ -74,7 +74,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 $_SESSION['uhptimestamp'] = null;
             }
         } else {
-            return flase;
+            return false;
         }
     }
 
@@ -165,7 +165,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 }
             }
         } else {
-            return flase;
+            return false;
         }
     }
 
@@ -302,7 +302,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 }
             }
         } else {
-            return flase;
+            return false;
         }
     }
 
