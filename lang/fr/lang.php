@@ -13,7 +13,6 @@
     $lang['privatenamespace'] = 'Espace Privé';
     $lang['publicpage'] = 'Page Publique';
     $lang['uhpcreated'] = 'Création automatique par l\'extension User Homepage';
-    $lang['fromskeleton'] = 'Added this page from User Homepage skeleton to your private namespace:';
     $lang['fromskeleton'] = 'Ajout de cette page du modèle User Homepage à votre espace privé :';
     $lang['aclupdate'] = 'Règles ACL ajoutées ou modifiées :';
     $lang['mkdirfailure'] = 'La création de ce dossier a échoué :';
