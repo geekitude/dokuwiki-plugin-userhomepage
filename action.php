@@ -93,7 +93,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     $this->private_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_private.txt';
                     // Create private page
                     lock($this->private_page);
-                    saveWikiText($this->private_page,$this->applyTemplate('private'),'Automatically created');
+                    saveWikiText($this->private_page,$this->applyTemplate('private'),$this->getLang('uhpcreated'));
                     unlock($this->private_page);
                     // Announce private namespace was created
                     msg($this->getLang('createdprivatens').' ('.$this->private_page.')', 1);
@@ -120,8 +120,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                             if (!page_exists($this->custom_target)) {
                                 $this->custom_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/uhp_private_skeleton'.$file;
                                 lock($this->custom_target);
-                                saveWikiText($this->custom_target,$this->applyTemplate($this->custom_page_template),'Automatically created');
-                                msg("Added  '".$this->custom_target."' page from user namespace skeleton to your private namespace.",0);
+                                saveWikiText($this->custom_target,$this->applyTemplate($this->custom_page_template),$this->getLang('uhpcreated'));
+                                msg($this->getLang('fromskeleton').' '.$this->custom_target,0);
                                 unlock($this->custom_target);
                             }
                         }
@@ -134,7 +134,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     $this->public_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt';
                     // Create public page
                     lock($this->public_page);
-                    saveWikiText($this->public_page,$this->applyTemplate('public'),'Automatically created');
+                    saveWikiText($this->public_page,$this->applyTemplate('public'),$this->getLang('uhpcreated'));
                     unlock($this->public_page);
                     // Announce plubic page was created
                     msg($this->getLang('createdpublicpage').' ('.$this->public_page.')', 1);
@@ -291,7 +291,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 } // end of templates acl
                 $i = count($newLines);
                 if ($i > 0) {
-                    msg("Userhomepage: adding or updating ".$i." ACL rules.",1);
+                    msg($this->getLang('aclupdate').' '.$i, 1);
                     foreach($newLines as $line) {
                         if (($line['where'] != null) && ($line['who'] != null)) {
                             // delete potential ACL rule with same scope (aka 'where') and same user (aka 'who')
@@ -309,7 +309,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function copyFile($source = null, $target_dir = null, $target_file = null) {
         if (!is_file($this->dataDir.DIRECTORY_SEPARATOR.$target_dir.DIRECTORY_SEPARATOR.$target_file)) {
             if(!is_dir($this->dataDir.DIRECTORY_SEPARATOR.$target_dir)){
-                io_mkdir_p($this->dataDir.DIRECTORY_SEPARATOR.$target_dir) || msg("Creating directory $target_dir failed",-1);
+                io_mkdir_p($this->dataDir.DIRECTORY_SEPARATOR.$target_dir) || msg($this->getLang('mkdirfailure').' '.$target_dir,-1);
             }
             $source = str_replace('/', DIRECTORY_SEPARATOR, $source);
             copy($source, $this->dataDir.DIRECTORY_SEPARATOR.$target_dir.DIRECTORY_SEPARATOR.$target_file);
@@ -433,7 +433,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
             $PrivateNS = str_replace(':', '', $this->getConf('users_namespace'));
             if ($PublicNS == $PrivateNS) {
                 if ($msg) {
-                    msg("UserHomePage settings conflict ! Make sure Private and Public namespaces are different. Plugin will have no effect untill this is corrected.", -1);
+                    msg($this->getLang('settingsconflict'), -1);
                 }
                 return false;
             } else {
