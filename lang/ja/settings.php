@@ -2,7 +2,7 @@
 
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
- * 
+ *
  * @author Hideaki SAWADA <chuno@live.jp>
  */
 $lang['create_private_ns']     = 'ユーザーの私用の名前空間の作成（有効化する前に全オプションを再度確認して下さい）';
