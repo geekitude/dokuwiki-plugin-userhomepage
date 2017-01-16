@@ -1,7 +1,7 @@
 User HomePage
 ============
 
-Dokuwiki plugin to automatically create user's homepage and/or namespace.
+Dokuwiki plugin to automatically create user's homepage and/or namespace (see [public page](https://www.dokuwiki.org/plugin:userhomepage) for more details).
 Previous authors stopped developing it in 2009.
 I started to work on it in 2014-08.
 
