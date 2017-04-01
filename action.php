@@ -352,6 +352,12 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         } else {
             $content = io_readFile($type, false);
         }
+        // If template is absolutely empty (ie. is NULL), target file will not be created but plugin will pretend it did and will keep trying over next page load
+        if ($content == NULL) {
+            // fill empty template with a simple space to work around the problem
+            $content = " ";
+        }
+
         $content = str_replace('@TARGETPRIVATEPAGE@', $this->helper->getPrivateID(), $content);
         $content = str_replace('@TARGETPRIVATENS@', cleanID(str_replace(':start', '', $this->helper->getPrivateID())), $content);
         $content = str_replace('@TARGETPUBLICPAGE@', $this->helper->getPublicID(), $content);
