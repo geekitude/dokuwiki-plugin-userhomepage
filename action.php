@@ -25,6 +25,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
 
     function init(&$event, $param) {
         global $conf;
+        global $INFO;
 
         if ($this->multiNsOk(true)) {
             $this->helper = plugin_load('helper','userhomepage');
@@ -34,6 +35,13 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 msg("Userhomepage option [<code>templates_path</code>] should be changed to a path relative to data folder (as set by Dokuwiki's [<code>savedir</code>] setting). Current value is based on former default (i.e. <code>data/pages/...</code>) and will still work but this message will keep appearing until the value is corrected, check <a href='https://www.dokuwiki.org/plugin:userhomepage'>this page</a> for details.",2);
             } else {
                 $dest = $this->getConf('templates_path');
+            }
+            if (!plugin_isdisabled('avatar')) {
+                $avatarHelper = plugin_load('helper','avatar');
+                $avatarsFolder = $avatarHelper->getConf('namespace');
+                if (($avatarsFolder == "user") && ($avatarsFolder == $this->getConf('users_namespace')) && (isadmin)) {
+                    msg($this->getLang('avatarsconflict'), -1);
+                }
             }
             //if ($event == "DETAIL_STARTED") { return false; }
             $this->dataDir = $conf['savedir'];

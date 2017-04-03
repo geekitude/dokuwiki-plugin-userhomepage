@@ -17,3 +17,4 @@
     $lang['aclupdate'] = 'ACL rules added or updated:';
     $lang['mkdirfailure'] = 'Creating this directory failed:';
     $lang['settingsconflict'] = 'UserHomePage settings conflict! Make sure Private and Public namespaces are different. Plugin will have no effect untill this is corrected.';
+    $lang['avatarsconflict'] = 'UserHomePage settings are in conflict with Avatar plugin settings! Make sure Private namespaces and avatars are stored in different places (otherwise UserHomePage ACL rules might block avatars).';
