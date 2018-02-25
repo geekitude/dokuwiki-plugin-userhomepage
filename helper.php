@@ -34,6 +34,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         if (strpos($this->getConf('public_pages_ns'),':%NAME%:%START%') !== false) {
             $target = str_replace('%NAME%', $userLogin, $this->getConf('public_pages_ns'));
             $target = str_replace('%START%', $conf['start'], $target);
+            //dbg($target);
         } else {
             $target = $this->getConf('public_pages_ns').':'.$userLogin;
         }
