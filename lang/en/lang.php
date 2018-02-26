@@ -12,6 +12,7 @@
     $lang['createdpublicpage'] = 'Created your public page';
     $lang['privatenamespace'] = 'Private Space';
     $lang['publicpage'] = 'Public Page';
+    $lang['publicnamespace'] = 'Public Space';
     $lang['uhpcreated'] = 'Automatic creation by User Homepage plugin';
     $lang['fromskeleton'] = 'Added this page from User Homepage skeleton to your private namespace:';
     $lang['aclupdate'] = 'ACL rules added or updated:';

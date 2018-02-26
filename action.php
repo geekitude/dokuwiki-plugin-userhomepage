@@ -69,6 +69,16 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 }
                 $this->copyFile($source, $dest, 'userhomepage_public.txt');
             }
+            // CREATE PUBLIC NAMESPACE START PAGE TEMPLATES IF NEEDED (is required by options, doesn't exist yet and a known user is logged in and not showing image details page)
+            if (($this->getConf('create_public_page')) and (strpos($this->getConf('public_pages_ns'),':%NAME%:%START%') !== false) and (!is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_publicspace.txt')) and ($this->userOk()) && ($event != "DETAIL_STARTED")) {
+                // If a template exists in path as builded before 2015/05/14 version, use it as source to create userhomepage_private.txt in new templates_path
+                if ((is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_publicspace.txt')) && ($this->getConf('templatepath') != null)) {
+                    $source = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_publicspace.txt';
+                } else {
+                    $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_publicspace.default';
+                }
+                $this->copyFile($source, $dest, 'userhomepage_publicspace.txt');
+            }
             // TARGETS
             // ...:start.txt or ...:simon_delage.txt
             $this->private_page = $this->helper->getPrivateID();
@@ -138,8 +148,12 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 // Public page?
                 // If public page doesn't exists, create it (from template)
                 if ($this->getConf('create_public_page') && is_file($this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt') && !page_exists($this->public_page) && !checklock($this->public_page) && !checkwordblock() && ($this->userOk('public'))) {
-                    // Target public page template
-                    $this->public_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt';
+                    // Target public page template or public namespace start page template
+                    if (strpos($this->getConf('public_pages_ns'),':%NAME%:%START%') !== false) {
+                        $this->public_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_publicspace.txt';
+                    } else {
+                        $this->public_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/userhomepage_public.txt';
+                    }
                     // Create public page
                     lock($this->public_page);
                     saveWikiText($this->public_page,$this->applyTemplate('public'),$this->getLang('uhpcreated'));
@@ -148,6 +162,26 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     msg($this->getLang('createdpublicpage').' ('.$this->public_page.')', 1);
                     // Note that we created public page
                     $created['public'] = page_exists($this->public_page);
+                }
+                // If public page is in fact a public namespace and is managed by plugin, check for any template from skeleton that doesn't exist yet
+                if ($this->getConf('create_public_page') && (is_dir($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_public_skeleton')) && ($this->userOk('public'))) {
+                    $path = realpath($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_public_skeleton/');
+                    $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
+                    $this->public_ns = cleanID(getNS($this->public_page));
+                    foreach($objects as $objectName => $object){
+                        $file = str_replace($path, '', $objectName);
+                        if ((is_file($this->dataDir.'/'.$this->getConf('templates_path').'/uhp_public_skeleton'.$file)) and (strpos($file, '.txt') !== false)) {
+                            $custom_page_id = cleanID(str_replace('.txt', '', str_replace('/', ':', str_replace('\\', ':', $file))));
+                            $this->custom_target = $this->public_ns.':'.$custom_page_id;
+                            if (!page_exists($this->custom_target)) {
+                                $this->custom_page_template = $this->dataDir.'/'.$this->getConf('templates_path').'/uhp_public_skeleton'.$file;
+                                lock($this->custom_target);
+                                saveWikiText($this->custom_target,$this->applyTemplate($this->custom_page_template),$this->getLang('uhpcreated'));
+                                msg($this->getLang('fromskeleton').' '.$this->custom_target,0);
+                                unlock($this->custom_target);
+                            }
+                        }
+                    }
                 }
                 // List IDs that can match wiki start
                 $wikistart = array($conf['start'], ':'.$conf['start']);

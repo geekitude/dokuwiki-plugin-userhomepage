@@ -34,7 +34,6 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         if (strpos($this->getConf('public_pages_ns'),':%NAME%:%START%') !== false) {
             $target = str_replace('%NAME%', $userLogin, $this->getConf('public_pages_ns'));
             $target = str_replace('%START%', $conf['start'], $target);
-            //dbg($target);
         } else {
             $target = $this->getConf('public_pages_ns').':'.$userLogin;
         }
@@ -61,11 +60,11 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $INFO;
         global $lang;
         if ($param == "loggedinas") {
-            return '<li>'.$lang['loggedinas'].' <a href="'.wl($this->getPublicID()).'"  class="uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
+            return '<li>'.$lang['loggedinas'].' <a href="'.wl($this->getPublicID()).'"  class="uhp_public" rel="nofollow" title="'.$this->publicString().'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
         } elseif ($param != null) {
-            return '<a href="'.wl($this->getPublicID()).'"  rel="nofollow" title="'.$this->getLang('publicpage').'">'.$param.'</a>';
+            return '<a href="'.wl($this->getPublicID()).'"  rel="nofollow" title="'.$this->publicString().'">'.$param.'</a>';
         } else {
-            return '<a href="'.wl($this->getPublicID()).'"  rel="nofollow" title="'.$this->getLang('publicpage').'">'.$this->getLang('publicpage').'</a>';
+            return '<a href="'.wl($this->getPublicID()).'"  rel="nofollow" title="'.$this->publicString().'">'.$this->publicString().'</a>';
         }
     }
 
@@ -74,7 +73,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $lang;
         // If user's private namespace and public page exist, return a 'Logged in as' string with both styled links)
         if ((page_exists($this->getPrivateID())) && (page_exists($this->getPublicID()))) {
-            return '<li>'.$lang['loggedinas'].' <a href="'.wl($this->getPrivateID()).'"  class="uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].'</a> (<a href="'.wl($this->getPublicID()).'"  class="uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').'">'.$_SERVER['REMOTE_USER'].'</a>)</li>';
+            return '<li>'.$lang['loggedinas'].' <a href="'.wl($this->getPrivateID()).'"  class="uhp_private" rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].'</a> (<a href="'.wl($this->getPublicID()).'"  class="uhp_public" rel="nofollow" title="'.$this->publicString().'">'.$_SERVER['REMOTE_USER'].'</a>)</li>';
         // Else if only private namespace exists, return 'Logged in as' string with private namespace styled link
         } elseif (page_exists($this->getPrivateID())) {
             return $this->getPrivateLink("loggedinas");
@@ -99,7 +98,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
             } else {
                 $result = $result.'wikilink2';
             }
-            $result = $result.'" rel="nofollow" title="'.$this->getLang('publicpage').'">'.editorinfo($userLogin, true).'</a>';
+            $result = $result.'" rel="nofollow" title="'.$this->publicString().'">'.editorinfo($userLogin, true).'</a>';
             return $result;
         } else {
             return false;
@@ -112,7 +111,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
 		if ($type == "private") {
 			echo '<form class="button btn_show" method="post" action="doku.php?id='.$this->getPrivateID().'"><input class="button" type="submit" value="'.$this->getLang('privatenamespace').'"/></form>';
         } elseif ($type == "public") {
-			echo '<form class="button btn_show" method="post" action="doku.php?id='.$this->getPublicID().'"><input class="button" type="submit" value="'.$this->getLang('publicpage').'"/></form>';
+			echo '<form class="button btn_show" method="post" action="doku.php?id='.$this->getPublicID().'"><input class="button" type="submit" value="'.$this->publicString().'"/></form>';
 		}
 	}
 
@@ -131,7 +130,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
             if ($this->getConf('create_public_page')) {
                 $return['public'] = array();
                 $return['public']['id'] = $this->getPublicID();
-                $return['public']['string'] = $this->getLang('publicpage');
+                $return['public']['string'] = $this->publicString();
             }
         }
         return $return;
@@ -155,6 +154,14 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
             return cleanID($conf['start']);
         } else {
             return $this->privateNamespace();
+        }
+    }
+
+    function publicString() {
+        if (strpos($this->getConf('public_pages_ns'),':%NAME%:%START%') !== false) {
+            return $this->getLang('publicnamespace');
+        } else {
+            return $this->publicString();
         }
     }
 

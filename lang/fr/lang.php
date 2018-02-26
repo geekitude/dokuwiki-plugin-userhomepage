@@ -12,6 +12,7 @@
     $lang['createdpublicpage'] = 'Votre page publique est créée';
     $lang['privatenamespace'] = 'Espace Privé';
     $lang['publicpage'] = 'Page Publique';
+    $lang['publicnamespace'] = 'Espace Publique';
     $lang['uhpcreated'] = 'Création automatique par l\'extension User Homepage';
     $lang['fromskeleton'] = 'Ajout de cette page du modèle User Homepage à votre espace privé :';
     $lang['aclupdate'] = 'Règles ACL ajoutées ou modifiées :';
