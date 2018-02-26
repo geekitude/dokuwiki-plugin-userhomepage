@@ -221,7 +221,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     // For known users
                     if (strpos($this->getConf('public_pages_ns'),':%NAME%:%START%') !== false) {
                         //$where = cleanID(str_replace(':%NAME%:%START%', '', $this->getConf('public_pages_ns'))).':*';
-                        $where = str_replace('%NAME%:%START%', ':%USER%', $this->getConf('public_pages_ns')).':*';
+                        $where = str_replace('%NAME%:%START%', '%USER%', $this->getConf('public_pages_ns')).':*';
                     } else {
                         $where = cleanID($this->getConf('public_pages_ns')).':%USER%';
                     }
