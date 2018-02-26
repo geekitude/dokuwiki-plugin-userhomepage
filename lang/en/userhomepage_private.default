@@ -1,5 +1,5 @@
 ====== @NAME@ (@USER@) - Private Space ======
-This namespace ''//@TARGETPRIVATENS@://'' and it's content (pages, images, ...) is **reserved for your own usage** (only superusers can also access to it)...
+This namespace ''//@TARGETPRIVATENS@:*//'' and it's content (pages, images, ...) is **reserved for your own usage** (only superusers can also access to it)...
   * To create a page inside this private space, simply use the standard link syntax __without any namespace__ :
 <code>[[example page 1]]
 [[example 2|My example page 2]]</code>

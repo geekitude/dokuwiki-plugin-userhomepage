@@ -388,6 +388,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     }
 
     function applyTemplate($type) {
+        global $conf;
         if ($type == 'private') {
             $content = io_readFile($this->private_page_template, false);
         } elseif ($type == 'public') {
@@ -402,9 +403,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         }
 
         $content = str_replace('@TARGETPRIVATEPAGE@', $this->helper->getPrivateID(), $content);
-        $content = str_replace('@TARGETPRIVATENS@', cleanID(str_replace(':start', '', $this->helper->getPrivateID())), $content);
+        $content = str_replace('@TARGETPRIVATENS@', cleanID(str_replace(':'.$conf['start'], '', $this->helper->getPrivateID())), $content);
         $content = str_replace('@TARGETPUBLICPAGE@', $this->helper->getPublicID(), $content);
-        $content = str_replace('@TARGETPUBLICNS@', cleanID(str_replace(':start', '', $this->helper->getPublicID())), $content);
+        $content = str_replace('@TARGETPUBLICNS@', cleanID(str_replace(':'.$conf['start'], '', $this->helper->getPublicID())), $content);
         // Improved template process to use standard replacement patterns from https://www.dokuwiki.org/namespace_templates based on code proposed by Christian Nancy
         // Build a fake data structure for the parser
         $data = array('tpl' => $content, 'id' => $this->private_page);

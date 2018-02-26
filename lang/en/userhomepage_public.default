@@ -3,7 +3,7 @@ This public page ''//@TARGETPUBLICPAGE@.txt//'', as stated by it's name,  **can 
   * You can introduce yourself, add links to your contributions in this wiki, tell a story or present your other works
   * Think about [[wp>http://en.wikipedia.org/wiki/Etiquette_in_technology|netiquette]] ;-)
 Limitations:
-  * You can't create any other page in that namespace ''//@TARGETPUBLICNS@//''
+  * You shouldn't create any other page in that namespace ''//@TARGETPUBLICNS@//''
   * Only a superuser can add a picture
 
 Feel free to remove this paragraph (beside the title)...\\
