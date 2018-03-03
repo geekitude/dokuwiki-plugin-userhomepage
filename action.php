@@ -254,13 +254,13 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 if ($this->getConf('create_public_page')) {
                     // For known users
                     if (strpos($this->getConf('public_pages_ns'),':%NAME%:%START%') !== false) {
-                        //$where = cleanID(str_replace(':%NAME%:%START%', '', $this->getConf('public_pages_ns'))).':*';
                         $where = str_replace('%NAME%:%START%', '%USER%', $this->getConf('public_pages_ns')).':*';
+                        $perm = AUTH_DELETE;
                     } else {
                         $where = cleanID($this->getConf('public_pages_ns')).':%USER%';
+                        $perm = AUTH_EDIT;
                     }
                     $who = '%USER%';
-                    $perm = AUTH_EDIT;
                     if (!in_array("$where\t$who\t$perm\n", $existingLines)) { $newLines[] = array('where' => $where, 'who' => $who, 'perm' => $perm); }
                     // For others
                     if ($this->getConf('acl_all_public') != 'noacl') {
