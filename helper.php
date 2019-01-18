@@ -46,16 +46,13 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $INFO;
         global $lang;
         $pageId = $this->getPrivateID();
-        $class ='class="uhp_private wikilink2"';
-        if (page_exists($pageId)) {
-            $class ='class="uhp_private wikilink1"';
-        }
+        $classes = $this->getLinkClasses($pageId, "uhp_private");
         if ($param == "loggedinas") {
-            return '<li>'.$lang['loggedinas'].' <a href="'.wl($pageId).'" '.$class.' rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
+            return '<li>'.$lang['loggedinas'].' <a href="'.wl($pageId).'" '.$classes.' rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
         } elseif ($param != null) {
-            return '<a href="'.wl($pageId).'" '.$class.' rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$param.'</a>';
+            return '<a href="'.wl($pageId).'" '.$classes.' rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$param.'</a>';
         } else {
-            return '<a href="'.wl($pageId).'" '.$class.' rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$this->getLang('privatenamespace').'</a>';
+            return '<a href="'.wl($pageId).'" '.$classes.' rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$this->getLang('privatenamespace').'</a>';
         }
     }
 
@@ -65,17 +62,29 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $INFO;
         global $lang;
         $pageId = $this->getPublicID();
-        $class ='class="uhp_public wikilink2"';
-        if (page_exists($pageId)) {
-            $class ='class="uhp_public wikilink1"';
-        }
+        $classes = $this->getLinkClasses($pageId, "uhp_public");
         if ($param == "loggedinas") {
-            return '<li>'.$lang['loggedinas'].' <a href="'.wl($pageId).'" '.$class.' rel="nofollow" title="'.$this->publicString().'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
+            return '<li>'.$lang['loggedinas'].' <a href="'.wl($pageId).'" '.$classes.' rel="nofollow" title="'.$this->publicString().'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
         } elseif ($param != null) {
-            return '<a href="'.wl($pageId).'" '.$class.' rel="nofollow" title="'.$this->publicString().'">'.$param.'</a>';
+            return '<a href="'.wl($pageId).'" '.$classes.' rel="nofollow" title="'.$this->publicString().'">'.$param.'</a>';
         } else {
-            return '<a href="'.wl($pageId).'" '.$class.' rel="nofollow" title="'.$this->publicString().'">'.$this->publicString().'</a>';
+            return '<a href="'.wl($pageId).'" '.$classes.' rel="nofollow" title="'.$this->publicString().'">'.$this->publicString().'</a>';
         }
+    }
+
+    // Returns CSS classes to apply to a UHP link
+    // $pageID is target ID and $class is link's primary CSS class
+    function getLinkClasses($pageId = null, $class = null) {
+        $ret = 'class="'.$class." ".$this->getConf('userlink_classes');
+        // Make sure "wikilink1" isn't there yet (was previously part of default 'userlink_classes' setting)
+        $ret = str_replace(" wikilink1", "", $ret);
+        if (page_exists($pageId)) {
+            $ret .= " wikilink1";
+        } else {
+            $ret .= " wikilink2";
+        }
+        $ret .= '"';
+        return $ret;
     }
 
     // Returns a more or less complex 'Logged in as' string with link(s) to private and/or public page
@@ -104,11 +113,8 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $lang;
         if ($userLogin != null) {
             $publicID = $this->getPublicID($userLogin);
-            $class ='class="uhp_public wikilink2"';
-            if (page_exists($publicID)) {
-                $class ='class="uhp_public wikilink1"';
-            }
-            $result = '<a href="'.wl($publicID).'" '.$class.' rel="nofollow" title="'.$this->publicString().'">'.editorinfo($userLogin, true).'</a>';
+            $classes = $this->getLinkClasses($publicID, "uhp_public");
+            $result = '<a href="'.wl($publicID).'" '.$classes.' rel="nofollow" title="'.$this->publicString().'">'.editorinfo($userLogin, true).'</a>';
             return $result;
         } else {
             return false;
