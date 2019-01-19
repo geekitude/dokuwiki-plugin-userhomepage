@@ -46,7 +46,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $INFO;
         global $lang;
         $pageId = $this->getPrivateID();
-        $classes = $this->getLinkClasses($pageId, "uhp_private");
+        $classes = 'class="'.$this->getLinkClasses($pageId, "uhp_private").'"';
         if ($param == "loggedinas") {
             return '<li>'.$lang['loggedinas'].' <a href="'.wl($pageId).'" '.$classes.' rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
         } elseif ($param != null) {
@@ -62,7 +62,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $INFO;
         global $lang;
         $pageId = $this->getPublicID();
-        $classes = $this->getLinkClasses($pageId, "uhp_public");
+        $classes = 'class="'.$this->getLinkClasses($pageId, "uhp_public").'"';
         if ($param == "loggedinas") {
             return '<li>'.$lang['loggedinas'].' <a href="'.wl($pageId).'" '.$classes.' rel="nofollow" title="'.$this->publicString().'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
         } elseif ($param != null) {
@@ -73,17 +73,22 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
     }
 
     // Returns CSS classes to apply to a UHP link
-    // $pageID is target ID and $class is link's primary CSS class
-    function getLinkClasses($pageId = null, $class = null) {
-        $ret = 'class="'.$class." ".$this->getConf('userlink_classes');
-        // Make sure "wikilink1" isn't there yet (was previously part of default 'userlink_classes' setting)
+    // $pageID is target ID, $class is link's primary CSS class, $default adds default interwiki classes or not
+    function getLinkClasses($pageId = null, $class = null, $default = true) {
+        if ($default) {
+            $ret = $this->getConf('userlink_classes');
+        }
+        if ($class != null) {
+            $ret .= " ".$class;
+        }
+        if ($ret != null) { $ret .= " "; }
+        // Make sure "wikilink1" isn't there yet (because it was previously part of default 'userlink_classes' setting)
         $ret = str_replace(" wikilink1", "", $ret);
         if (page_exists($pageId)) {
-            $ret .= " wikilink1";
+            $ret .= "wikilink1";
         } else {
-            $ret .= " wikilink2";
+            $ret .= "wikilink2";
         }
-        $ret .= '"';
         return $ret;
     }
 
@@ -113,7 +118,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $lang;
         if ($userLogin != null) {
             $publicID = $this->getPublicID($userLogin);
-            $classes = $this->getLinkClasses($publicID, "uhp_public");
+            $classes = 'class="'.$this->getLinkClasses($publicID, "uhp_public").'"';
             $result = '<a href="'.wl($publicID).'" '.$classes.' rel="nofollow" title="'.$this->publicString().'">'.editorinfo($userLogin, true).'</a>';
             return $result;
         } else {
@@ -131,8 +136,9 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
 		}
 	}
 
-    // Returns an array containing id and language of Private NS Start Page and/or Public Page (depending on options, page existance isn't checked)
-	function getElements() {
+    // Returns an array containing id and language strings of Private NS Start Page and/or Public Page (depending on options, page existance isn't checked)
+    // $default adds default interwiki classes or not
+	function getElements($default) {
         global $INFO;
         $return = array();
         // Don't return anything if no known user is logged in
@@ -141,15 +147,17 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
             if ($this->getConf('create_private_ns')) {
                 $return['private'] = array();
                 $return['private']['id'] = $this->getPrivateID();
-                $return['private']['string'] = $this->getLang('privatenamespace');
-                $return['private']['link'] = $this->getPrivateLink($INFO['userinfo']['name']);
+                $return['private']['title'] = $this->getLang('privatenamespace');
+                $return['private']['string'] = $INFO['userinfo']['name'];
+                $return['private']['classes'] = $this->getLinkClasses($this->getPrivateID(), null, $default);
             }
             // Add PUBLIC PAGE INFO IF NEEDED (is required by options)
             if ($this->getConf('create_public_page')) {
                 $return['public'] = array();
                 $return['public']['id'] = $this->getPublicID();
-                $return['public']['string'] = $this->publicString();
-                $return['public']['link'] = $this->getPublicLink($_SERVER['REMOTE_USER']);
+                $return['public']['title'] = $this->publicString();
+                $return['public']['string'] = $_SERVER['REMOTE_USER'];
+                $return['public']['classes'] = $this->getLinkClasses($this->getPublicID(), null, $default);
             }
         }
         return $return;
