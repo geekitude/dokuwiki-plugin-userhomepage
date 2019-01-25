@@ -2,7 +2,7 @@
 /**
  * Configuration metadata file for Userhomepage plugin
  * Previous authors: James GuanFeng Lin, Mikhail I. Izmestev, Daniel Stonier
- * @author: Simon Delage <simon.geekitude@gmail.com>
+ * @author   Simon DELAGE <sdelage@gmail.com>
  * @license: CC Attribution-Share Alike 3.0 Unported <http://creativecommons.org/licenses/by-sa/3.0/>
  */
 

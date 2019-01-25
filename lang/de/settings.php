@@ -3,7 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * 
- * @author Simon Delage <simon.geekitude@gmail.com>
+ * @author   Simon DELAGE <sdelage@gmail.com>
  * @author Padhie <develop@padhie.de>
  * @author Dana <dannax3@gmx.de>
  */

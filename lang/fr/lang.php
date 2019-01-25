@@ -1,7 +1,7 @@
 <?php
 /**
  * French language file for Userhomepage plugin
- * @author     Simon DELAGE <simon.geekitude@gmail.com>
+ * @author     Simon DELAGE <sdelage@gmail.com>
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  */
 

@@ -3,7 +3,7 @@
 /**
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * 
- * @author Simon DELAGE <simon.geekitude@gmail.com>
+ * @author   Simon DELAGE <sdelage@gmail.com>
  * @author Dana <dannax3@gmx.de>
  */
 $lang['copyerror']             = 'Fehler beim Kopieren';
