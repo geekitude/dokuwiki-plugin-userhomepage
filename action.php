@@ -27,6 +27,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         global $conf;
         global $INFO;
 
+        // If there's no conflict between private and public space
         if ($this->multiNsOk(true)) {
             $this->helper = plugin_load('helper','userhomepage');
             // If templates_path option starts with 'data/pages' it can automatically be adapted but should be changed
@@ -101,6 +102,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         global $lang;
         global $ID;
 
+        // If there's no conflict between private and public space
         if ($this->multiNsOk()) {
             $created = array();
             // If a user is logged in and not allready requesting his private namespace start page
@@ -214,6 +216,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function acl(&$event, $param) {
         global $conf;
 
+        // If there's no conflict between private and public space
         if ($this->multiNsOk()) {
             if ((!$this->getConf('no_acl')) && ($conf['useacl']) && ($this->userOk())) {
                 global $config_cascade;
@@ -418,6 +421,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         global $INFO;
         global $conf;
 
+        // If there's no conflict between private and public space
         if ($this->multiNsOk()) {
             if (($conf['showuseras'] == "username_link") and ($this->getConf('userlink_replace'))) {
                 $classes = $this->getConf('userlink_classes');
