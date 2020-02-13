@@ -102,8 +102,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         global $lang;
         global $ID;
 
-        // If there's no conflict between private and public space
-        if ($this->multiNsOk()) {
+        // If there's no conflict between private and public space and if user did not request an action page
+        if (($this->multiNsOk()) and ($_GET['do'] == null)) {
             $created = array();
             // If a user is logged in and not allready requesting his private namespace start page
             if (($this->userOk())&&($_REQUEST['id']!=$this->private_page)) {
