@@ -18,7 +18,7 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
     function register(Doku_Event_Handler $controller) {
         $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, 'init',array());
         $controller->register_hook('DETAIL_STARTED', 'AFTER', $this, 'init',array());
-        $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'redirect',array());
+        $controller->register_hook('ACTION_ACT_PREPROCESS', 'AFTER', $this, 'redirect',array());
         $controller->register_hook('ACTION_ACT_PREPROCESS', 'AFTER', $this, 'acl',array());
         $controller->register_hook('COMMON_USER_LINK', 'AFTER', $this, 'replaceUserLink',array());
     }
@@ -103,7 +103,9 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
         global $ID;
 
         // If there's no conflict between private and public space and if user did not request an action page
+//        if ($this->multiNsOk()) {
         if (($this->multiNsOk()) and ($_GET['do'] == null)) {
+//        if (($this->multiNsOk()) and ($_GET['do'] != 'admin')) {
             $created = array();
             // If a user is logged in and not allready requesting his private namespace start page
             if (($this->userOk())&&($_REQUEST['id']!=$this->private_page)) {
@@ -199,11 +201,14 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     // If Public page was just created, redirect to it and edit (or show)
                     if (($created['public']) && (page_exists($this->public_page))) {
                         send_redirect(wl($this->public_page, array('do='.$this->getConf('action')), true));
+//msg('Public page creation redirection: id '.$_GET['id'].'; do '.$_GET['do'], 1);
                     // Else if private start page was just created and edit option is set, redirect to it and edit
                     } elseif (($created['private']) && (page_exists($this->private_page)) && ($this->getConf('edit_before_create'))) {
                         send_redirect(wl($this->private_page, array('do='.$this->getConf('action')), true));
+//msg('Private page creation redirection: id '.$_GET['id'].'; do '.$_GET['do'], 1);
                     // Else if redirection is enabled and user's private page exists AND [(user isn't requesting a specific page OR he's requesting wiki start page) AND logged in 2sec ago max]
                     } elseif (($this->getConf('redirection')) && (page_exists($this->private_page)) && (((!isset($_GET['id'])) or (in_array($_GET['id'], $wikistart))) && (time()-$_SESSION["uhptimestamp"] <= 2))) {
+//msg('Default redirection: id '.$_GET['id'].'; do '.$_GET['do'], 1);
                         send_redirect(wl($this->private_page, '', true));
                     }
                 }
