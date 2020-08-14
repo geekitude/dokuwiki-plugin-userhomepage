@@ -346,8 +346,8 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     foreach($newLines as $line) {
                         if (($line['where'] != null) && ($line['who'] != null)) {
                             // delete potential ACL rule with same scope (aka 'where') and same user (aka 'who')
-                            $acl->_acl_del($line['where'], $line['who']);
-                            $acl->_acl_add($line['where'], $line['who'], $line['perm']);
+                            $acl->deleteACL($line['where'], $line['who']);
+                            $acl->addOrUpdateACL($line['where'], $line['who'], $line['perm']);
                         }
                     }
                 }
