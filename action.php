@@ -56,7 +56,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                     $source = $this->getConf('templatepath');
                 // Otherwise, we're on a fresh install
                 } else {
-                    $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
+					if (is_file('lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default')) {
+						$source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_private.default';
+					} else {
+						$source = 'lib/plugins/userhomepage/lang/en/userhomepage_private.default';
+					}
                 }
                 $this->copyFile($source, $dest, 'userhomepage_private.txt');
             }
@@ -66,7 +70,11 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 if ((is_file(DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt')) && ($this->getConf('templatepath') != null)) {
                     $source = DOKU_CONF.'../'.$this->getConf('templates_path').'/userhomepage_public.txt';
                 } else {
-                    $source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
+					if (is_file('lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default')) {
+						$source = 'lib/plugins/userhomepage/lang/'.$conf['lang'].'/userhomepage_public.default';
+					} else {
+						$source = 'lib/plugins/userhomepage/lang/en/userhomepage_public.default';
+					}
                 }
                 $this->copyFile($source, $dest, 'userhomepage_public.txt');
             }
