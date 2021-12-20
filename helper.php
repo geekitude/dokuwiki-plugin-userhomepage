@@ -126,6 +126,67 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         }
     }
 
+    /**
+     * Print some info about the current page with a link to last editor's public page
+     *
+     * Based on core function tpl_pageinfo() by Andreas Gohr <andi@splitbrain.org>
+     *
+     * @param bool $ret return content instead of printing it
+     * @return bool|string
+     */
+    function getPageInfo($ret = false) {
+        global $conf;
+        global $lang;
+        global $INFO;
+        global $ID;
+
+        // return if we are not allowed to view the page
+        if(!auth_quickaclcheck($ID)) {
+            return false;
+        }
+
+        // prepare date and path
+        $fn = $INFO['filepath'];
+        if(!$conf['fullpath']) {
+            if($INFO['rev']) {
+                $fn = str_replace($conf['olddir'].'/', '', $fn);
+            } else {
+                $fn = str_replace($conf['datadir'].'/', '', $fn);
+            }
+        }
+        $fn   = utf8_decodeFN($fn);
+        $date = dformat($INFO['lastmod']);
+
+        // print it
+        if($INFO['exists']) {
+            $out = '';
+            $out .= '<bdi>'.$fn.'</bdi>';
+            $out .= ' · ';
+            $out .= $lang['lastmod'];
+            $out .= ' ';
+            $out .= $date;
+            if($INFO['editor']) {
+                $out .= ' '.$lang['by'].' ';
+                $out .= $this->getAnyPublicLink($INFO['editor']);
+            } else {
+                $out .= ' ('.$lang['external_edit'].')';
+            }
+            if($INFO['locked']) {
+                $out .= ' · ';
+                $out .= $lang['lockedby'];
+                $out .= ' ';
+                $out .= $this->getAnyPublicLink($INFO['locked']);
+            }
+            if($ret) {
+                return $out;
+            } else {
+                echo $out;
+                return true;
+            }
+        }
+        return false;
+    }
+
 	function getButton($type="private") {
         global $INFO;
         global $lang;
