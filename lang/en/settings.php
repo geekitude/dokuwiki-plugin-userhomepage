@@ -31,6 +31,7 @@
     $lang['groups_private'] = 'Comma separated list of user groups concerned by Private Namespace creation (leave empty to apply above settings to all users).';
     $lang['create_public_page'] = 'Create a user\'s public page?';
     $lang['public_pages_ns'] = 'Namespace under wich public pages are created.';
+    $lang['fullname_public_id'] = 'Use full name rather than login to build public page id (only works if <code>showuseras</code> option is set to interwiki link).';
     $lang['acl_all_public'] = 'Permissions for @ALL group on Public Pages';
     $lang['acl_all_public_o_0'] = 'None';
     $lang['acl_all_public_o_1'] = 'Read (Default)';
@@ -60,5 +61,5 @@
     $lang['action_o_edit'] = 'Edit (Default)';
     $lang['action_o_show'] = 'Show';
     $lang['userlink_replace'] = 'Enable replacement of [<code>Logged in as</code>] interwiki link, depending on pages created by Userhomepage (only works if <code>showuseras</code> option is set to interwiki link).';
-    $lang['userlink_classes'] = 'Space separated list of CSS classes to apply to [<code>Logged in as</code>] interwiki links (default: <code>interwiki iw_user wikilink1</code>).';
+    $lang['userlink_classes'] = 'Space separated list of CSS classes to apply to [<code>Logged in as</code>] interwiki links (default: <code>interwiki iw_user</code>).';
     $lang['userlink_fa'] = 'Use Fontawesome icons instead of images (Fontawesome has to be installed by template or a plugin) ?';

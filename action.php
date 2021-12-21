@@ -475,7 +475,15 @@ class action_plugin_userhomepage extends DokuWiki_Action_Plugin{
                 // ... or Last modified...
                 } else {
                     // No change for this right now
-                    $return = null;
+                    //$return = null;
+                    $publicId = $this->helper->getPublicID();
+                    $classes = $this->helper->getLinkClasses($publicId, null, true);
+                    print("ICI:".$publicId);
+                    if ($this->getConf('userlink_fa')) {
+                        $return = '</a> (<a href="'.wl($publicId).'" class="'.$classes.' uhp_fa" rel="nofollow" title="'.$this->getLang('publicpage').'('.$publicId.')'.'"><bdi><i class="fa fa-user"></i>'.$this->name.'</bdi></a>)';
+                    } else {
+                        $return = '<a href="'.wl($publicId).'" class="'.$classes.' uhp_public" rel="nofollow" title="'.$this->getLang('publicpage').' ('.$publicId.')'.'"><bdi>'.$this->name.'</bdi></a>';
+                    }
                 }
                 if ($return != null) {
                     $event->data = array(

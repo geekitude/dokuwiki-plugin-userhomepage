@@ -26,6 +26,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
 
     // Returns the ID of any (or current) user's public page (even if it doesn't exist)
     function getPublicID($userLogin=null) {
+        global $INFO;
         global $conf;
 
         if ($userLogin == null) {
@@ -34,6 +35,8 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         if (strpos($this->getConf('public_pages_ns'),':%NAME%:%START%') !== false) {
             $target = str_replace('%NAME%', $userLogin, $this->getConf('public_pages_ns'));
             $target = str_replace('%START%', $conf['start'], $target);
+        } elseif ($this->getConf('fullname_public_id')) {
+            $target = $this->getConf('public_pages_ns').':'.cleanID($INFO['userinfo']['name']);
         } else {
             $target = $this->getConf('public_pages_ns').':'.$userLogin;
         }

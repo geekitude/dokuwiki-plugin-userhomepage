@@ -17,6 +17,7 @@
     $meta['groups_private'] = array('string');
     $meta['create_public_page'] = array('onoff');
     $meta['public_pages_ns'] = array('string','_pattern' => '/^(|[a-zA-Z\-:%]+)$/','_caution' => 'warning');
+    $meta['fullname_public_id'] = array('onoff');
     $meta['acl_all_public'] = array('multichoice','_choices'=>array('0','1','2','noacl'));
     $meta['acl_user_public'] = array('multichoice','_choices'=>array('0','1','2','noacl'));
     $meta['groups_public'] = array('string');
