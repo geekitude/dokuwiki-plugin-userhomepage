@@ -17,7 +17,6 @@
     $conf['groups_private'] = '';
     $conf['create_public_page'] = 0;
     $conf['public_pages_ns'] = 'user';
-    $conf['fullname_public_id'] = 0;
     $conf['acl_all_public'] = '1';
     $conf['acl_user_public'] = '1';
     $conf['groups_public'] = '';
