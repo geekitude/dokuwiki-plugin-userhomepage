@@ -61,4 +61,5 @@
     $lang['action_o_show'] = 'Show';
     $lang['userlink_replace'] = 'Enable replacement of [<code>Logged in as</code>] interwiki link, depending on pages created by Userhomepage (only works if <code>showuseras</code> option is set to interwiki link).';
     $lang['userlink_classes'] = 'Space separated list of CSS classes to apply to [<code>Logged in as</code>] interwiki links (default: <code>interwiki iw_user</code>).';
+    $lang['userlink_icons'] = 'Use old school png or modern svg images as icons in interwiki links (default: <code>png</code>).';
     $lang['userlink_fa'] = 'Use Fontawesome icons instead of images (Fontawesome has to be installed by template or a plugin) ?';

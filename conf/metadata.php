@@ -29,4 +29,5 @@
     $meta['action'] = array('multichoice','_choices'=>array('edit','show'));
     $meta['userlink_replace'] = array('onoff');
     $meta['userlink_classes'] = array('string');
+    $meta['userlink_icons'] = array('multichoice','_choices'=>array('png','svg'));
     $meta['userlink_fa'] = array('onoff');

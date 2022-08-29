@@ -46,7 +46,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $INFO;
         global $lang;
         $pageId = $this->getPrivateID();
-        $classes = 'class="'.$this->getLinkClasses($pageId, "uhp_private").'"';
+        $classes = 'class="'.$this->getLinkClasses($pageId, "uhp_private_".$this->getConf('userlink_icons')).'"';
         if ($param == "loggedinas") {
             return '<li>'.$lang['loggedinas'].' <a href="'.wl($pageId).'" '.$classes.' rel="nofollow" title="'.$this->getLang('privatenamespace').'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
         } elseif ($param != null) {
@@ -62,7 +62,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $INFO;
         global $lang;
         $pageId = $this->getPublicID();
-        $classes = 'class="'.$this->getLinkClasses($pageId, "uhp_public").'"';
+        $classes = 'class="'.$this->getLinkClasses($pageId, "uhp_public_".$this->getConf('userlink_icons')).'"';
         if ($param == "loggedinas") {
             return '<li>'.$lang['loggedinas'].' <a href="'.wl($pageId).'" '.$classes.' rel="nofollow" title="'.$this->publicString().'">'.$INFO['userinfo']['name'].' ('.$_SERVER['REMOTE_USER'].')</a></li>';
         } elseif ($param != null) {
@@ -118,7 +118,7 @@ class helper_plugin_userhomepage extends DokuWiki_Plugin {
         global $lang;
         if ($userLogin != null) {
             $publicID = $this->getPublicID($userLogin);
-            $classes = 'class="'.$this->getLinkClasses($publicID, "uhp_public").'"';
+            $classes = 'class="'.$this->getLinkClasses($publicID, "uhp_public_".$this->getConf('userlink_icons')).'"';
             $result = '<a href="'.wl($publicID).'" '.$classes.' rel="nofollow" title="'.$this->publicString().'">'.editorinfo($userLogin, true).'</a>';
             return $result;
         } else {

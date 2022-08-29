@@ -29,4 +29,6 @@
     $conf['action'] = 'edit';
     $conf['userlink_replace'] = 1;
     $conf['userlink_classes'] = 'interwiki iw_user';
+    $conf['userlink_icons'] = 'png';
     $conf['userlink_fa'] = 0;
+
